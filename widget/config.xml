@@ -1,0 +1,34 @@
+ <widget id="A6077358266072"  version="0.0.1">
+    <name>车立享</name>
+    <description>
+        Example For APICloud.
+    </description>
+    <author email="developer@apicloud.com" href="http://www.apicloud.com">
+        Developer
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="pageBounce" value="false"/>
+	<preference name="appBackground" value="rgba(0,0,0,0.0)"/>  <preference name="appCertificateVerify" value="false"/>	<preference name="windowBackground" value="rgba(0,0,0,0.0)"/>
+
+	<preference name="frameBackgroundColor" value="rgba(0,0,0,0.0)"/>
+	<preference name="hScrollBarEnabled" value="false"/>
+	<preference name="vScrollBarEnabled" value="false"/>
+	<preference name="autoLaunch" value="true"/>
+	<preference name="fullScreen" value="false"/>
+	<preference name="autoUpdate" value="true" />
+	<preference name="smartUpdate" value="false" />
+	<preference name="debug" value="true"/>
+	<preference name="statusBarAppearance" value="true"/>
+	<permission name="readPhoneState" />
+	<permission name="camera" />
+	<permission name="record" />
+	<permission name="location" />
+	<permission name="fileSystem" />
+	<permission name="internet" />
+	<permission name="bootCompleted" />
+	<permission name="hardware" />  <feature name="bMap">    <param name="android_api_key" value="zZWkQMQWtHmDT61XFxvq9wHXKFoZXEg7" />    <param name="ios_api_key" value="5mDC22SluT6UogavUiogTc2Z02203VvX" />  </feature>  <feature name="aMap">    <param name="android_api_key" value="X43893a8a5596aeaa1f08868f53097f99" />    <param name="ios_api_key" value="bf09b5dacfbf6c8f14d1611aadbc163f" />  </feature>  <feature name="ajpush">
+      <param name="app_key" value="57d591f1e20928a64fd1f7b8" />
+      <param name="channel" value="fff4b2ccd657e63564bb1472 " />
+  </feature>
+</widget>

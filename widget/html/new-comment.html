@@ -1,0 +1,234 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <script src="../script/vue.js"></script>
+    <style>
+      body {
+        background: white;
+      }
+    </style>
+  </head>
+  <body ontouchstart>
+    <style>
+      header {
+        padding-top: 1rem;
+        height: 3.25rem;
+      }
+    </style>
+    <header class="aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         tapmode onclick="closeWin()"></a>
+      <div class="aui-title" id="title">发表评价</div>
+    </header>
+
+    <style>
+      #root {
+        padding: 20px 35px 100px;
+      }
+
+      #root .one {
+        font-size: 1rem;
+      }
+
+      #root .two {
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+      }
+
+      #root .two span {
+        font-size: .8rem;
+        line-height: 20px;
+        flex-shrink: 0;
+      }
+
+      #root .two > div {
+        width: 99%;
+        height: 20px;
+        padding: 0 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+
+      #root .two > div img {
+        width: 20px;
+        height: 20px;
+        margin-right: 3px;
+      }
+
+      #root .two p {
+        font-size: .8rem;
+        line-height: 20px;
+        flex-shrink: 0;
+        color: #999;
+      }
+
+      #root .three {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #dedede;
+        color: #555;
+        font-size: .8rem;
+        height: 150px;
+        margin-top: 20px;
+      }
+
+      #root .four {
+        font-size: .7rem;
+        color: #ddd;
+        line-height: 20px;
+        margin-top: -26px;
+        padding-right: 6px;
+        text-align: right;
+      }
+
+      #root .five {
+        width: 100%;
+        background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#3a76f1), to(#0ba8ef));
+        color: white;
+        line-height: 50px;
+        border-radius: 4px;
+        margin-top: 20px;
+        text-align: center;
+      }
+    </style>
+
+    <div id="root">
+      <div class="one">我要评价</div>
+      <div class="two">
+        <span>服务满意度</span>
+        <div v-show="star === 0">
+          <img src="../image/star_gray.png" alt="" @click="star = 1">
+          <img src="../image/star_gray.png" alt="" @click="star = 2">
+          <img src="../image/star_gray.png" alt="" @click="star = 3">
+          <img src="../image/star_gray.png" alt="" @click="star = 4">
+          <img src="../image/star_gray.png" alt="" @click="star = 5">
+        </div>
+        <div v-show="star === 1">
+          <img src="../image/star.png" alt="" @click="star = 1">
+          <img src="../image/star_gray.png" alt="" @click="star = 2">
+          <img src="../image/star_gray.png" alt="" @click="star = 2">
+          <img src="../image/star_gray.png" alt="" @click="star = 4">
+          <img src="../image/star_gray.png" alt="" @click="star = 5">
+        </div>
+        <div v-show="star === 2">
+          <img src="../image/star.png" alt="" @click="star = 1">
+          <img src="../image/star.png" alt="" @click="star = 2">
+          <img src="../image/star_gray.png" alt="" @click="star = 3">
+          <img src="../image/star_gray.png" alt="" @click="star = 4">
+          <img src="../image/star_gray.png" alt="" @click="star = 5">
+        </div>
+        <div v-show="star === 3">
+          <img src="../image/star.png" alt="" @click="star = 1">
+          <img src="../image/star.png" alt="" @click="star = 2">
+          <img src="../image/star.png" alt="" @click="star = 3">
+          <img src="../image/star_gray.png" alt="" @click="star = 4">
+          <img src="../image/star_gray.png" alt="" @click="star = 5">
+        </div>
+        <div v-show="star === 4">
+          <img src="../image/star.png" alt="" @click="star = 1">
+          <img src="../image/star.png" alt="" @click="star = 2">
+          <img src="../image/star.png" alt="" @click="star = 3">
+          <img src="../image/star.png" alt="" @click="star = 4">
+          <img src="../image/star_gray.png" alt="" @click="star = 5">
+        </div>
+        <div v-show="star === 5">
+          <img src="../image/star.png" alt="" @click="star = 1">
+          <img src="../image/star.png" alt="" @click="star = 2">
+          <img src="../image/star.png" alt="" @click="star = 3">
+          <img src="../image/star.png" alt="" @click="star = 4">
+          <img src="../image/star.png" alt="" @click="star = 5">
+        </div>
+        <p>{{ starText }}</p>
+      </div>
+      <textarea class="three" placeholder="服务满足您的期待吗，说说你的看法" v-model.trim="content"></textarea>
+      <div class="four">至少输入8个字</div>
+      <div class="five" @click="submit">立即评价</div>
+    </div>
+
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/tool.js"></script>
+    <script type="text/javascript" src="../config.js"></script>
+    <script>
+      apiready = function () {
+        new Vue({
+          el: '#root',
+          data: {
+            starTextMap: {
+              0: '极差',
+              1: '非常差',
+              2: '有点差',
+              3: '一般',
+              4: '很好',
+              5: '极好',
+            },
+            star: 5,
+            content: ''
+          },
+          computed: {
+            starText: function () {
+              return this.starTextMap[this.star];
+            }
+          },
+          methods: {
+            submit: function () {
+              console.log($api.getStorage('userId'));
+              console.log(api.pageParam.orderId);
+              console.log(this.star);
+              console.log();
+              if (!this.content) {
+                Tool.toastInfo('请输入评论内容');
+                return;
+              }
+              if (this.content.length<=8) {
+                Tool.toastInfo('请最少输入八个汉字');
+                return;
+              }
+              api.showProgress();
+              api.ajax({
+                url: SERVER_PATH + 'User/orderComments',
+                method: 'post',
+                data: {
+                  values: {
+                    userId: $api.getStorage('userId'),
+                    orderId: api.pageParam.orderId,
+                    comments: this.content,
+                    images: '',
+                    level: this.star // 0-5
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                api.hideProgress();
+                if (ret) {
+                  if (ret.code === 0) {
+                    Tool.toastInfo('评论成功');
+                    Tool.openWin({
+                      url: '/html/supplier/sup-home.html',
+                      param: {
+                        id: api.pageParam.id
+                      }
+                    })
+                  }
+                  else {
+                    Tool.toastInfo('评论失败，请稍后重试');
+                  }
+                }
+                else {
+                  Tool.toastInfo('评论失败，请稍后重试');
+                }
+              });
+            }
+          }
+        })
+      }
+    </script>
+  </body>
+</html>

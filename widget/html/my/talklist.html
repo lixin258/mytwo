@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
+    <!--css-->
+    <style>
+    .fixedHeader {
+      padding-top: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+    .reserveList .reLi {
+      width: 100%;
+      margin: 0.5rem 0;
+      background: white;
+      border-radius: 0.3rem;
+      padding: 5px 10px 5px 0px;
+      display: flex;
+    }
+
+    .reLi > .line1 {
+      line-height: 1.5rem;
+      border-bottom: 1px dashed #d5d5d5;
+    }
+
+    .line1 .name {
+      display: inline-block;
+      padding: 0 0.5rem;
+      color: #5891f5;
+    }
+
+    .line1 .date {
+      display: inline-block;
+      padding: 0 0.5rem;
+      color: #777;
+      float: right;
+    }
+
+    .line1 img {
+      width: 1rem;
+      display: inline-block;
+      float: right;
+      padding-top: 0.2rem;
+    }
+
+    .reLi .line2 {
+      padding: 0.5rem;
+      position: relative;
+      color: #777;
+    }
+
+    .reLi .line2 span {
+      color: rgb(33, 33, 33);
+    }
+
+    .line2 img {
+      position: absolute;
+      width: 3rem;
+      right: 1rem;
+      top: 0.8rem;
+    }
+    .reserveList_border{
+      width: 100%;
+      display: flex;
+    }
+    .reserveList_border_img{
+
+      width: 20%;
+    }
+    .reserveList_border_img img{
+      width: 50px;
+      height: 50px;
+      border-radius: 100%;
+      margin: 0 auto;
+    }
+    .reserveList_border_text{
+      width: 80%;
+      line-height: 25px;
+    }
+    .reserveList_border_text .reserveList_border_text_border{
+      display: flex;
+      width: 100%;
+    }
+    .reserveList_border_text div:nth-child(2){
+      text-align: right;
+      color: #999;
+    }
+    .reserveList_border_text div:nth-child(2) {
+      text-align: right;
+    }
+    .reserveList_border_text div div{
+      width: 100%;
+    }
+    .reserveList_border_text div div:nth-child(1){
+      text-align: left;
+      color: #333;
+      font-weight: 600;
+    }
+    .reserveList_border_text div div:nth-child(2){
+      text-align: right;
+    }
+    .reserveList_border_text div:nth-child(2) div{
+      color: #999;
+      font-size: 14px;
+      width: 80%;
+    }
+    </style>
+  </head>
+  <body ontouchstart>
+    <!--html-->
+    <div  class="aui-content" id="app">
+      <ul class="reserveList" id="reserveList">
+        <li class="reLi" v-for="value in dataArr" data-id="value.toShopId" @click="gotalkweb(value.a,value.b)">
+            <div class="reserveList_border_img">
+              <img :src="value.headimgurl"/>
+            </div>
+            <div class="reserveList_border_text">
+              <div class="reserveList_border_text_border">
+                <div>{{value.realname}}</div>
+                <div>{{value.createTime}}</div>
+              </div>
+              <div>
+                <div>{{value.info}}</div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+      <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/vue.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var vm = new Vue({
+          el: '#app',
+          data: {
+            dataArr: [],
+            page: 1,
+            length: 10,
+            maxPage: 1,
+          },
+          methods: {
+            init: function () {
+              vm.getChatList();
+              vm.loadMore();
+              vm.refresh();
+            },
+            getChatList: function () {
+              api.ajax({
+                url: SERVER_PATH + 'User/getChatList',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    fromId: $api.getStorage('userId'),
+                    fromType:$api.getStorage('type')
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret) {
+                  if (ret.code == 0 && ret.data && ret.data.length) {
+                      vm.maxPage = Math.ceil(ret.recordsTotal / vm.length);
+                      vm.dataArr = ret.data;
+                      setTimeout(function () {
+                          vm.getChatList({}, 1500);
+                      });
+                  } else {
+                      vm.nullData = true;
+                  }
+                } else {
+                  Tool.toastInfo(ret.msg || errMsg);
+                  vm.referralsCode = '';
+                }
+              });
+            },
+            gotalkweb:function(toId,toType){
+              Tool.openWin({
+                name: '',
+                url: '/html/my/talkweb.html',
+                param: {
+                  toId: toId,
+                  toType:toType,
+                }
+              })
+            },
+            loadMore: function () {
+                Tool.loadMore(function () {
+                    if (vm.page && vm.maxPage && !vm.nullData) {
+                        if (parseInt(vm.page) < parseInt(vm.maxPage)) {
+                            vm.page++;
+                            vm.getData();
+                        } else {
+                            vm.listMsg = LoadAll;
+                        }
+                    }
+                });
+            },
+            refresh: function () {
+                Tool.refreshPage(function () {
+                    vm.listMsg = '';
+                    vm.nullData = false;
+                    vm.page = 1;
+                    vm.maxPage = 1;
+                    vm.dataArr = [];
+                    vm.getChatList();
+                });
+            }
+          },
+          created: function () {
+            FastClick.attach(document.body);
+          },
+        });
+        vm.init();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,346 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      #cityChoose {
+        color: #fff;
+      }
+
+      #cityChoose::before {
+        content: '' !important;
+      }
+
+      #title {
+        width: 85%;
+        padding-left: 1.5rem;
+      }
+
+      .aui-slide-node img {
+        object-fit: cover;
+      }
+
+      .aui-row img.aui-iconfont {
+        display: inline-block;
+        height: 2rem;
+        border-radius: 1rem;
+      }
+
+      .aui-row .aui-grid-label {
+        font-size: 0.6rem;
+      }
+
+      .aui-grid [class*=aui-col-] {
+        padding: 0.2rem 0;
+      }
+
+      .aui-grid .aui-grid-label {
+        margin-top: 0;
+      }
+
+      .fixedHeader {
+        width: 100%;
+        background: #0098ff !important;
+        color: #fff !important;
+      }
+
+      .fixedHeader img {
+        position: absolute;
+        padding: 0;
+        right: 0.1rem;
+        top: 0.5rem;
+        width: 2rem;
+      }
+
+      .block {
+        background: white;
+        padding: 0.5rem;
+      }
+
+      .block1 {
+        text-align: center;
+        padding-bottom: 0rem;
+        padding-top: 0rem;
+      }
+
+      .block1 .headImg {
+        width: 4rem;
+        height: 4rem;
+        margin: 0 auto;
+        position: relative;
+        top: -2rem;
+        border: 4px solid rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+      }
+
+      .block1 .name, .headCount {
+        position: relative;
+        top: -2rem;
+      }
+
+      .block1 .headCount span {
+        color: blue;
+      }
+
+      .block3 {
+        margin-top: 0.5rem;
+        background: white;
+      }
+
+      .block4 {
+
+      }
+
+      .block4 .title {
+        display: inline-block;
+      }
+
+      .block4 .more {
+        display: inline-block;
+        color: #3a76f1;
+        font-size: 0.5rem;
+        line-height: 1rem;
+      }
+
+      .evaluateItem {
+        position: relative;
+        margin-top: 0.5rem;
+      }
+
+      .evaluateItem .headImg {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+      }
+
+      .evaluateItem .details {
+        position: relative;
+        top: -3rem;
+        left: 3.5rem;
+        width: calc(100% - 3.5rem);
+      }
+
+      .evaluateItem .details .date {
+        display: inline-block;
+      }
+
+      .evaluateItem .details img {
+        width: 5rem;
+        margin: 0.5rem 0.5rem 0 0;
+      }
+
+      .contactBox {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2.2rem;
+      }
+
+      .contactBox .info_1 {
+        width: 6.5rem;
+      }
+
+      .contactBox .info_1 img {
+        width: 1rem;
+        margin: 0.6rem 0.75rem;
+      }
+
+      .contactBox .info_1 p {
+        line-height: 1.1rem;
+        color: #444;
+      }
+
+      .contactBox .info_2 {
+        width: calc(100% - 6.5rem);
+        line-height: 2.2rem;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <div id="app">
+    <header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+      <a class="aui-pull-left aui-icon-left aui-iconfont button-active2"
+         style="width: 45px;"
+         onclick="closeWin()"></a>
+      <div class="" id="title">技师详情</div>
+    </header>
+    <div >
+    <div class="aui-slide-node bg-dark z-banner shopImg ">
+      <img src="../../image/tec_bg.png"/>
+    </div>
+    <div class='block block1'>
+      <img class='headImg' :src="infoArr.headimgurl" alt="">
+      <div class='name'>{{infoArr.realname}}</div>
+      <p class='headCount'>已服务<span>{{infoArrs.recordsTotal}} </span>位车主</p>
+
+    </div>
+    <div class='block block2 clearfix'>
+      <div>服务项目</div>
+      <p class='serviceItem'><span v-for="value in ownSerInfo">|{{value.name}}</span></p>
+      <div>服务说明</div>
+      <p class='serviceItem'>{{infoArr.introduce}}</p>
+    </div>
+    <div class='block block3'>
+      <div>擅长维修车型</div>
+      <p class='serviceItem'>{{infoArr.carInfo}}</p>
+      <div>工作年限</div>
+      <p class='serviceItem'>{{infoArr.workyear}}</p>
+    </div>
+
+  </div>
+    <div class='block block4'>
+      <div class='title'>用户评价</div>
+      <ul class='evaluateList' >
+        <li class='evaluateItem' v-for="value in infoListArr">
+          <img class='headImg' :src="value.headimgurl" alt="">
+          <div class='details'>
+            <span>{{value.nickname}}</span>
+            <p class='aui-pull-right date'>{{value.createTime}}</p>
+            <p>{{value.comments}}</p>
+            <img :src="value.images" alt="">
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+    <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+  </div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/vue.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+    <script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var headerHeight = $api.offset(header).h;
+        var footerH = $api.getStorage('footerH');
+        var vm = new Vue({
+          el: '#app',
+          data: {
+            infoArr:{},
+            infoListArr:[],
+            ownSerInfo:[],
+            infoArrs:{}
+          },
+          methods: {
+            init: function () {
+              this.getInfo();
+              this.getInfoList();
+              this.getOwnSerInfo();
+            },
+            getInfo: function () {
+              var self=this;
+              api.ajax({
+                url: SERVER_PATH + 'Agency/getInfo',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    userId: api.pageParam.id,
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret && ret.code == 0) {
+                    self.infoArr=ret.data[0];
+
+                } else {
+                console.log("1")
+                  Tool.toastInfo(ret.msg || errMsg);
+                }
+
+              });
+              api.ajax({
+                  url: SERVER_PATH + 'Agency/ownService',
+                  method: 'post',
+                  data: {
+                      values: {
+                          AccessToken: $api.getStorage('token'),
+                          id: api.pageParam.id
+                      },
+                      files: {}
+                  }
+              }, function(ret, err) {
+                  if (ret && ret.code == 0) {
+                      self.infoArrs=ret;
+                  } else {
+                    console.log("2")
+                      Tool.toastInfo(errMsg);
+                  }
+              });
+            },
+
+            getOwnSerInfo: function () {
+              var self=this;
+              api.ajax({
+                url: SERVER_PATH + 'Agency/getOwnSerInfo',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    id:api.pageParam.id,
+
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret && ret.code == 0) {
+                    self.ownSerInfo=ret.data;
+                } else {
+                  Tool.toastInfo(ret.msg || errMsg);
+                }
+
+              });
+            },
+            getInfoList: function () {
+              var self=this;
+              api.ajax({
+                url: SERVER_PATH + 'User/getCommentsList',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    id: api.pageParam.id,
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret && ret.code == 0) {
+                    self.infoListArr=ret.data;
+                } else {
+                  console.log("4")
+                  Tool.toastInfo(ret.msg || errMsg);
+                }
+
+              });
+            },
+
+          },
+          created: function () {
+            FastClick.attach(document.body);
+          },
+        });
+        vm.init();
+      };
+    </script>
+  </body>
+</html>

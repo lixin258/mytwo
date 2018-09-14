@@ -1,0 +1,619 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      .fixedHeader {
+        padding-top: 1.5rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+      }
+
+      .reserveList {
+        margin: 0rem 0.75rem;
+      }
+
+      .reserveList .reLi {
+        margin: 0.5rem 0;
+        background: white;
+        border-radius: 0.3rem;
+      }
+
+      .reLi > .line1 {
+        line-height: 1.5rem;
+        border-bottom: 1px dashed #d5d5d5;
+      }
+
+      .line1 .name {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #5891f5;
+      }
+
+      .line1 .date {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #777;
+        float: right;
+      }
+
+      .line1 img {
+        width: 1rem;
+        display: inline-block;
+        float: right;
+        padding-top: 0.2rem;
+      }
+
+      .reLi .line2 {
+        padding: 0.5rem;
+        position: relative;
+        color: #777;
+      }
+
+      .reLi .line2 span {
+        color: rgb(33, 33, 33);
+      }
+
+      .line2 .headCount {
+        position: absolute;
+
+        right: 1rem;
+        top: .45rem;
+      }
+
+      .line2 img {
+        position: absolute;
+        width: 3rem;
+        right: 1rem;
+        top: 0.8rem;
+      }
+
+      .fixedHeader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+      }
+
+      #dataNull img {
+        margin: 3rem auto;
+        width: 3rem;
+      }
+
+      #submit {
+        margin: 0 auto;
+        width: 50%;
+        background: #0098ff !important;
+        color: white;
+      }
+
+      header {
+        height: 3.25rem;
+      }
+
+      .goCertify {
+        margin: 0 auto;
+        text-align: center;
+        color: #0098ff;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <!--css-->
+    <style>
+      .reLi:active {
+        background: #f0f0f0;
+      }
+    </style>
+    <!--html-->
+    <header class="fixedHeader aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         tapmode onclick="closeWin()" id='icon-left'></a>
+      <div class="aui-title" id="title">预约服务</div>
+      <a class="aui-pull-right" tapmode id="text"></a>
+    </header>
+    <div id="place">
+      <div style="height: 2.25rem;"></div>
+    </div>
+    <div id='dataNull' class='aui-hide'>
+      <img src="../../image/no-data.png" alt="">
+    </div>
+    <div class='goCertify aui-hide'>去认证>></div>
+    <ul class="reserveList" id="reserveList"></ul>
+    <div class="aui-padded-r-10 aui-padded-l-10 mt-40 ">
+      <div class="aui-btn aui-btn-block z-bg aui-hide button-active" id='submit'>发布预约</div>
+    </div>
+    <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+    <div class="aui-text-center loadAll aui-hide" id="dataNullText"><span>没有数据</span></div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/html" id="tpl-reserveList">
+      {{each data as value index}}
+      <li class="reLi tab-active" data-id="{{value.id}}" data-status='{{value.status}}'>
+        <div class="line1">
+          <div class='name'>{{value.status==0?'待处理':value.status==1?'已被接单':'订单完成'}}</div>
+          <div class="date">{{value.serviceTime}}</div>
+          <img src="../../image/clock.png" alt="">
+        </div>
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>&nbsp;{{value.servicename}}</span></div>
+          <div class="info_2">服务方式:<span>&nbsp;{{value.type}}</span></div>
+          <div class="info_3">车主车型:<span>&nbsp;{{value.carInfo}}</span></div>
+          <div class='headCount'>已有{{value.peopleNumber}}人报名接单</div>
+          <div>
+            <style>
+              .llg-cancel:active,.llg-cancel1:active,
+              .llg-detail:active {
+                opacity: .5;
+              }
+            </style>
+            <button
+              class="llg-detail"
+              data-id="{{value.id}}"
+              data-status="{{value.status}}"
+              style="
+              font-size: 14px;
+              color: #3A2A11;
+              padding: 0 5px;
+              background: white;
+              margin-top: 5px;
+              float: right;
+              margin-left: 7px;
+              border: 1px solid #b7b7b7;">查看详情
+            </button>
+            {{ if (value.status==0) }}
+            <button
+              class="llg-cancel"
+              data-id="{{value.id}}"
+              data-status="{{value.status}}"
+              style="
+              font-size: 14px;
+              color: #3A2A11;
+              padding: 0 5px;
+              background: white;
+              margin-top: 5px;
+              float: right;
+              border: 1px solid #b7b7b7;">取消预约
+            </button>
+              {{/if}}
+              {{ if (value.status==1) }}
+              <button
+                class="llg-cancel1"
+                data-id="{{value.id}}"
+                data-status="{{value.status}}"
+                style="
+                font-size: 14px;
+                color: #3A2A11;
+                padding: 0 5px;
+                background: white;
+                margin-top: 5px;
+                float: right;
+                border: 1px solid #b7b7b7;">完成预约
+              </button>
+                {{/if}}
+            <div style="clear: both;"></div>
+          </div>
+        </div>
+      </li>
+      {{/each}}
+    </script>
+    <script type="text/html" id="tpl-reserveList0">
+      {{each data as value index}}
+      <li class="reLi tab-active" data-id="{{value.id}}">
+        <div class="line1">
+          <div class='name'>{{value.nickname || '昵称未填写'}}</div>
+          <div class="date">{{value.serviceTime}}</div>
+          <img src="../../image/clock.png" alt="">
+        </div>
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>&nbsp;{{value.servicename}}</span></div>
+          <div class="info_2">服务方式:<span>&nbsp;{{value.type}}</span></div>
+          <div class="info_3" +{{value.form==1?'aui-hide':''}}+'"'>
+            车主车型:<span>&nbsp;{{value.carInfo || '未填写'}}</span></div>
+          <img src="../../image/re-button.png" alt="">
+        </div>
+      </li>
+      {{/each}}
+    </script>
+    <script type="text/html" id="tpl-one">
+      {{each data as info index}}
+      <li class="reLi tab-active" data-id="{{info.id}}">
+        <div class="line1">
+          <div class='name'>{{info.form == 0 ? (info.nickname || '昵称未填写') : info.shopname}}</div>
+          <div class="date">{{info.serviceTime}}</div>
+          <img src="../../image/clock.png" alt="">
+        </div>
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>&nbsp;{{info.servicename || '未填写'}}</span></div>
+          <div class="info_2">服务方式:<span>&nbsp;{{info.type}}</span></div>
+          {{ if (info.form == 1) }}
+          <div class="info_3" style="visibility: hidden;">车主车型:<span>&nbsp;{{info.carInfo || '未填写'}}</span>
+          </div>
+          {{ /if }}
+          {{ if (info.form != 1) }}
+          <div class="info_3" style="">车主车型:<span>&nbsp;{{info.carInfo || '未填写'}}</span>
+          </div>
+          {{ /if }}
+          <img src="{{info.appointmentStatus == 0 ? '../../image/re-button.png' : '../../image/re-button-gray.png'}}"
+               alt="">
+        </div>
+      </li>
+      {{/each}}
+    </script>
+    <!--js-->
+    <script type="text/javascript">
+      var isAppend = true;
+      apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var subs = location.search.split("=");
+        var hide = subs[1];
+        if (hide == 1) {
+          $('#icon-left').css('display', 'none')
+        }
+        var Home = function () {
+          this.cityId = '';
+          this.title = '';
+          this.page = 0;
+          this.pagesize = 10;
+          this.maxPage = 0;
+          this.total = 0;
+          this.priceId = 0;
+          this.sort = 'default';
+          this.brandId = '';
+          this.status = '';
+          this.character = '';
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.addEventListener();
+            this.getData(true);
+            this.newReserve();
+            this.refresh();
+            this.loadMore();
+            FastClick.attach(document.body);
+            // cancel reserve
+            {
+              $('body').on('click', '.llg-cancel1', function () {
+                var that = $(this);
+                var id = $(this).data('id');
+                var status = $(this).data('status');
+                Tool.confirm('确认完成吗？', 'confirmCancel');
+                api.addEventListener({
+                  name: 'confirmCancel'
+                }, function (ret, err) {
+                  api.showProgress();
+                  api.ajax({
+                    url: SERVER_PATH + 'User/orderOver',
+                    method: 'post',
+                    data: {
+                      values: {
+                        AccessToken: $api.getStorage('token'),
+                        id: $api.getStorage('userId'),
+                        orderId: id
+                      },
+                      files: {}
+                    }
+                  }, function (ret, err) {
+                    api.hideProgress();
+                    if (ret && ret.code === 0) {
+                      Tool.toastInfo('完成订单');
+                      that.parent().parent().parent().remove();
+                      if ($('.reLi').length === 0) {
+                        $('#dataNull').removeClass('aui-hide');
+                      }
+                    }
+                    else {
+                      Tool.toastInfo(ret.msg);
+                    }
+                  });
+                });
+              })
+            }
+            {
+              $('body').on('click', '.llg-cancel', function () {
+                var that = $(this);
+                var id = $(this).data('id');
+                var status = $(this).data('status');
+                Tool.confirm('确认取消吗？', 'confirmCancel');
+                api.addEventListener({
+                  name: 'confirmCancel'
+                }, function (ret, err) {
+                  api.showProgress();
+                  api.ajax({
+                    url: SERVER_PATH + 'User/cancelOrder',
+                    method: 'post',
+                    data: {
+                      values: {
+                        AccessToken: $api.getStorage('token'),
+                        id: $api.getStorage('userId'),
+                        orderId: id
+                      },
+                      files: {}
+                    }
+                  }, function (ret, err) {
+                    api.hideProgress();
+                    if (ret && ret.code === 0) {
+                      Tool.toastInfo('删除成功');
+                      that.parent().parent().parent().remove();
+                      if ($('.reLi').length === 0) {
+                        $('#dataNull').removeClass('aui-hide');
+                      }
+                    }
+                    else {
+                      Tool.toastInfo(ret.msg);
+                    }
+                  });
+                });
+              })
+            }
+            // view reserve detail
+            {
+              $('body').on('click', '.llg-detail', function () {
+                var _id = $(this).data('id');
+                var status = $(this).data('status');
+                Tool.openWin({
+                  url: '/html/my/my-reserve-details.html',
+                  param: {
+                    id: _id,
+                    status: status
+                  }
+                });
+              });
+            }
+          },
+          addEventListener: function () {
+            var self = this;
+            api.addEventListener({
+              name: 'chooseCity'
+            }, function (ret, err) {
+              $('#cityChoose').text(ret.value.city);
+              self.resetList();
+            });
+            api.addEventListener({
+              name: 'chooseCar'
+            }, function (ret, err) {
+              $('#select li[data-select="select_3"]').html(ret.value.carInfo.city == "#全部" ? "品牌" : ret.value.carInfo.city + '&ensp;');
+              self.brandId = ret.value.carInfo.id;
+              self.resetList();
+            });
+            // api.addEventListener({
+            //     name: 'carFromSearchPage'
+            // }, function(ret, err){
+            //     self.title = ret.value.car;
+            //     $('#select li[data-select="select_3"]').html(self.title + '&ensp;');
+            //     self.resetList();
+            // });
+            api.addEventListener({
+              name: 'hasNewReserve'
+            }, function (ret, err) {
+              $('#dataNull').addClass('aui-hide');
+              $('#dataNullText').addClass('aui-hide');
+              isAppend = false;
+              self.getData();
+            });
+          },
+          setDefaultSearch: function () {
+            $('#title span').text(' ' + ($api.getStorage('defaultSearch') || '奔驰汽车'));
+          },
+          goCertify: function () {
+            $(".goCertify").off('click').on('click', function () {
+              Tool.openHeader({
+                name: 'sup-certify',
+                frame: {
+                  title: "店铺认证",
+                  url: api.wgtRootDir + '/html/supplier/sup-certify.html'
+                  //pageParam:
+                }
+              });
+            });
+          },
+          getData: function (initial) {
+            var self = this;
+            Tool.isLogin();
+            // 未登录状态不切换
+            if ($api.getStorage('isLogin') === 'false')
+              return;
+            // 刷新认证状态
+            false && api.ajax({
+              url: SERVER_PATH + 'Agency/getInfo',
+              method: 'post',
+              data: {
+                values: {
+                  AccessToken: $api.getStorage('token'),
+                  userId: $api.getStorage('userId'),
+                  userType: $api.getStorage('type'),
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0) {
+                if (ret.data) {
+                  $api.setStorage('status', ret.data[0].status);
+                }
+              }
+              else {
+                Tool.toastInfo('xxx' || errMsg);
+              }
+            });
+
+            // Tool.isCertify();
+            // if ($api.getStorage('status') === "0") return;
+            self.status = $api.getStorage('status');
+            self.character = $api.getStorage('character');
+            if (!(self.character == "0")) {
+              if (self.character == "1"&&self.status=="0") {
+                $('#dataNull').removeClass('aui-hide');
+                $(".goCertify").removeClass('aui-hide');
+                self.goCertify();
+                return;
+              }
+            }
+
+            $(".goCertify").addClass('aui-hide');
+            api.showProgress();
+            if ($api.getStorage('character') == 0) {
+              api.ajax({
+                url: SERVER_PATH + 'User/getUserOrder',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    id: $api.getStorage('userId')
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                api.hideProgress();
+                if (ret) {
+                  if (ret.code == 0 && ret.data && ret.data.length) {
+                    self.total = ret.recordsTotal;
+                    self.maxPage = Math.ceil(ret.recordsTotal / self.pagesize);
+                    self.drawData(ret.data);
+                  }
+                  else {
+                    if (!initial)
+                      $('#dataNullText').removeClass('aui-hide');
+                    else
+                      $('#dataNull').removeClass('aui-hide');
+                    $('#submit').removeClass('aui-hide');
+                    self.newReserve();
+                  }
+                }
+                else {
+                  Tool.toastInfo(errMsg);
+                }
+              });
+            }
+            else {
+              // alert(1)
+              console.log($api.getStorage('userId'))
+              api.ajax({
+                url: SERVER_PATH + 'Agency/getServiceList',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    id: $api.getStorage('userId'),
+                    userType:$api.getStorage('type')
+
+                  },
+                  files: {}
+
+                }
+              }, function (ret, err) {
+                api.hideProgress();
+                if (ret) {
+                  if (ret.data && ret.data.length) {
+                    self.total = ret.recordsTotal;
+                    self.maxPage = Math.ceil(ret.recordsTotal / self.pagesize);
+                    self.drawData0(ret.data);
+                  }
+                  else {
+                    $('#dataNull').removeClass('aui-hide');
+                  }
+                }
+                else {
+                  Tool.toastInfo('获取服务列表失败');
+                }
+              });
+            }
+          },
+          drawData: function (data) {
+            isAppend || $('#reserveList').html(template('tpl-reserveList', {"data": data}));
+            isAppend && $('#reserveList').append(template('tpl-reserveList', {"data": data}));
+            isAppend = true;
+            $('#submit').removeClass('aui-hide');
+            this.viewReserveInfo();
+          },
+          drawData0: function (data) {
+            //$('#reserveList').append(template('tpl-reserveList0', {"data": data}));
+            var html = '';
+            var info = '';
+            for (var i = 0; i < data.length; i++) {
+              info = data[i];
+              html += template('tpl-one', {"data": [info]});
+            }
+            $('#reserveList').html(html);
+            this.viewReserveInfo0();
+          },
+          newReserve: function () {
+            $('#submit').off('click').on('click', function () {
+              $api.setStorage('fromTabIndex', 1);
+              Tool.openWin({
+                name: 'new-reserve',
+                url: '/html/reserve/newReserve.html',
+                param: {
+                  //id: _id
+                }
+              });
+            });
+          },
+          viewReserveInfo: function () {
+
+          },
+          viewReserveInfo0: function () {
+            $('.reLi').off('click').on('click', function (e) {
+              var _id = $(this).data('id');
+              Tool.openWin({
+                url: '/html/reserve/reserve-details.html',
+                param: {
+                  id: _id
+                }
+              });
+            });
+          },
+          refresh: function () {
+            var self = this;
+            Tool.refreshPage(function () {
+              self.resetList();
+            });
+          },
+          resetList: function () {
+            this.page = 0;
+            this.maxPage = 0;
+            $('#loadAll').addClass('aui-hide');
+            $('#dataNullText').addClass('aui-hide');
+            $('#reserveList').html('');
+            this.getData();
+          },
+          loadMore: function () {
+            var self = this;
+            Tool.loadMore(function () {
+              if (self.maxPage && self.total) {
+                if (parseInt(self.page + 1) < parseInt(self.maxPage)) {
+                  self.page++;
+                  self.getData();
+                } else {
+                  $('#loadAll').removeClass('aui-hide');
+                }
+              }
+            });
+          },
+        };
+        new Home();
+      };
+    </script>
+  </body>
+</html>

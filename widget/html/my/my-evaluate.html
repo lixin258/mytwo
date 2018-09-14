@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    body{
+      background: white;
+    }
+    .evaluate{
+      padding:1rem;
+    }
+    .evaluate .line1{
+      font-size:1rem;
+    }
+    .evaluate .line2{
+      line-height:2rem;
+      margin:0.5rem 0;
+      position: relative;
+    }
+    .evaluate .line2 img{
+      width:1rem;
+    }
+    .evaluate .line2 ul{
+      display:inline-block;
+      padding:0 0.5rem;
+      position: absolute;
+      top: 0.2rem;
+    }
+    .evaluate .line2 span:last-child{
+      position: absolute;
+      right: 1rem;
+      color:#6f6f6f;
+    }
+    .evaluate .line2 li{
+      display:inline-block;
+      line-height:1.5rem;
+      padding:0 0.2rem;
+    }
+    .evaluate .line3{
+      border:1px solid #e4e4e4;
+      height: 8rem;
+      padding:0.3rem;
+      margin:1rem auto;
+    }
+    #submit{
+      background:#0098ff;
+      color:white;
+    }
+</style>
+<body class="">
+    <div class='evaluate'>
+      <div class='line1'>我要评价</div>
+      <div class='line2'>
+        <span>服务满意度</span>
+        <ul class='stars'>
+          <li><img src="../../image/star_gray.png" alt=""></li>
+          <li><img src="../../image/star_gray.png" alt=""></li>
+          <li><img src="../../image/star_gray.png" alt=""></li>
+          <li><img src="../../image/star_gray.png" alt=""></li>
+          <li><img src="../../image/star_gray.png" alt=""></li>
+        </ul>
+        <span class='comment'></span>
+      </div>
+      <textarea class='line3' name="" id="" cols="30" rows="10" placeholder='服务满足您的期待吗,说说你的看法,分享给他们吧~'></textarea>
+      <div class="mt-40">
+          <div class="aui-btn aui-btn-block z-bg" id='submit'>立即评价</div>
+      </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var Home = function(){
+            this.index = '';
+            this.init();
+        };
+        Home.prototype = {
+            init: function () {
+                this.clickStar();
+                this.submit();
+            },
+            clickStar:function(){
+                var self = this;
+               $('.stars li').off('click').on('click',function(){
+                 self.index= $(this).index()+1;
+                 $("ul li:lt("+self.index+") img").attr('src','../../image/star.png');
+                 $("ul li:gt("+(self.index-1)+") img").attr('src','../../image/star_gray.png');
+                 switch (self.index) {
+                             case 1: $('.comment').html('非常差'); break;
+                             case 2: $('.comment').html('差'); break;
+                             case 3: $('.comment').html('一般'); break;
+                             case 4: $('.comment').html('好'); break;
+                             case 5: $('.comment').html('非常好'); break;
+                         }
+               });
+            },
+            submit: function(){
+              var self = this;
+              $('#submit').off('click').on('click',function(){
+                api.showProgress();
+                api.ajax({
+                    url: SERVER_PATH + '/User/orderComments',
+                    method: 'post',
+                    data: {
+                        values: {
+                            orderId:api.pageParam.orderId,
+                            userId:$api.getStorage('userId'),
+                            level:self.index,
+                            comments:$(".line3").val()
+                        },
+                        files: {}
+                    }
+                }, function (ret, err) {
+                    if (ret.code== 0) {
+                        Tool.toastInfo(ret.msg);
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                    api.hideProgress();
+                });
+                setTimeout(function(){
+                  Tool.openWin({
+                      name: 'main',
+                      url: '/home/main.html',
+                  });
+                },1500);
+              });
+            },
+        };
+        new Home();
+    };
+</script>
+</html>

@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/aui/aui.css" />
+    <script type="text/javascript" src="./config.js"></script>
+</head>
+<style media="screen">
+/*啦啦啦啦啦*/
+    /*body {
+        width: 100vw;
+        height: 100vh;
+        background-image: url('image/firstPage.png');
+        background-size: cover;
+    }*/
+</style>
+
+<body>
+
+</body>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript" src="./script/tool.js"></script>
+<script type="text/javascript" src="./res/version.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+      var ajpush = api.require('ajpush');
+
+      ajpush.init(function(ret) {
+        if (ret && ret.status){
+            alert("success")
+        }
+      });
+        var Index = function () {
+            this.update = false;
+            this.loginApi = SERVER_PATH + 'User/login';
+            this.init();
+        };
+
+        Index.prototype = {
+            init: function () {
+                $api.setStorage('isLogin', 'false');
+                //this.versionCheck();
+                if(this.update) return;
+                $api.setStorage('isLogin', 'false');
+                $api.setStorage('logOut', 'false');
+                $api.setStorage('hasDealPwd', 'false');
+                var character = $api.getStorage('character');
+                var phone = $api.getStorage('phone');
+                var password = $api.getStorage('password');
+                if (character && phone && password) {
+                    this.checkLoginStatus(character,phone, password);
+                } else {
+                    this.goHome();
+                }
+            },
+            versionCheck: function () {
+                if (ENV === 'development') {
+                    return;
+                }
+                try {
+                    var _currentV = Version.data[0].version;
+                    var _NewVersion = NewVersion;
+                    var _AndroidURL = AndroidURL;
+                    var _IOSURL = IOSURL;
+                    $api.setStorage('HeadlineText', HeadlineText);
+                } catch (err) {
+                    return;
+                }
+                if (NewVersion && Tool.cpr_version(_NewVersion, _currentV)) {
+                    this.update = true;
+                    api.alert({
+                        title: '车立享',
+                        msg: '有新版本发布，点击确定进行更新',
+                    }, function (ret, err) {
+                        if (ret.buttonIndex == 1) {
+                            if (api.systemType == 'ios') {
+                                api.openApp({
+                                    iosUrl: _IOSURL
+                                });
+                            }
+                            if (api.systemType == 'android') {
+                                api.openApp({
+                                    // androidPkg: 'android.intent.action.VIEW',
+                                    // mimeType: 'text/html',
+                                    uri: _AndroidURL
+                                }, function (ret, err) {
+
+                                });
+                            }
+                        }
+                    });
+                }
+            },
+            checkLoginStatus: function (character,phone, pwd) {
+                var self = this;
+                api.ajax({
+                    url: self.loginApi,
+                    method: 'post',
+                    timeout: 3,
+                    data: {
+                        values: {
+                            type:character,
+                            phone: phone,
+                            password: pwd,
+                            accessToken: $api.getStorage('token'),
+                            deviceToken: api.deviceId,
+                            OS: api.systemType + api.systemVersion,
+                        },
+                        files: {}
+                    }
+                }, function (ret, err) {
+                    if (ret && ret.code == '1') {
+                        $api.setStorage('userId', ret.data[0].id);
+                        $api.setStorage('isLogin', 'true');
+                        self.goHome('main');
+                    } else {
+                        self.goHome('');
+                    }
+                });
+            },
+            goHome: function (winName) {
+                api.removeLaunchView({
+                    animation: {
+                        type: 'fade',
+                        duration: 500
+                    }
+                });
+                Tool.openWin({
+                    name: winName,
+                    url: '/html/main.html',
+                    delay: 800
+                });
+            }
+        };
+        new Index();
+    };
+</script>
+
+</html>

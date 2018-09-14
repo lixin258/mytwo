@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title></title>
+        <link rel="stylesheet" type="text/css" href="../css/aui/aui.css" />
+        <link rel="stylesheet" type="text/css" href="../css/common.css" />
+	</head>
+    <style>
+        html,body{
+            height: 100vh;
+			position: relative;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+		.aui-dialog-header {
+			background-color: #3a76f1;
+			border-top-left-radius: 0.3rem;
+			border-top-right-radius: 0.3rem;
+			padding-bottom: 0.5rem;
+			color: #fff;
+		}
+		.aui-dialog-btn[button-index="1"] {
+			color: #3a76f1;
+		}
+		.aui-dialog-btn {
+			color: #444;
+		}
+		.aui-dialog-body {
+			font-size: 0.8rem;
+		}
+    </style>
+	<body>
+
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/aui/aui-dialog.js"></script>
+	<script type="text/javascript" src="../script/tool.js"></script>
+	<script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript">
+      apiready = function(){
+      var dialog = new auiDialog();
+			dialog.alert({
+				title:api.pageParam.title || "车立享",
+				msg:api.pageParam.msg,
+				buttons:['取消','确定'],
+				input: api.pageParam.input || false,
+				inputType: api.pageParam.inputType || 'text'
+			},function(ret){
+				if(ret.buttonIndex == 1){ //取消操作
+					api.closeFrame({
+						name: 'dialog'
+					});
+				}
+				if(ret.buttonIndex == 2){ //确定操作
+					if(api.pageParam.inputType === "password"){ //进行交易密码验证
+						var pwd = $api.val(document.querySelector('input[type="password"]'));
+						api.showProgress();
+		                api.ajax({
+		                    url: SERVER_PATH + 'User/checkDealPassword',
+		                    method: 'post',
+		                    data: {
+		                        values: {
+		                            accessToken: $api.getStorage('token'),
+		                            userId: $api.getStorage('userId'),
+		                            dealPass: pwd
+		                        }
+		                    }
+		                }, function(ret, err) {
+		                    api.hideProgress();
+		                    if (ret && ret.code == 0) {
+								setTimeout(function(){
+									api.sendEvent({
+									    name: api.pageParam.event,
+										extra: {
+									        password: pwd
+									    }
+									});
+									api.closeFrame({
+										name: 'dialog'
+									});
+								}, 1500);
+		                    } else {
+		                        Tool.toastInfo(ret.msg || errMsg);
+								api.closeFrame({
+									name: 'dialog'
+								});
+		                    }
+		                });
+					}else{
+						api.sendEvent({
+						    name: api.pageParam.event
+						});
+						api.closeFrame({
+							name: 'dialog'
+						});
+					}
+				}
+			});
+			if(api.pageParam.inputType === "password"){
+				setTimeout(function(){
+					document.querySelector('input[type="password"]').focus();
+				}, 500);
+			}
+        }
+    </script>
+</html>

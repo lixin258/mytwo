@@ -1,0 +1,567 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/LCalendar.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      body {
+        background: white;
+      }
+
+      header {
+        padding-top: 1rem;
+        height: 3.25rem;
+      }
+
+      .itemBox0 {
+        background: #f5f5f5;
+        padding: 0.5rem 0;
+      }
+
+      .itemBox0 > li {
+        background: white;
+      }
+
+      .itemBox1 {
+        background: white;
+        padding: 0.75rem;
+      }
+
+      .itemBox1 > div {
+        border: 1px solid #ccc;
+      }
+
+      .itemBox1 textarea {
+        padding: 0.5rem;
+        height: 5rem;
+      }
+
+      .itemBox1 .addPic {
+        padding: 0.5rem;
+      }
+
+      .itemBox1 .addPic > div, img {
+        display: inline-block;
+        color: #777;
+      }
+
+      .itemBox1 .addPic img {
+        padding: 0;
+        width: 3rem;
+        height: 3rem;
+        font-size: 0;
+      }
+
+      .itemBox1 .addPic > div {
+
+      }
+
+      .itemBox2 {
+        padding: 0.75rem;
+      }
+
+      .itemBox2 ul {
+        padding: 1rem 0;
+      }
+
+      .itemBox2 li {
+        display: inline-block;
+        background: #f0f0f0;
+        padding: 0rem 0.5rem;
+        color: #777;
+        border-radius: 1rem;
+        min-width: 4rem;
+        text-align: center;
+      }
+
+      .calendar {
+        width: calc((100% - 4.6rem) / 2);
+      }
+
+      .itemBox2 .addType {
+        border: 1px dashed #1890eb;
+        color: #1890eb;
+        background: white;
+      }
+
+      #type ul li {
+        display: inline-block;
+        background: #f5f5f5;
+        border-radius: 1rem;
+        width: 3rem;
+        margin-left: 0.3rem;
+        text-align: center;
+      }
+
+      #type .active {
+        background: #0098ff;
+        color: white
+      }
+
+      #submit {
+        color: white;
+      }
+    </style>
+  </head>
+  <body ontouchstart>
+    <!--html-->
+    <header class="aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         tapmode onclick="closeWin()" id='icon-left'></a>
+      <div class="aui-title" id="title">发布预约</div>
+      <a class="aui-pull-right" tapmode id="text"></a>
+    </header>
+    <div class="aui-content aui-margin-b-15 userInfo " id="app">
+      <ul class="aui-list aui-list-in z-no-bt itemBox0">
+        <li class="aui-list-item">
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            服务类型
+            <span id='service' class="aui-pull-right" style='text-align:right'>全部</span>
+          </div>
+        </li>
+        <li class="aui-list-item">
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            预约时间
+            <input id='serviceDate' readonly="" placeholder="日期" name="input_date"
+                   data-lcalendar="2018-01-01,2028-12-31"
+                   style="text-align:right;position:absolute;top:0.7rem;right:5.5rem;line-height:100%;width:6rem">
+            <input id='serviceTime' readonly="" placeholder="时间" name="input_date"
+                   data-lcalendar="2018-01-01,2028-12-31"
+                   style="text-align:right;position:absolute;top:0.7rem;right:1.5rem;line-height:100%;width:2rem">
+          </div>
+        </li>
+        <li class="aui-list-item"  id="type_border">
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            服务方式
+            <span id='type' class="aui-pull-right">
+                <ul>
+                  <li value="0" class='active'>上门</li>
+                  <li value='1'>到店</li>
+                </ul>
+            </span>
+          </div>
+        </li>
+        <li class="aui-list-item">
+          <div class="aui-list-item-inner  z-inner">
+            车主车型
+            <input id='service' class="aui-pull-right" style='text-align:right'>
+          </div>
+        </li>
+      </ul>
+      <div class='itemBox1'>
+        <div>
+          <textarea id="serviceInfo" cols="30" rows="10" placeholder="告诉我们您遇到的问题"></textarea>
+          <div class="addPic">
+            <img id='serviceImg01' src="../../image/addPic.png" alt="">
+            <img id='serviceImg02' src="../../image/addPic.png" alt="" style="display: none;">
+            <img id='serviceImg03' src="../../image/addPic.png" alt="" style="display: none;">
+          </div>
+        </div>
+      </div>
+      <div class="aui-padded-r-10 aui-padded-l-10 mt-40">
+        <div class="aui-btn aui-btn-block z-bg button-active" id='submit'>发布预约</div>
+      </div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../script/LCalendar.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script src="../../script/LCalendar.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      var imgForUpload1 = '';
+      var imgForUpload2 = '';
+      var imgForUpload3 = '';
+      apiready = function () {
+        var Home = function () {
+           this.service=$("#service");
+          this.pageArr = [
+            {title: "昵称", key: "nickname", type: "text"},
+          ];
+          var subs = location.search.split("=");
+          var hide = subs[1];
+          if (hide == 1) {
+            $('#icon-left').css('display', 'none')
+          }
+          this.serviceId = ''; // xxx
+          this.infoId = ''; // xxx
+          this.gender = 0;
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.listenEvent();
+            this.getData();
+            this.bindClick();
+            this.initCalendarDate();
+            this.initCalendarTime();
+          console.log($api.getStorage('type'))
+            if($api.getStorage('type')==1){
+              $('#type_border').css('display', 'none')
+            }
+          },
+          listenEvent: function () {
+            var self = this;
+            // 选择服务类型后，执行改方法 llgxvi
+            api.addEventListener({
+              name: 'chooseServiceType1'
+            }, function (ret, err) {
+              if (ret) {
+                $('#service').html(ret.value.serviceName + ' ' + ret.value.infoName);
+                self.serviceId = ret.value.serviceId;
+                self.infoId = ret.value.infoId;
+              }
+            });
+          },
+          getData: function () {
+            var self = this;
+          },
+          bindClick: function () {
+            var self = this;
+            $('#submit').off('click').on('click', function () {
+              self.confirm();
+            });
+            $('#service').off('click').on('click', function () {
+              Tool.openHeader({
+                name: 'chooseService',
+                frame: {
+                  title: '服务类型',
+                  url: api.wgtRootDir + '/html/chooseService1.html',
+                  param: {
+                    event: 'chooseService',
+                    newService: 1
+                  }
+                }
+              });
+            });
+            $('#type ul li').off('click').on('click', function () {
+              $(this).addClass('active');
+              $(this).siblings().removeClass('active');
+            });
+            $('#serviceImg01').off('click').on('click', function () {
+              api.actionSheet({
+                title: '上传方式',
+                cancelTitle: '取消',
+                buttons: ['拍照上传', '从相册选择']
+              }, function (ret, err) {
+                if (ret.buttonIndex == 3) return;
+                var index = ret.buttonIndex, type;
+                switch (index) {
+                  case 1:
+                    type = 'camera';
+                    break;
+                  case 2:
+                    type = 'album';
+                    break;
+                }
+                Tool.getPicture(type, 'getPictureAtUser');//选择图片
+              });
+              api.addEventListener({
+                name: 'getPictureAtUser'
+              }, function (ret, err) {
+                var json = ret.value;
+                if (json.ret && json.ret.data) {
+                  Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUser'); //上传图片
+                  api.addEventListener({
+                    name: 'uploadImageAtUser'
+                  }, function (ret, err) {
+                    var json2 = ret.value;
+                    if (json2.ret.code == 0) {
+                      $('#serviceImg01').attr('src', json2.ret.CDNPath);
+                      imgForUpload1 = json2.ret.CDNPath;
+                      $('#serviceImg02').show();
+                      // self.updatePhoto(json2.ret.CDNPath);
+                    }
+                  });
+                }
+              });
+            });
+            $('#serviceImg02').off('click').on('click', function () {
+              api.actionSheet({
+                title: '上传方式',
+                cancelTitle: '取消',
+                buttons: ['拍照上传', '从相册选择']
+              }, function (ret, err) {
+                if (ret.buttonIndex == 3) return;
+                var index = ret.buttonIndex, type;
+                switch (index) {
+                  case 1:
+                    type = 'camera';
+                    break;
+                  case 2:
+                    type = 'album';
+                    break;
+                }
+                Tool.getPicture(type, 'getPictureAtUser');//选择图片
+              });
+              api.addEventListener({
+                name: 'getPictureAtUser'
+              }, function (ret, err) {
+                var json = ret.value;
+                if (json.ret && json.ret.data) {
+                  Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUser'); //上传图片
+                  api.addEventListener({
+                    name: 'uploadImageAtUser'
+                  }, function (ret, err) {
+                    var json2 = ret.value;
+                    if (json2.ret.code == 0) {
+                      $('#serviceImg02').attr('src', json2.ret.CDNPath);
+                      imgForUpload2 = json2.ret.CDNPath;
+                      $('#serviceImg03').show();
+                      // self.updatePhoto(json2.ret.CDNPath);
+                    }
+                  });
+                }
+              });
+            });
+            $('#serviceImg03').off('click').on('click', function () {
+              api.actionSheet({
+                title: '上传方式',
+                cancelTitle: '取消',
+                buttons: ['拍照上传', '从相册选择']
+              }, function (ret, err) {
+                if (ret.buttonIndex == 3) return;
+                var index = ret.buttonIndex, type;
+                switch (index) {
+                  case 1:
+                    type = 'camera';
+                    break;
+                  case 2:
+                    type = 'album';
+                    break;
+                }
+                Tool.getPicture(type, 'getPictureAtUser');//选择图片
+              });
+              api.addEventListener({
+                name: 'getPictureAtUser'
+              }, function (ret, err) {
+                var json = ret.value;
+                if (json.ret && json.ret.data) {
+                  Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUser'); //上传图片
+                  api.addEventListener({
+                    name: 'uploadImageAtUser'
+                  }, function (ret, err) {
+                    var json2 = ret.value;
+                    if (json2.ret.code == 0) {
+                      $('#serviceImg03').attr('src', json2.ret.CDNPath);
+                      imgForUpload3 = json2.ret.CDNPath;
+                      // self.updatePhoto(json2.ret.CDNPath);
+                    }
+                  });
+                }
+              });
+            });
+          },
+          updatePhoto: function (url) {
+            var self = this;
+            var id = $api.getStorage('userId');
+            var headimgurl = url;
+            api.ajax({
+              url: SERVER_PATH + 'User/updateUser',
+              method: 'post',
+              data: {
+                values: self.userInfo,
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0) {
+                $('#uploadPhoto img').attr('src', url);
+                Tool.toastInfo('头像上传成功');
+              } else {
+                Tool.toastInfo(errMsg);
+              }
+            });
+          },
+          confirm: function () {
+            var self = this;
+            Tool.confirm('确认提交?', 'updateInfo');
+            api.addEventListener({
+              name: 'updateInfo'
+            }, function (ret, err) {
+              self.newReserve();
+            });
+          },
+          newReserve: function () {
+            var self = this;
+            console.log($api.getStorage('type'))
+            var data = this.userInfo;
+            var url = '';
+            if ($api.getStorage('character') == 0) {
+              url = 'User/userServiceOrder'
+            }
+            else {
+              url = 'Agency/userServiceOrder'
+            }
+            {
+              if (!self.serviceId) {
+                Tool.toastInfo('请选择服务类型');
+                return;
+              }
+              if (!$('#serviceDate').val().trim() || !$('#serviceTime').val().trim()) {
+                Tool.toastInfo('请选择预约时间');
+                return;
+              }
+
+              if($api.getStorage('type')!=1){
+                if (!self.infoId) {
+                  Tool.toastInfo('请选择服务方式');
+                  return;
+                }
+              }
+              if (!$('#serviceInfo').val().trim() && !imgForUpload1) {
+                Tool.toastInfo('请至少上图一张图片');
+                return;
+              }
+            }
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + url,
+              method: 'post',
+              data: {
+                values: {
+                  id: $api.getStorage('userId'),
+                  serviceId: self.serviceId,
+                  serviceListId: self.infoId,
+                  carInfo:self.service.val(),
+                  serviceTime: $('#serviceDate').val() + " " + $('#serviceTime').val(),
+                  serviceInfo: $('#serviceInfo').val(),
+                  headimgurl: $('#avatar').attr("src"),
+                  // serviceImg01: $('#serviceImg01').attr("src"),
+                  serviceImg01: imgForUpload1 || '',
+                  serviceImg02: imgForUpload2 || '',
+                  serviceImg03: imgForUpload3 || '',
+                  type: $('#type ul .active').val(),
+                  userType:$api.getStorage('type'),
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              api.hideProgress();
+              if (ret && ret.code == 0) {
+                Tool.toastInfo(ret.msg || okMsg);
+                api.sendEvent({
+                  name: 'hasNewReserve',
+                  extra: {
+                    key1: 'value1',
+                    key2: 'value2'
+                  }
+                });
+                //
+                false && $api.setStorage('hasNewReserve', '1');
+                //
+                if ($api.getStorage('fromTabIndex') == 1) {
+                  api.closeWin();
+                }
+                else if ($api.getStorage('fromTabIndex') == 2 || $api.getStorage('fromTabIndex') == 6) {
+                  api.openFrame({
+                    reload: true,
+                    // name: 'add',
+                    // url: api.wgtRootDir + '/reserve/reserve_index.html',
+                    url:  './reserve_index.html',
+                    rect: {
+                      x: 0,
+                      y: 0,
+                      w: 'auto',
+                      h: 'auto'
+                    },
+                  });
+                }
+
+              }
+              else {
+                Tool.toastInfo(ret.msg);
+              }
+            });
+            false && setTimeout(function () {
+              Tool.openWin({
+                name: 'main',
+                url: '/home/main.html',
+              });
+            }, 1500);
+            api.setFrameGroupIndex({
+              name: 'app_index',
+              index: 1,
+              scroll: true
+            });
+          },
+          uploadImage: function (index) {
+            if (this.userInfo.status == 1) return;
+            api.actionSheet({
+              title: '上传方式',
+              cancelTitle: '取消',
+              buttons: ['拍照上传', '从相册选择']
+            }, function (ret, err) {
+              if (ret.buttonIndex == 3) return;
+              var index = ret.buttonIndex, type;
+              switch (index) {
+                case 1:
+                  type = 'camera';
+                  break;
+                case 2:
+                  type = 'album';
+                  break;
+              }
+              Tool.getPicture(type, 'getPictureAtUserInfo');//选择图片
+            });
+
+            api.addEventListener({
+              name: 'getPictureAtUserInfo'
+            }, function (ret, err) {
+              var json = ret.value;
+              if (json.ret && json.ret.data) {
+                Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUserInfo'); // 上传图片
+                api.addEventListener({
+                  name: 'uploadImageAtUserInfo'
+                }, function (ret, err) {
+                  var json2 = ret.value;
+                  if (json2.ret.code == 0) {
+                    var src = json2.ret.thumbPath;
+                    if (index == 1) vm.userInfo.idCardOnURL = src;
+                    if (index == 0) vm.userInfo.idCardOffURL = src;
+                    vm.infochange = true;
+                  }
+                  else {
+                    Tool.toastInfo(errMsg);
+                  }
+                });
+              }
+            });
+          },
+          initCalendarDate: function () {
+            var calendar = new LCalendar();
+            calendar.init({
+              'trigger': '#serviceDate',
+              'type': 'date',
+              'minDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
+              'maxDate': '2020-12-30'
+            });
+          },
+          initCalendarTime: function () {
+            var calendar = new LCalendar();
+            calendar.init({
+              'trigger': '#serviceTime',//标签id
+              'type': 'time',//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择
+            });
+          },
+          created: function () {
+            FastClick.attach(document.body);
+          },
+        };
+        new Home();
+      }
+    </script>
+  </body>
+</html>

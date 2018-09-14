@@ -1,0 +1,187 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width">
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <!--css-->
+    <style>
+      body {
+        background: rgba(205, 238, 255, 1);
+        min-height: 100vh;
+      }
+    </style>
+  </head>
+  <body ontouchstart>
+    <header class="aui-bar aui-bar-nav aui-hide">
+      <a class="aui-pull-left aui-btn button-active2" style="width: 45px;" onclick="closeWin();">
+        <span class="aui-iconfont aui-icon-left button-active2" style="margin: auto;"></span>
+      </a>
+      <div class="" id="title">我的邀请码</div>
+    </header>
+    <style>
+      #con1 {
+        position: relative;
+        overflow: hidden;
+      }
+
+      #con1 div {
+        position: absolute;
+        width: 600px;
+        height: 200px;
+        border-radius: 50%;
+        left: calc(50% - 300px);
+        bottom: -170px;
+        background: rgba(205, 238, 255, 1);
+      }
+
+      #con2 {
+        position: relative;
+        margin-top: 30px;
+      }
+
+      #con2 > img {
+        width: 60%;
+        margin-left: 20%;
+      }
+
+      #con2 #qrcode-con {
+        position: absolute;
+        width: 40%;
+        /*height: 100px;*/
+        /*background: yellow;*/
+        left: 30%;
+        top: 14.5%;
+      }
+
+      #con3 {
+        position: relative;
+        margin-top: 30px;
+      }
+
+      #con3 > img {
+        width: 70%;
+        margin-left: 15%;
+      }
+
+      #con3 .text1,
+      #con3 .text2,
+      #con3 .text3,
+      #con3 .text4,
+      #con3 .text5,
+      #con3 .text6 {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        /*border: 1px solid red;*/
+        top: 57%;
+        font-size: 19px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+      }
+
+      #con3 .text1 {
+        left: 16%;
+      }
+
+      #con3 .text2 {
+        left: 28%;
+      }
+
+      #con3 .text3 {
+        left: 40%;
+      }
+
+      #con3 .text4 {
+        left: 52%;
+      }
+
+      #con3 .text5 {
+        left: 64%;
+      }
+
+      #con3 .text6 {
+        left: 76.5%;
+      }
+    </style>
+    <div id="con1">
+      <img src="../image/share1.png" alt="">
+      <div></div>
+    </div>
+    <div id="con2">
+      <img src="../image/share2.png" alt="">
+      <div id="qrcode-con"></div>
+    </div>
+    <div id="con3">
+      <img src="../image/share3.png" alt="">
+      <div class="text1">1</div>
+      <div class="text2">2</div>
+      <div class="text3">3</div>
+      <div class="text4">4</div>
+      <div class="text5">5</div>
+      <div class="text6">6</div>
+    </div>
+    <!--js-->
+    <script src="../script/api.js"></script>
+    <script src="../config.js"></script>
+    <script src="../script/jquery.js"></script>
+    <script src="../script/jquery.qrcode.min.js"></script>
+    <!--js-->
+    <script>
+      apiready = function () {
+        var userId = $api.getStorage('userId');
+        var apiGetInfo = SERVER_PATH + 'User/getUserInfo';
+        var qrCodeWidth = $('#qrcode-con').width();
+
+        // generate qrcode from client side
+        if (false) {
+          var width = $('#qrcode-con').width();
+          $('#qrcode-con').qrcode({
+            width: width,
+            height: width,
+            text: 'test'
+          });
+        }
+
+        // get qrcode from server side
+        (function () {
+          api.showProgress();
+          api.ajax({
+            url: apiGetInfo,
+            method: 'post',
+            data: {
+              values: {
+                id: userId
+              }
+            }
+          }, function (ret, err) {
+            api.hideProgress();
+            if (ret) {
+              if (ret.code == 0) {
+                // qrCodeUrL, inviteCode // notice the L in UrL
+                var invitationCodeArr = ret.data[0].inviteCode.split('');
+                $('#qrcode-con').html('<img src="' + ret.data[0].qrCodeUrL + '" width="' + qrCodeWidth + 'px;">');
+                $('#con3').find('.text1').html(invitationCodeArr[0]);
+                $('#con3').find('.text2').html(invitationCodeArr[1]);
+                $('#con3').find('.text3').html(invitationCodeArr[2]);
+                $('#con3').find('.text4').html(invitationCodeArr[3]);
+                $('#con3').find('.text5').html(invitationCodeArr[4]);
+                $('#con3').find('.text6').html(invitationCodeArr[5]);
+              }
+              else {
+                Tool.toastInfo(ret.msg || errMsg);
+              }
+            }
+            else {
+              Tool.toastInfo(errMsg);
+            }
+          });
+        })();
+      }
+    </script>
+  </body>
+</html>

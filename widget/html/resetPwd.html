@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html class="sign">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <!--css-->
+    <style>
+      html, body {
+        height: 100vh;
+      }
+
+      header {
+        background-color: rgba(255, 255, 255, 0) !important;
+        color: #ccc;
+        text-align: center;
+        padding-top: 1rem;
+      }
+
+      header span {
+        color: black !important;
+      }
+
+      header > div {
+        color: black;
+      }
+
+      .fr {
+        float: right;
+      }
+
+      .signIn {
+        margin: 0 auto;
+      }
+
+      .signIn .logo {
+        width: 100%;
+        text-align: center;
+        margin: 1rem auto;
+      }
+
+      .signIn .logo img {
+        width: 4rem;
+        margin: 0 auto;
+      }
+
+      .aui-list-item {
+        margin: 0.5rem auto !important;
+        width: 80%;
+        border: 1px solid silver !important;
+        border-radius: 2rem;
+        position: relative;
+      }
+
+      .chooseCaracter {
+        position: absolute;
+        display: inline-block;
+        width: 30%;
+        line-height: 2rem;
+        padding-left: 0rem;
+      }
+
+      .z-character {
+        line-height: 2rem;
+        width: 100%;
+        padding-right: 1.5rem;
+        direction: rtl;
+      }
+
+      .z-btn {
+        background: #5990f4 !important;
+      }
+
+      .z-smsBtn {
+        border-left: 1px solid silver;
+        padding: 0 1rem;
+      }
+    </style>
+  </head>
+  <body ontouchstart style="background-color: #fff;">
+    <!--html-->
+    <header class="aui-bar aui-bar-nav">
+      <style>
+        .this-page-only:active {
+          border-radius: 100%;
+          background: #f0f0f0 !important;
+          /*opacity: .9;*/
+        }
+      </style>
+      <a class="aui-pull-left aui-btn this-page-only"
+         style="width: 50px; height: 50px;"
+         onclick="closeWin();">
+        <span class="aui-iconfont aui-icon-close" style="margin: auto;"></span>
+      </a>
+      <div></div>
+    </header>
+    <div id="signIn" class="signIn">
+      <div class="logo">
+        <img src="../image/logo.png" style="border-radius: 17vw;">
+      </div>
+      <div class="aui-content aui-margin-b-15">
+        <ul class="aui-list aui-form-list z-no-bt">
+          <li class="aui-list-item">
+            <div class='chooseCaracter'>选择角色</div>
+            <select class="z-character " name="" id="character">
+              <option value="0">用户</option>
+              <option value="1">商户</option>
+              <option value="2">技师</option>
+            </select>
+            <div class='aui-list-item-arrow'></div>
+          </li>
+          <li class="aui-list-item">
+            <input type="tel" id='phone' placeholder="输入手机号">
+          </li>
+          <li class="aui-list-item">
+            <input type="tel" id='captcha' placeholder="验证码">
+            <div class="z-smsBtn" id='smsBtn'>获取</div>
+          </li>
+          <li class="aui-list-item">
+            <input type="password" id='npwd' placeholder="设置新密码(6~16位)">
+          </li>
+          <li class="aui-list-item">
+            <input type="password" id='confirmPwd' placeholder="确认新密码(6~16位)">
+          </li>
+        </ul>
+        <p class="aui-margin-t-15">
+        <div class="aui-btn aui-btn-block z-btn button-active" id='resetPwd'>重置密码</div>
+        </p>
+      </div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/jquery.js"></script>
+    <script type="text/javascript" src="../script/fastclick.js"></script>
+    <script type="text/javascript" src="../script/tool.js"></script>
+    <script type="text/javascript" src="../config.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var interval;
+        var Home = function () {
+          if ($api.getStorage('phone')) {
+            $('#phone').val($api.getStorage('phone'));
+            $('#character>option[value=' + $api.getStorage('character') + ']').attr('selected', 'selected');
+          }
+          ;
+          this.getCaptchaIng = false;
+          this.time = 60;
+          this.phoneDom = $('#phone');
+          this.captchaDom = $('#captcha');
+          this.npwdDom = $('#npwd');
+          this.confirmPwdDom = $('#confirmPwd');
+          this.captchaBtnText = '';
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.bindClick();
+            this.addEventListener();
+          },
+          addEventListener: function () {
+            var self = this;
+            api.addEventListener({
+              name: 'resetPwd'
+            }, function (ret, err) {
+              clearInterval(interval); //清除计时器
+              self.getCaptchaIng = false;
+              $('#smsBtn').text('获取');
+              self.time = 60;
+            });
+            api.addEventListener({
+              name: 'closeSetLoginPwd'
+            }, function (ret, err) {
+              closeWin();
+            });
+          },
+          bindClick: function () {
+            var self = this;
+            $('#smsBtn').off('click').on('click', function () {
+              self.getCaptcha();
+            });
+            $('#resetPwd').off('click').on('click', function () {
+              self.resetPwd();
+            });
+          },
+          resetPwd: function () {
+            var self = this;
+            if (!isPwd(self.npwdDom.val())) {
+              Tool.toastInfo('输入密码格式不正确');
+              return;
+            }
+            if (!isCaptcha(self.captchaDom.val())) {
+              Tool.toastInfo('验证码格式有误');
+              return;
+            }
+            if (!(self.npwdDom.val() === self.confirmPwdDom.val())) {
+              Tool.toastInfo('两次密码输入不一致');
+              return;
+            }
+            api.ajax({
+              url: SERVER_PATH + 'User/updatePassword',
+              method: 'post',
+              data: {
+                values: {
+                  type: $('#captcha option:selected').val(),
+                  phone: self.phoneDom.val(),
+                  npwd: self.npwdDom.val(),
+                  code: self.captchaDom.val()
+                },
+              }
+            }, function (ret, err) {
+              if (ret) {
+                if (ret.code == 0) {
+                  Tool.toastInfo(ret.msg || okMsg);
+                  // api.sendEvent({
+                  //     name: 'closeSetLoginPwd_step1',
+                  // });
+                  setTimeout(function () {
+                    closeWin();
+                  }, 1500);
+                } else {
+                  Tool.toastInfo(ret.msg || errMsg);
+                }
+              } else {
+                Tool.toastInfo(errMsg);
+              }
+            });
+          },
+          getCaptcha: function () {
+            var self = this;
+            if (self.getCaptchaIng) {
+              return;
+            }
+            self.getCaptchaIng = true;
+            if (!isPhone(self.phoneDom.val())) {
+              self.getCaptchaIng = false;
+              Tool.toastInfo('手机号格式不正确');
+              return;
+            } else {
+              api.showProgress();
+              api.ajax({
+                url: SERVER_PATH + 'User/sendVerifyCode',
+                method: 'post',
+                data: {
+                  values: {
+                    phone: self.phoneDom.val(),
+                    type: 2
+                  }
+                }
+              }, function (ret, err) {
+                api.hideProgress();
+                if (ret) {
+                  if (ret.code == 0) {
+                    Tool.toastInfo(ret.msg || okMsg);
+                    interval = setInterval(refreshGetCaptcha, 1000); //创建计时器
+                    self.captchaFocus = true;
+                  } else {
+                    Tool.toastInfo(ret.msg || errMsg);
+                    self.getCaptchaIng = false;
+                  }
+                } else {
+                  Tool.toastInfo(err.msg || errMsg);
+                  self.getCaptchaIng = false;
+                }
+              });
+            }
+
+            function refreshGetCaptcha() {
+              $('#smsBtn').text(self.time + 's');
+              self.time--;
+              if (self.time < 0) {
+                clearInterval(interval); //清除计时器
+                self.getCaptchaIng = false;
+                $('#smsBtn').text('获取');
+                self.time = 60;
+              }
+            }
+          },
+        };
+        new Home();
+      };
+    </script>
+  </body>
+</html>

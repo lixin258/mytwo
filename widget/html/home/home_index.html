@@ -1,0 +1,568 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+  />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+  <!--css-->
+  <style media="screen">
+    #cityChoose {
+      color: #fff;
+    }
+
+    #cityChoose::before {
+      content: '' !important;
+    }
+
+    #title {
+
+      width: 100%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    #title span {
+      padding: 0.15rem 2rem;
+      display: inline-block;
+      width: 100%;
+      line-height: 1.3rem;
+      background-color: white;
+      color: #777;
+      border-radius: 0.8rem;
+      font-size: .8rem;
+    }
+
+    .aui-slide-node img {
+      object-fit: cover;
+    }
+
+    .aui-row img.aui-iconfont {
+      display: inline-block;
+      height: 2rem;
+      border-radius: 1rem;
+    }
+
+    .aui-row .aui-grid-label {
+      font-size: 0.6rem;
+    }
+
+    .aui-grid [class*=aui-col-] {
+      padding: 0.2rem 0;
+    }
+
+    .aui-grid .aui-grid-label {
+      margin-top: 0;
+    }
+
+    .carLi h2 {
+      margin-top: 0.25rem;
+      font-size: 0.7rem;
+      font-size: 0.65rem;
+      font-weight: bold;
+    }
+
+    .carLi .new {
+      position: absolute;
+      left: 0.75rem;
+      top: 0.75rem;
+      width: 1.6rem;
+    }
+
+    .fixedHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#41b2ff), to(#0097fe)) !important;
+      background-image: none;
+      color: white !important;
+    }
+
+    .fixedHeader img {
+      position: absolute;
+      /*padding:none;*/
+      padding: 0;
+      right: 0rem;
+      top: 1.8rem;
+      width: 2.3rem;
+    }
+
+    .shopBox {
+      background: white;
+      padding-top: 0.5rem;
+    }
+
+    .shopBox > span {
+      font-weight: bold;
+      padding-left: 0.5rem;
+    }
+
+    .shopBox > p {
+      padding-right: 0.5rem;
+    }
+
+    .shopBox > ul {
+      padding: 0.5rem;
+      display: inline-block;
+    }
+
+    .shopBox .recommendItem {
+      display: inline-block;
+
+      /*margin-bottom: 0.5rem;*/
+      margin-bottom: 0.75rem;
+      width: calc((100% - 1rem) / 2);
+    }
+
+    .shopBox .recommendItem:nth-of-type(odd) {
+      margin-right: 0.5rem;
+    }
+
+    .shopBox .recommendItem > img {
+      margin-bottom: 0.5rem;
+    }
+
+    .shopBox .shopname {
+      width: 100%;
+    }
+
+    .shopBox p {
+      display: inline-block;
+      padding-left: 0.5rem;
+    }
+
+    .stars {
+      display: inline-block;
+    }
+
+    .stars li {
+      display: inline-block;
+
+    }
+    .stars img {
+      width: .5rem;
+      display: inline-block;
+    }
+    #place,#slide{
+      z-index: 2
+    }
+  </style>
+</head>
+<body ontouchstart class="bodyBc">
+<!--html-->
+<header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+  <!--<a class="aui-pull-left" id="cityChoose"></a>-->
+  <div class="" id="title"><span class="aui-iconfont aui-icon-search"> 想找商家/技师?</span></div>
+  <!-- <img class="aui-pull-right" src="../../image/message_white.png" alt=""> -->
+</header>
+<div id="place">
+  <div style="height: 2.25rem;"></div>
+</div>
+<div id="slide" style="height:0.4vw;"></div>
+<section class="aui-grid clearfix aui-margin-b-10">
+  <div class="aui-row" id="serviceItem">
+  </div>
+</section>
+<!-- 滚动头条 -->
+<div class="aui-info aui-padded-l-10 aui-padded-r-10" style="border-top: 2px solid #f7f7f7;">
+  <div class="aui-info-item">
+    <img src="../../image/i_tip.png" style="width:4.5rem;height:0.8rem;">
+    <span class="aui-margin-l-5 aui-margin-r-5">|</span>
+    <span  class="aui-margin-l-5 headline-text" id="notice"></span>
+  </div>
+</div>
+<div class='shopBox'>
+  <span>热门推荐</span>
+  <style>
+    #recommendList > li:active {
+      opacity: .6;
+    }
+  </style>
+  <ul class="recommendList clearfix" id="recommendList"></ul>
+</div>
+<div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+<div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+<!--js-->
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/html" id="tpl-banner">
+  <div class="aui-slide-wrap">
+    {{each data as value index}}
+    <div class="aui-slide-node bg-dark z-banner">
+      <img src="{{value}}"/>
+    </div>
+    {{/each}}
+  </div>
+  <div class="aui-slide-page-wrap"></div>
+</script>
+<script type="text/html" id="tpl-carList">
+  {{each data as value index}}
+  <li class="carLi" data-id="{{value.id}}">
+    <img src="{{value.images}}" alt="">
+    <img class="new" src="../../image/demo2.png" alt="">
+    <h2 class="line-1 aui-padded-t-5 aui-ellipsis-1">{{value.title}}</h2>
+    <p class="aui-font-size-12 line-2 aui-ellipsis-1">{{value.style}} {{value.standard}}</p>
+    <div class="aui-font-size-12 line-1" style="verticle-style: bottom;"><span class="fc">蚂蚁有车价：</span><b
+      class="aui-text-danger aui-font-size-14">{{value.saleprice}}万</b></div>
+  </li>
+  {{/each}}
+</script>
+<script type="text/html" id="tpl-serviceItem">
+  {{each data as value index}}
+  <div class="aui-col-xs-3 tab-active2" data-index="{{value.id}}">
+    <img class="aui-iconfont aui-icon-home" src="{{value.image}}"/>
+    <div class="aui-grid-label">{{value.name}}</div>
+  </div>
+  {{/each}}
+</script>
+<script type="text/html" id="tpl-recommendList">
+  {{each data as value index}}
+  <li class="recommendItem" data-id="{{value.id}}">
+    <img src="{{value.shopimgurl}}" alt="" style="width:360px;">
+    <span class="shopname">{{value.shopname}}</span>
+    <ul class="stars">
+      <li><img src="../../image/star.png" alt=""></li>
+      <li><img src="../../image/star.png" alt=""></li>
+      <li><img src="../../image/star.png" alt=""></li>
+      <li><img src="../../image/star.png" alt=""></li>
+      <li><img src="../../image/star.png" alt=""></li>
+    </ul>
+    <p>{{value.viewAmount}}条评价</p>
+  </li>
+  {{/each}}
+</script>
+<!--js-->
+<script type="text/javascript">
+  apiready = function () {
+    map = api.require( 'bMap' );
+
+    // 判断定位功能是否开启
+    var header = $api.dom('header');
+    $api.fixStatusBar(header);
+    $api.fixStatusBar($api.dom('#place'));
+    var headerHeight = $api.offset(header).h; //header高度
+    var footerH = $api.getStorage('footerH'); //footer高度
+    var Home = function () {
+      this.cityId = '';
+      this.page = 0;
+      this.pagesize = 10;
+      this.maxPage = 0;
+      this.total = 0;
+      this.lon='';
+      this.lat='';
+      this.init();
+    };
+    Home.prototype = {
+      init: function () {
+        this.addEventListener();
+        this.getData();
+        this.getBanners();
+        this.bindClick();
+        this.getService();
+        this.nowPosition();
+        this.mounted();
+        $('#recommendList').off('click').on('click', '> li', function () {
+          var id = $(this).data('id');
+          map.getLocation( {
+            accuracy: '10m',
+            autoStop: true,
+            filter: 10
+          }, function ( ret, err ) {
+            if ( ret.status ) {
+              var lon=ret.lon;
+              var lat=ret.lat;
+              Tool.openWin({
+                url: '/html/supplier/sup-home.html',
+                param: {
+                  id: id,
+                  lat:lat,
+                  lon:lon
+                }
+              });
+            } else {
+              // api.alert( {
+              //   msg: "获取位置信息失败，请重试!2"
+              // } );
+            }
+          } );
+        });
+        // 获取经纬度
+      },
+      nowPosition:function() {
+      map.getLocation( {
+        accuracy: '10m',
+        autoStop: true,
+        filter: 10
+      }, function ( ret, err ) {
+        if ( ret.status ) {
+          $api.setStorage('longitude',ret.lon );
+          $api.setStorage('latitude',ret.lat );
+          this.lon=ret.lon;
+          this.lat=ret.lat;
+        } else {
+          // api.alert( {
+            // msg: "获取位置信息失败，请重试!"
+          // } );
+        }
+      } );
+    },
+      getService:function(){
+              var self=this;
+              api.ajax({
+                url:SERVER_PATH + 'Category/getCategoryList',
+                data: {
+                  values: {},
+                  files: {}
+                }
+              },function (ret, err) {
+                if (ret) {
+                  $('#serviceItem').append(template('tpl-serviceItem', {"data": ret.data}));
+                }
+              });
+      },
+      setDefaultSearch: function () {
+        var self = this;
+        $('#title span').text(' ' + ($api.getStorage('defaultSearch') || '奔驰汽车'));
+        api.ajax({
+          url: SERVER_PATH + 'Index/getDefaultSearch',
+          method: 'post',
+          data: {
+            values: {},
+            files: {}
+          }
+        }, function (ret, err) {
+          if (ret && ret.code == 0) {
+            $api.setStorage('defaultSearch', ret.data);
+          }
+        });
+      },
+      addEventListener: function () {
+        api.addEventListener({
+          name: 'chooseCity'
+        }, function (ret, err) {
+          $('#cityChoose').text(ret.value.city);
+        });
+        api.addEventListener({
+          name: 'setadress'
+        }, function (ret, err) {
+          this.nowPosition();
+        });
+        api.addEventListener({
+          name: 'chooseServiceType'
+        }, function (ret, err) {
+          Tool.openWin({
+            url: '/html/nearBy/nearBy_index.html',
+            param: {
+              serviceId: ret.value.serviceId,
+              serviceListId: ret.value.infoId
+            }
+          });
+        });
+
+      },
+      getBanners: function () {
+        var self = this;
+        api.ajax({
+          url: SERVER_PATH + 'Index/getBanner',
+          method: 'post',
+          data: {
+            values: {},
+            files: {}
+          }
+        }, function (ret, err) {
+          if (ret && ret.code == 0 && ret.data && ret.data.length) {
+            var arr = [];
+            for (var i = 0; i < ret.data.length; i++) {
+              arr.push(ret.data[i].image);
+            }
+            self.drawBanners(arr);
+          }
+        });
+      },
+      drawBanners: function (bannersArr) {
+        var self = this;
+        $api.html(document.getElementById("slide"), template('tpl-banner', {"data": bannersArr}))
+        new auiSlide({
+          "container": document.getElementById("slide"),
+          "height": api.winWidth * 0.312,
+          "speed": 500,
+          "autoPlay": 5000, //自动播放
+          "loop": true,
+          "pageShow": true,
+          "pageStyle": 'dot',
+          'dotPosition': 'center'
+        });
+      },
+      getData: function () {
+        var self = this;
+        api.showProgress();
+        api.ajax({
+          url: SERVER_PATH + 'Agency/recommendedShop',
+          method: 'post',
+          data: {
+            values: {},
+            files: {}
+          }
+        }, function (data, err) {
+          if (data) {
+
+            $('#recommendList').append(template('tpl-recommendList', {"data": data}));
+            // $("#recommendList").html(htmlDoc);
+          }
+          else {
+            Tool.toastInfo('暂时没有热门推荐');
+          }
+          api.hideProgress();
+        });
+      },
+      drawData: function (data) {
+        $('#carList').append(template('tpl-carList', {"data": data}));
+        this.viewCarInfo();
+      },
+      loadMore: function () {
+        var self = this;
+        Tool.loadMore(function () {
+          if (self.maxPage && self.total) {
+            if (parseInt(self.page + 1) < parseInt(self.maxPage)) {
+              self.page++;
+              self.getData();
+            } else {
+              $('#loadAll').removeClass('aui-hide');
+            }
+          }
+        });
+      },
+      refresh: function () {
+        var self = this;
+        Tool.refreshPage(function () {
+          self.page = 0;
+          self.maxPage = 0;
+          $('#loadAll').addClass('aui-hide');
+          $('#dataNull').addClass('aui-hide');
+          $('#carList').html('');
+          self.getData();
+        });
+      },
+      bindClick: function () {
+        var self = this;
+        $api.addEvt(document.getElementById('cityChoose'), 'click', function () {
+          return;
+          Tool.openHeader({
+            name: 'chooseCity',
+            frame: {
+              title: '选择城市',
+              url: api.wgtRootDir + '/html/chooseCity.html',
+              param: {
+                event: 'chooseCity'
+              }
+            }
+          });
+        });
+        $('#title').off('click').on('click', function () {
+          Tool.openWin({
+            url: '/html/search.html',
+          });
+        });
+        $('#serviceItem').off('click').on('click','div', function () {
+          var serviceId = $(this).data('index');
+          console.log(serviceId)
+          Tool.openHeader({
+            name: 'chooseService',
+            frame: {
+              title: '服务列表',
+              url: api.wgtRootDir + '/html/chooseService.html',
+              param: {
+                serviceId: serviceId,
+              }
+            }
+          });
+        });
+      },
+      viewCarInfo: function () {
+        $('.carLi').off('click').on('click', function () {
+          var _id = $(this).data('id');
+          Tool.openWin({
+            url: '/html/buyCar/buyCar_detail.html',
+            param: {
+              id: _id
+            }
+          });
+        });
+      } ,
+
+      mounted: function () {
+        console.log(121313);
+        // 滚动头条
+        (function () {
+          var headline = document.querySelector('.headline-text');
+          var text = '暂无公告！！';
+          headline.innerText = text;
+          console.log(13134);
+          api.ajax({
+              url: SERVER_PATH + 'Feedback/headlines',
+              method: 'post',
+              data: {
+                  values: {
+                      AccessToken: $api.getStorage('token'),
+
+                  },
+                  files: {}
+              }
+          }, function (ret, err) {
+            console.log(ret==false);
+
+              if (ret) {
+                console.log(424525);
+                  if (ret.code == 0 && ret.data && ret.data.length) {
+
+                    var dataArr=ret.data[0]
+                     text = ret.data[0].title
+                     $('#notice').on('click',function(){
+                       console.log("1111")
+                         Tool.openHeader({
+                             frame: {
+                                 title: '公告详情',
+                                 url: api.wgtRootDir + '/html/news/news_detail.html',
+                                 param: {
+                                     value: dataArr
+                                 }
+                             }
+                         });
+                     });
+
+                  }else{
+                    console.log(1111);
+
+
+                  }
+              }
+          });
+          setInterval(function () {
+            var len = text.length;
+            var head = text.substr(0, 2);
+            var tail = text.substr(2, len - 2);
+            text = tail + head;
+            headline.innerText = text;
+          }, 500);
+        })();
+      },
+
+    };
+    new Home();
+  };
+
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    #cityChoose{
+      color:#777;
+      padding-left:30px;
+    }
+    #cityChoose::before{
+        content: '' !important;
+    }
+    #title{
+        left: 4.5rem;
+        right: 2rem;
+    }
+    #title span{
+        padding: 0.15rem 2rem;
+        display: inline-block;
+        width: 100%;
+        line-height: 1.3rem;
+        background-color: rgb(236,236,236);
+        color: #777;
+        border-radius: 0.8rem;
+        font-size: .8rem;
+    }
+    .aui-slide-node img{
+        object-fit: cover;
+    }
+    .aui-row img.aui-iconfont{
+        display: inline-block;
+        height: 2rem;
+        border-radius: 1rem;
+    }
+    .aui-row .aui-grid-label{
+        font-size: 0.6rem;
+    }
+    .aui-grid [class*=aui-col-]{
+        padding: 0.5rem 0;
+    }
+    .aui-grid .aui-grid-label{
+        margin-top: 0;
+    }
+    .carList li{
+        position: relative;
+        width: 49.5vw;
+        padding: 0.5rem;
+        background-color: #fff;
+        float: left;
+    }
+    .carList li:nth-of-type(odd){
+        margin-right: 1vw;
+        margin-bottom: 1vw;
+    }
+    .carLi h2{
+        margin-top: 0.25rem;
+        font-size: 0.7rem;
+        font-size: 0.65rem;
+        font-weight: bold;
+    }
+    .carLi .new{
+        position: absolute;
+        left: 0.75rem;
+        top: 0.75rem;
+        width: 1.6rem;
+    }
+
+    .fixedHeader{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+      background-color: rgba(255,255,255,1) !important;
+      background-image: none;
+    }
+</style>
+<body class="bodyBc">
+    <img src="../../image/nearBy.jpg" alt="">
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+</html>

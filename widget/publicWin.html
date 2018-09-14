@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="./css/aui/aui.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/main.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/common.css"/>
+</head>
+<body ontouchstart>
+<!--<script>-->
+  <!--if ('addEventListener' in document) {-->
+    <!--document.addEventListener('DOMContentLoaded', function () {-->
+      <!--FastClick.attach(document.body);-->
+    <!--}, false);-->
+  <!--}-->
+<!--</script>-->
+<header class="aui-bar aui-bar-nav aui-bar-info">
+  <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+     style="width: 45px;"
+     tapmode onclick="closeWin()"></a>
+  <div class="aui-title" id="title"></div>
+  <a class="aui-pull-right" tapmode id="text"></a>
+</header>
+</body>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript" src="./script/tool.js"></script>
+<script type="text/javascript">
+  function sq() {
+    document.querySelector('#text').click();
+  }
+
+  apiready = function () {
+    var header = $api.dom('header');
+    $api.fixStatusBar(header);
+    var headerPos = $api.offset(header);
+    var param = api.pageParam;
+    if (param.title && param.title != undefined) $api.text($api.byId('title'), param.title);
+    if (param.text && param.text != undefined) $api.text($api.byId('text'), param.text);
+    api.openFrame({
+      name: param.frameName,
+      url: param.frameUrl,
+      rect: {
+        x: 0,
+        y: headerPos.h,
+        w: api.winWidth,
+        h: api.winHeight - headerPos.h
+      },
+      pageParam: param.param,
+      vScrollBarEnabled: false,
+      hScrollBarEnabled: false
+    });
+    $api.addEvt($api.byId('text'), 'click', function () {
+      if ($api.text($api.byId('text')) === "筛选") {
+        api.openFrame({
+          name: 'status',
+          url: api.wgtRootDir + '/html/status.html',
+          rect: {
+            x: 0,
+            y: headerPos.h,
+            w: api.winWidth,
+            h: api.winHeight
+          },
+          pageParam: param.eveObj,
+          vScrollBarEnabled: false,
+          hScrollBarEnabled: false,
+          animation: {
+            type: "movein",
+            subType: "from_left",
+            duration: 300
+          }
+        });
+        $api.text($api.byId('text'), "收起");
+      } else if ($api.text($api.byId('text')) === "转出") {
+        Tool.openHeader({
+          frame: {
+            title: '权益转出',
+            url: api.wgtRootDir + '/home/userCenter/pushStockForm.html',
+          }
+        });
+      } else {
+        $api.text($api.byId('text'), "筛选");
+        api.closeFrame({
+          name: 'status'
+        });
+      }
+    });
+    api.addEventListener({
+      name: 'pushStockSelect'
+    }, function (ret, err) {
+      api.closeFrame({
+        name: 'status'
+      });
+    });
+  };
+</script>
+</html>

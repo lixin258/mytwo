@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html class="bodyBc">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+    <link rel="stylesheet" href="../../css/LCalendar.css">
+</head>
+<style media="screen">
+  .reserve-car{
+    padding:0.4rem;
+    width: 100%;
+    height:4.3rem;
+    background: #fff;
+    position:relative;
+  }
+  .reserve-car .carImg{
+    display: inline-block;
+    width:4.5rem;
+    height:3.5rem;
+  }
+  .reserve-car .carInfo{
+    display:inline-block;
+    width:calc(100% - 5.3rem);
+    height:3.5rem;
+    position:relative;
+    top:-0.4rem;
+  }
+  .carInfo .info_1{
+      padding-top: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+  }
+  .carInfo .info_1 span{
+      display: inline-block;
+      max-width: calc(100% - 0.75rem);
+      padding-right: 0.25rem;
+      vertical-align: top;
+      font-weight: bold;
+      font-size: 0.7rem;
+  }
+  .carInfo .info_1 .newIcon{
+      display: inline-block;
+      font-size: 0px;
+      width: 0.75rem;
+      vertical-align: top;
+  }
+  .carInfo .info_2{
+      height: 1rem;
+      line-height: 1rem;
+      font-size: .6rem;
+      color: #777;
+  }
+  .carInfo .info_3{
+      position: relative;
+      padding-bottom: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+  }
+  .carInfo .info_3 span{
+      line-height: 1;
+      font-size: .6rem;
+  }
+  .carInfo .info_3 .price{
+      line-height: 1;
+      font-size: .8rem;
+  }
+  .carInfo .info_3 .other{
+      line-height: 1;
+      font-size: .6rem;
+      padding: 0.15rem 0.2rem;
+      border-radius: 0.15rem;
+      color: #777;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+  }
+  /*用户信息*/
+  .fl{
+    float:left;
+  }
+  .fr{
+    float:right;
+  }
+  .line{
+    padding: 0 0.8rem;
+    line-height:2.2rem;
+    border-bottom:1px solid #EDEDED;
+  }
+  .customer-info .title{
+    width:3rem;
+  }
+  .customer-info .placeholder{
+    display:inline-block;
+    text-align: right;
+    width:calc(100% - 3.6rem);
+  }
+  .customer-info input::-webkit-input-placeholder{
+      font-size: 0.7rem;
+      text-align: right;
+  }
+  .customer-info{
+    margin:0.4rem 0;
+    background:#fff;
+    font-size:0.7rem;
+  }
+  .customer-info  .aui-radio{
+    padding: 0 0.2rem;
+    vertical-align: middle;
+    width:0.8rem;
+    height:0.8rem;
+  }
+  #c-name #uname{
+    width:calc(100% - 8.6rem);
+  }
+  #calendar .calendar{
+    width:calc((100% - 4.6rem)/2);
+  }
+  .customer-info label{
+    width:2.5rem;
+    text-align: right;
+  }
+  .address{
+    font-size: 0.7rem;
+    color:rgb(33,33,33);
+  }
+  /*提交*/
+  .submit{
+    margin:1.5rem auto;
+    width:90%;
+    line-height:2rem;
+    border-radius: 0.15rem;
+    background:#3A76F2;
+    text-align: center;
+    color:#fff;
+    letter-spacing: 0.1rem;
+  }
+</style>
+<body >
+    <div id="reserve-car" class="reserve-car">
+        <img class="carImg" src="../../image/demo3.png" alt="">
+        <div id="carInfo" class="carInfo">
+        <div class=" info_1"><span class="aui-ellipsis-1" id="title"></span></div>
+        <div  class="info_2"><span>厂商指导价</span></div>
+        <div class="info_3">
+           <span class="fc">首付</span>
+           <span class="price fc">万</span>
+           <span class="other">月供元</span>
+        </div>
+    </div>
+    <div class="customer-info">
+      <div id="c-name" class="line">
+        <span  class="title">姓名</span>
+        <input id="uname" type="text" class="placeholder" placeholder="请输入您的姓名">
+        <label><input class="aui-radio" type="radio" name="gender" value="1" checked> 先生</label>
+        <label><input class="aui-radio" type="radio" name="gender" value="0"> 女士</label>
+      </div>
+      <div class="line">
+        <span  class="title">手机号码</span>
+        <input id="phone" type="tel" class="placeholder fr" placeholder="请输入您的手机号码">
+      </div>
+      <div id="calendar" class="line">
+        <span class="title">预约时间</span>
+        <input id="calendar-time" class="calendar fr placeholder" type="text" readonly="" name="input_date" placeholder="请选择时间" />
+        <input id="calendar-date" class="calendar fr placeholder" type="text" readonly="" name="input_date" placeholder="请选择日期" data-lcalendar="2018-01-01,2028-12-31" />
+      </div>
+      <div id="addSelect" class="line">
+        <span  class="title">预约地址</span>
+        <span id="address" class="address fr"></span>
+      </div>
+    </div>
+    <div id="submit" class="submit" tapmode >确定预约</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script src="../../script/LCalendar.js"></script>
+<script type="text/javascript">
+    apiready = function (){
+        var title = api.pageParam.title;
+        $('#title').text(title);
+        var imageurl = api.pageParam.imageurl;
+        $("#reserve-car .carImg").attr('src',imageurl);
+        var price = api.pageParam.price;
+        $('.info_2').text("厂商指导价:"+price);
+        var salePrice = api.pageParam.salePrice;
+        var oncePayment = api.pageParam.oncePayment;
+        $('.info_3 > .price').text(oncePayment+"万");
+        var installment = api.pageParam.installment;
+        $('.other').text("月供"+installment+"元");
+        var sInfo = [];
+        var Home = function(){
+            this.reserveId = null;
+            this.initial();
+        };
+        Home.prototype = {
+            initial: function () {
+                this.bindClick();
+                this.addEventListener();
+            },
+            addEventListener: function(){
+
+            },
+            fnReserveData: function(){
+                  var rdate = $api.byId('calendar-date');
+                  var rtime = $api.byId('calendar-time');
+                  var name = $api.byId("uname").value;
+                  var phone = $api.byId('phone').value;
+                  var address = $api.byId('address').value;
+                  var gender = $("input[name='gender']:checked").val();
+                  var self = this;
+                  if(sInfo.length==0){
+                      alert("以上均为必填项,请填写完整");
+                  }else{
+                      api.ajax({
+                          url: SERVER_PATH + '/User/addAppointmentForm',
+                          method: 'post',
+                          data: {
+                              values: {
+                                provinceId:sInfo[0].id,
+                                cityId:sInfo[1].id,
+                                regionId:sInfo[2].id,
+                                appointmentTime:rdate.value + ' ' + rtime.value, //预约时间
+                                phone:phone,//手机号
+                                gender:gender,//性别（0：女，1：男）
+                                carId:api.pageParam.carId,//汽车ID
+                                realname:name,//姓名
+                                userId:$api.getStorage('userId')//登陆人ID
+                              },
+                              files: {
+                                  file: ''
+                              }
+                          }
+                      },function(ret, err){
+                          if (ret && ret.code == 0 && ret.data) {
+                              self.reserveId = ret.data;
+                              var regPhone = /^1[3|4|5|7|8][0-9]{9}$/;
+                              if(!name||!rtime.value||!rdate.value){
+                                  alert('以上均为必填项,请填写完整');
+                              }else if(!regPhone.test(phone)){
+                                  alert('您的电话号码格式不正确,请重新输入');
+                              }else{
+                                  Tool.openHeader({
+                                      name: 'reserveSuccess',
+                                      frame: {
+                                          title: '预约成功',
+                                          url: api.wgtRootDir + '/html/buyCar/buyCar_reserve_success.html',
+                                          param: {
+                                              appointId:self.reserveId,
+                                          }
+                                      }
+                                });
+                                $("#reserve-car input").val(null);
+                                $("#address").text(null);
+                              }
+                          } else {
+                              Tool.toastInfo(errMsg);
+                          }
+                          api.hideProgress();
+                      });
+                  }
+              },
+              chooseCity: function(){
+                  var UIActionSelector = api.require('UIActionSelector');
+                  UIActionSelector.open({
+                      datas: api.wgtRootDir + '/res/gp.json',
+                      layout: {
+                          row: 5,
+                          col: 3,
+                          height: 30,
+                          size: 12,
+                          sizeActive: 14,
+                          rowSpacing: 5,
+                          colSpacing: 10,
+                          maskBg: 'rgba(0,0,0,0.2)',
+                          bg: '#fff',
+                          color: '#888',
+                          colorActive: 'rgb(58, 118, 241)',
+                          colorSelected: 'rgb(58, 118, 241)'
+                      },
+                      animation: true,
+                      cancel: {
+                          text: '取消',
+                          size: 12,
+                          w: 90,
+                          h: 35,
+                          bg: '#fff',
+                          bgActive: '#ccc',
+                          color: '#888',
+                          colorActive: '#fff'
+                      },
+                      ok: {
+                          text: '确定',
+                          size: 12,
+                          w: 90,
+                          h: 35,
+                          bg: '#fff',
+                          bgActive: '#ccc',
+                          color: '#888',
+                          colorActive: '#fff'
+                      },
+                      title: {
+                          text: '请选择所属区域',
+                          size: 12,
+                          h: 44,
+                          bg: '#eee',
+                          color: '#888'
+                      },
+                  }, function(ret, err) {
+                      if (ret) {
+                          if(ret.eventType=="cancel")return;
+                          sInfo = ret.selectedInfo;
+                          $('#address').text(sInfo[0].name+' '+ sInfo[1].name+' '+sInfo[2].name);
+                      } else {
+                          Tool.toastInfo(errMsg);
+                      }
+                  });
+              },
+              bindClick: function(){
+                  var self = this;
+                  $('#submit').off('click').on('click', function(){
+                      self.fnReserveData();
+                  });
+                  $('#addSelect').off('click').on('click',function(){
+                    self.chooseCity();
+                  });
+              }
+        }
+        new Home();
+    }
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#calendar-date',//标签id
+        'type': 'date',//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择
+      });
+    var calendar = new LCalendar();
+    calendar.init({
+        'trigger': '#calendar-time',//标签id
+        'type': 'time',//date 调出日期选择 datetime 调出日期时间选择 time 调出时间选择 ym 调出年月选择
+      });
+</script>
+</html>

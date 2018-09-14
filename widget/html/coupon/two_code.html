@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+</head>
+<style>
+    .addCardNo {
+        line-height: 1.5rem;
+        font-size: 0.7rem;
+    }
+
+    .addCardNo .okBtn {
+        padding: 0.25rem 0.5rem;
+        line-height: 1;
+        margin-top: 0.15rem;
+        border-radius: 0.25rem;
+        color: #fff;
+    }
+    .a{
+    margin: 0 auto;
+    margin-top: 130px;
+
+    }
+
+</style>
+
+<body>
+    <div   id="app">
+      <img class="a" src="" :src="img" class="orderListImg">
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.js"></script>
+<script type="text/javascript" src="../../script/fastclick.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dataArr: [],
+                listMsg: '',
+                nullData: false,
+                page: 1,
+                length: 10,
+                maxPage: 1,
+                img:  api.pageParam.qrCodeUrL,
+
+            },
+          });
+        }
+
+</script>
+
+</html>

@@ -1,0 +1,317 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    .fixedHeader{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 99999;
+    }
+    .aui-slide-node img{
+        object-fit: cover;
+    }
+    .imgBox img{
+        display: inline-block;
+        width: 100vw;
+        float: left;
+    }
+    .carInfo{
+        padding: 0.75rem;
+    }
+    .carInfo h2{
+        font-weight: bold;
+    }
+    .carPriceInfo{
+        padding: 0.5rem 0.75rem;
+    }
+    .carPriceInfo .info_1{
+        padding-left: 0.35rem;
+        margin-bottom: 0.75rem;
+        border-left: 3px solid #3a76f1;
+        /*color: #3a76f1;*/
+        font-size: .9rem;
+        font-weight: bold;
+    }
+    .carPriceInfo .info_2{
+        background-color: #f5f5f5;
+    }
+    .contactBox{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2.2rem;
+    }
+    .contactBox .info_1{
+        width: 6.5rem;
+    }
+    .contactBox .info_1 img{
+        width: 1rem;
+        margin: 0.6rem 0.75rem;
+    }
+    .contactBox .info_1 p{
+        line-height: 1.1rem;
+        color: #444;
+    }
+    .contactBox .info_2{
+        width: calc(100% - 6.5rem);
+        line-height: 2.2rem;
+    }
+</style>
+<body class="bodyBc">
+    <header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+        <a class="aui-pull-left aui-iconfont aui-icon-left" onclick="closeWin()"></a>
+        <div class="aui-title">车辆信息</div>
+        <a class="aui-pull-right aui-iconfont aui-icon-share" id="share"></a>
+    </header>
+    <div class="aui-content" style="padding-top: 70px;padding-bottom: 2.5rem;">
+        <div id="slide" style="height: 0.4vw;"></div>
+        <div id="carInfo">
+
+        </div>
+        <ul class="clearfix imgBox">
+            <li><img src="../../image/detail_11.png" alt=""></li>
+            <li><img src="../../image/detail_12.png" alt=""></li>
+            <li><img src="../../image/detail_13.png" alt=""></li>
+            <li><img src="../../image/detail_14.png" alt=""></li>
+            <li><img src="../../image/detail_15.png" alt=""></li>
+        </ul>
+    </div>
+    <footer class="contactBox bg clearfix">
+        <div class="info_1 aui-text-center bodyBc aui-pull-left" id="call">
+            <img class="aui-pull-left" src="../../image/icon2.png" alt="">
+            <div class="aui-pull-left">
+                <p class="aui-font-size-12">咨询客服</p>
+                <p class="aui-font-size-12">09:00-21:00</p>
+            </div>
+        </div>
+        <div class="info_2 aui-text-center fc-fff aui-pull-left" id="order">预约此车</div>
+    </footer>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/html" id="tpl-banner">
+    <div class="aui-slide-wrap" >
+        {{each data as value index}}
+            <div class="aui-slide-node bg-dark z-banner">
+                <img src="{{value}}" />
+            </div>
+        {{/each}}
+    </div>
+    <div class="aui-slide-page-wrap"></div>
+</script>
+<script type="text/html" id="tpl-carInfo">
+    <div class="carInfo aui-margin-b-10 bg-fff">
+        <h2 class="aui-font-size-16 line-1">{{title}}</h2>
+        <p class="aui-font-size-14 line-2">{{intro}}</p>
+        <p class="aui-font-size-14 line-1">指导价:{{price}}万<span class="aui-pull-right" style="position: relative;bottom: 8px;">全款：<span class="fc" style="font-size: 1.2rem;">{{salePrice}}万</span></span></p>
+    </div>
+    <div class="carPriceInfo bg-fff">
+        <div class="line-1 info_1" style="margin-top: 15px;line-height: 1.2;">分期购车</div>
+        <div class="clearfix aui-text-left info_2">
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>首付</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{oncePayment}}万</p>
+            </div>
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>月供</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{installment}}</p>
+            </div>
+            <div class="aui-col-xs-4 aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>期限</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">36期</p>
+            </div>
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #DBEAFF;padding: 0.35rem 0.75rem;">
+                <p>首付</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{oncePayment}}万</p>
+            </div>
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #DBEAFF;padding: 0.35rem 0.75rem;">
+                <p>月供</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{installmentlong}}</p>
+            </div>
+            <div class="aui-col-xs-4 aui-padded-l-15" style="background-color: #DBEAFF;padding: 0.35rem 0.75rem;">
+                <p>期限</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">60期</p>
+            </div>
+        </div>
+        <div class="line-1 info_1" style="margin-top: 15px;line-height: 1.2;">履约购车</div>
+        <div class="clearfix aui-text-left info_2" style="background-color: #EEF5FF;">
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>履约价格</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{onceMoney}}万</p>
+            </div>
+            <div class="aui-col-xs-4 aui-border-r aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>补贴</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">{{share}}</p>
+            </div>
+            <div class="aui-col-xs-4 aui-padded-l-15" style="background-color: #EEF5FF;padding: 0.35rem 0.75rem;">
+                <p>期限</p>
+                <p class="fc aui-font-size-16 aui-ellipsis-1">60期</p>
+            </div>
+        </div>
+        <p class="line-2 aui-padded-t-10">需向门店支付服务费{{serviceCost}}元</p>
+    </div>
+</script>
+<script type="text/javascript">
+    apiready = function () {
+        $api.fixStatusBar($api.dom('header'));
+        var Home = function(){
+            this.carInfo = null;
+            this.init();
+        };
+        Home.prototype = {
+            init: function () {
+                this.getData();
+                this.bindClick();
+                this.addEventListener();
+                this.share();
+            },
+            addEventListener: function(){
+
+            },
+            drawBanners: function (bannersArr) {
+                $api.html(document.getElementById("slide"), template('tpl-banner', { "data": [bannersArr] }))
+                new auiSlide({
+                    "container": document.getElementById("slide"),
+                    "height": api.winWidth * 0.6,
+                    "speed": 500,
+                    "autoPlay": 5000, //自动播放
+                    "loop": true,
+                    "pageShow": true,
+                    "pageStyle": 'dot',
+                    'dotPosition': 'center'
+                });
+            },
+            getData: function(){
+                var self = this;
+                api.showProgress();
+                api.ajax({
+                    url: SERVER_PATH + 'Car/getInfoById',
+                    method: 'post',
+                    data: {
+                        values: {
+                            AccessToken: $api.getStorage('token'),
+                            id: api.pageParam.id
+                        },
+                        files: {}
+                    }
+                }, function (ret, err) {
+                    if (ret && ret.code == 0 && ret.data) {
+                        self.carInfo = ret.data;
+                        $('#carInfo').html(template('tpl-carInfo', ret.data));
+                        self.drawBanners(ret.data.images);
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                    api.hideProgress();
+                });
+            },
+            bindClick: function(){
+                var self = this;
+                $('#call').off('click').on('click', function(){
+                    document.location.href = "tel:0631-5668696";
+                });
+                $('#order').off('click').on('click', function(){
+                    Tool.isLogin();
+                    if ($api.getStorage('isLogin') === 'false') return;
+                    if(!self.carInfo) return;
+                    Tool.openHeader({
+                        name: 'buyCarReserve',
+                        frame: {
+                            title: '预约车辆',
+                            url: api.wgtRootDir + '/html/buyCar/buyCar_reserve.html',
+                            param: {
+                                carId: api.pageParam.id,
+                                imageurl: self.carInfo.images,
+                                title: self.carInfo.title,
+                                price: self.carInfo.price,
+                                salePrice: self.carInfo.salePrice,
+                                oncePayment: self.carInfo.oncePayment,
+                                installment: self.carInfo.installment,
+                            }
+                        }
+                    });
+                });
+            },
+            share: function(){
+                var self = this;
+                $('#share').off('click').on('click', function(){
+                    api.actionSheet({
+                        title: '分享',
+                        cancelTitle: '取消',
+                        buttons: ['微信朋友圈', '微信好友']
+                    }, function(ret, err) {
+                        var index = ret.buttonIndex;
+
+                        var mapType = {
+                            "1": "timeline",
+                            "2": "session",
+                        };
+                        if(self.wxIsInstalled){
+                            self.shareWebpage(mapType[index]);
+                        }else{
+                            Tool.toastInfo('您没有安装微信');
+                        }
+                    });
+                });
+            },
+            wxIsInstalled: function(){
+                var wx = api.require('wx');
+                wx.isInstalled(function(ret, err) {
+                    if (ret.installed) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            shareWebpage: function(type){
+                var self = this;
+                var wx = api.require('wx');
+                var mapCode = {
+                    "-1": "未知错误",
+                    "0": "成功",
+                    "1": "apiKey非法",
+                    "2": "用户取消",
+                    "3": "发送失败",
+                    "4": "授权拒绝",
+                    "5": "微信服务器返回的不支持错误",
+                    "7": "注册SDK失败",
+                };
+                wx.shareWebpage({
+                    scene: type,
+                    title: self.carInfo.title,
+                    description: self.carInfo.intro,
+                    thumb: 'widget://image/logo.png',
+                    contentUrl: 'http://app.mayiyouche.com/index.php/Home/User/share?car_id='+api.pageParam.id
+                }, function(ret, err) {
+                    if (ret.status) {
+                        Tool.toastInfo('分享成功');
+                    } else {
+                        Tool.toastInfo(mapCode[err.code]);
+                    }
+                });
+            }
+        };
+        new Home();
+    };
+
+</script>
+</html>

@@ -1,0 +1,667 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/LCalendar.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+</head>
+<style media="screen">
+    .aui-icon-right {
+        font-size: 0.4rem;
+        font-weight: bold;
+        color: #787878;
+    }
+
+    .fr {
+        float: right;
+    }
+
+    .avatar {
+        margin: 0.5rem 0;
+        line-height: 4rem;
+        position: relative;
+    }
+
+    .avatar img {
+        display: inline-block;
+        height: 4rem;
+        width:4rem;
+        position: absolute;
+        top: 0rem;
+        padding:0;
+        right: 1.5rem;
+        border-radius: 50%;
+    }
+
+    .item {
+        padding: 0 0.5rem 0 0.8rem;
+        line-height: 1.5rem;
+    }
+
+    .title {
+        color: #3A2A11;
+        font-size: 0.7rem;
+    }
+
+    .info {
+        padding-right: 0.4rem;
+        font-size: 0.7rem;
+        color: #787878;
+    }
+
+    .moneyRecord .aui-list.aui-list-in .aui-list-item {
+        background-position: 2.25rem bottom;
+    }
+
+    .moneyRecord .aui-list .aui-list-item-label-icon {
+        padding-right: 0.5rem;
+    }
+
+    .moneyRecord .aui-list .aui-list-item-inner {
+        min-height: 2.5rem;
+    }
+
+    .moneyRecord img {
+        position: relative;
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        max-width: 1rem;
+    }
+    .mt-40{
+        margin-top: 2rem;
+    }
+    .userInfo .aui-list.aui-list-in .aui-list-item {
+        background-position: 0.75rem bottom !important;
+    }
+    .z-bg{
+      background:#0098ff;
+      color:white;
+    }
+</style>
+<body class="bodyBc">
+    <div class="aui-content aui-margin-b-15 userInfo" id="app">
+        <ul class="aui-list aui-list-in z-no-bt">
+            <li class="aui-list-item" id="uploadPhoto">
+                <div class="aui-list-item-inner z-inner avatar">
+                    头像
+                    <img id="avatar" class="z-photo logo" src="../../image/logo.png" alt="">
+                </div>
+            </li>
+        </ul>
+        <ul class="aui-list aui-list-in aui-margin-t-10 z-no-bt">
+            <li class="aui-list-item">
+                <div class="aui-list-item-inner z-inner">
+                    手机号
+                    <span id='phone' class="aui-pull-right"></span>
+                </div>
+            </li>
+            <!--<li class="aui-list-item" @click="openPage(0)">
+                <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                    姓名
+                    <span class="aui-pull-right">{{userInfo.realname}}</span>
+                </div>
+            </li>-->
+            <li class="aui-list-item"  id="editName">
+                <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                    昵称
+                    <span id='nickname' class="aui-pull-right"></span>
+                </div>
+            </li>
+            <li class="aui-list-item" id="genderChoose">
+                <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                    性别
+                    <span id='gender' class="aui-pull-right"></span>
+                </div>
+            </li>
+            <li class="aui-list-item" style="position: relative;">
+                <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                    生日
+                    <input id="birthday" class="aui-pull-right" type="text" readonly="" name="input_date" placeholder="" data-lcalendar="2018-01-01,2028-12-31" style="text-align:right;position:absolute;right:1.5rem;top:0;height:100%;"/>
+                </div>
+
+            </li>
+            <li class="aui-list-item" id="addSelect">
+                <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                    常驻城市
+                    <span id="address" class="aui-pull-right"></span>
+                </div>
+            </li>
+        </ul>
+        <ul class="aui-list aui-list-in aui-margin-t-10 z-no-bt">
+          <li class="aui-list-item" id="carSelect">
+              <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                  爱车车型
+                  <span id="loveType" class="aui-pull-right"></span>
+              </div>
+          </li>
+        </ul>
+        <div v-if="userInfo.status != 1" class="aui-padded-r-10 aui-padded-l-10 mt-40">
+            <div class="aui-btn aui-btn-block z-bg" id='submit'>确定</div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/fastclick.js"></script>
+<script type="text/javascript" src="../../script/LCalendar.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script src="../../script/LCalendar.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var Home = function(){
+          this.pageArr = [
+                          { title: "昵称", key: "nickname", type: "text"},
+                      ];
+          this.gender = 0;
+          this.init();
+        }
+        Home.prototype={
+          init:function(){
+            this.listenEvent();
+            this.getData();
+            this.bindClick();
+            this.initCalendar();
+          },
+          listenEvent: function(){
+              api.addEventListener({
+                  name: 'userInfoEdit'
+              }, function(ret, err){
+                  if( ret ){
+                      // vm.userInfo[ret.value.key] = ret.value.value;
+                      // vm.infochange = true;
+                      $('#nickname').html(ret.value.value);
+                  }
+              });
+          },
+          getData: function(){
+              var self = this;
+              api.ajax({
+                  url: SERVER_PATH + 'User/getUserInfo',
+                  method: 'post',
+                  data: {
+                      values: {
+                          AccessToken: $api.getStorage('token'),
+                          id: $api.getStorage('userId')
+                      },
+                      files: {}
+                  }
+              }, function(ret, err) {
+                  if (ret && ret.code == 0) {
+                      if(ret.data){
+                          var data = ret.data[0];
+                          $('#phone').html($api.getStorage('phone'));
+                          $('#nickname').html(data.nickname || '');
+                          $('#avatar').attr('src',data.headimgurl || '../../image/logo.png');
+                          $('#gender').html(data.gender == 0 ? '女' : '男');
+                          $('#birthday').val(data.birthday);
+                          $('#address').html(data.provinceName +' '+ data.cityName +' '+ data.regionName);
+                      }
+                  } else {
+                      Tool.toastInfo(errMsg);
+                  }
+              });
+          },
+          bindClick: function(){
+              var self = this;
+              $('#submit').off('click').on('click', function(){
+                  self.confirm();
+              });
+              $('#addSelect').off('click').on('click',function(){
+                self.chooseCity();
+              });
+              $('#editName').off('click').on('click',function(){
+                self.openPage(0);
+              });
+              $('#genderChoose').off('click').on('click',function(){
+                self.genderChoose();
+              });
+              $('#carSelect').off('click').on('click',function(){
+                Tool.openHeader({
+                    name: 'chooseCar',
+                    frame: {
+                        title: '选择品牌',
+                        url: api.wgtRootDir + '/html/chooseCar.html',
+                        param: {
+                            event: 'chooseCar'
+                        }
+                    }
+                });
+              });
+              $('#uploadPhoto').off('click').on('click', function(){
+                  api.actionSheet({
+                      title: '上传方式',
+                      cancelTitle: '取消',
+                      buttons: ['拍照上传', '从相册选择']
+                  }, function (ret, err) {
+                      if (ret.buttonIndex == 3) return;
+                      var index = ret.buttonIndex, type;
+                      switch (index) {
+                          case 1: type = 'camera'; break;
+                          case 2: type = 'album'; break;
+                      }
+                      Tool.getPicture(type, 'getPictureAtUser');//选择图片
+                  });
+                  api.addEventListener({
+                      name: 'getPictureAtUser'
+                  }, function (ret, err) {
+                      var json = ret.value;
+                      if (json.ret && json.ret.data) {
+                          Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUser'); //上传图片
+                          api.addEventListener({
+                              name: 'uploadImageAtUser'
+                          }, function (ret, err) {
+                              var json2 = ret.value;
+                              if (json2.ret.code == 0) {
+                                $('#avatar').attr('src',json2.ret.CDNPath)
+                                  //self.updatePhoto(json2.ret.CDNPath);
+                              }
+                          });
+                      }
+                  });
+              });
+          },
+          updatePhoto: function (url) {
+              var self = this;
+              var id = $api.getStorage('userId');
+              var headimgurl = url;
+              api.ajax({
+                  url: SERVER_PATH + 'User/updateUser',
+                  method: 'post',
+                  data: {
+                      values: self.userInfo,
+                      files: {}
+                  }
+              }, function (ret, err) {
+                  if (ret && ret.code == 0) {
+                      $('#uploadPhoto img').attr('src', url);
+                      Tool.toastInfo('头像上传成功');
+                  } else {
+                      Tool.toastInfo(errMsg);
+                  }
+              });
+          },
+          openPage: function(index) {
+              var self = this;
+              //if(this.userInfo.status == 1) return;
+              Tool.openHeader({
+                  frame: {
+                      title: self.pageArr[index].title,
+                      url: api.wgtRootDir + '/html/my/input.html',
+                      param: {
+                          title: self.pageArr[index].title,
+                          type: self.pageArr[index].type,
+                          key: self.pageArr[index].key,
+                          //value: self.userInfo[self.pageArr[index].key]
+                      }
+                  }
+              });
+          },
+          confirm: function(){
+              var self = this;
+              Tool.confirm('确认提交?', 'updateInfo');
+              api.addEventListener({
+                  name: 'updateInfo'
+              }, function(ret, err){
+                  self.updateUserInfo();
+              });
+          },
+          genderChoose: function(){
+            var self = this;
+              api.actionSheet({
+                  title: '选择',
+                  cancelTitle: '取消',
+                  buttons: ['男', '女']
+              }, function(ret, err) {
+                  var index = ret.buttonIndex;
+                  if(index == 2){
+                    $('#gender').html('女');
+                      self.gender = 0;
+                      // vm.userInfo.genderText = '女';
+                  }
+                  if(index == 1){
+                    $('#gender').html('男')
+                      self.gender = 1;
+                      // vm.userInfo.genderText = '男';
+                  }
+              });
+          },
+          chooseCity: function(){
+              var UIActionSelector = api.require('UIActionSelector');
+              UIActionSelector.open({
+                  datas: api.wgtRootDir + '/res/gp.json',
+                  layout: {
+                      row: 5,
+                      col: 3,
+                      height: 30,
+                      size: 12,
+                      sizeActive: 14,
+                      rowSpacing: 5,
+                      colSpacing: 10,
+                      maskBg: 'rgba(0,0,0,0.2)',
+                      bg: '#fff',
+                      color: '#888',
+                      colorActive: 'rgb(58, 118, 241)',
+                      colorSelected: 'rgb(58, 118, 241)'
+                  },
+                  animation: true,
+                  cancel: {
+                      text: '取消',
+                      size: 12,
+                      w: 90,
+                      h: 35,
+                      bg: '#fff',
+                      bgActive: '#ccc',
+                      color: '#888',
+                      colorActive: '#fff'
+                  },
+                  ok: {
+                      text: '确定',
+                      size: 12,
+                      w: 90,
+                      h: 35,
+                      bg: '#fff',
+                      bgActive: '#ccc',
+                      color: '#888',
+                      colorActive: '#fff'
+                  },
+                  title: {
+                      text: '请选择所属区域',
+                      size: 12,
+                      h: 44,
+                      bg: '#eee',
+                      color: '#888'
+                  },
+              }, function(ret, err) {
+                  if (ret) {
+                      if(ret.eventType=="cancel")return;
+                      sInfo = ret.selectedInfo;
+                      $('#address').text(sInfo[0].name+' '+ sInfo[1].name+' '+sInfo[2].name);
+                  } else {
+                      Tool.toastInfo(errMsg);
+                  }
+              });
+          },
+          updateUserInfo: function(){
+              var self = this;
+              var data = this.userInfo;
+              api.showProgress();
+              api.ajax({
+                  url: SERVER_PATH + 'User/updateUser',
+                  method: 'post',
+                  data: {
+                      values: {
+                          id: $api.getStorage('userId'),
+                          nickname:$('#nickname').html(),
+                          gender:self.gender,
+                          birthday:$('#birthday').val(),
+                          headimgurl:$('#avatar').attr("src"),
+                          provinceId:sInfo[0].id,
+                          cityId:sInfo[1].id,
+                          regionId:sInfo[2].id,
+                      },
+                      files: {}
+                  }
+              }, function(ret, err) {
+                  api.hideProgress();
+                  if (ret && ret.code == 0) {
+                      Tool.toastInfo(ret.msg || okMsg);
+                      setTimeout(function(){
+                          api.closeWin();
+                      }, 1500);
+                  } else {
+                      Tool.toastInfo('设置失败或您没有修改任何信息');
+                  }
+              });
+          },
+          uploadImage: function(index){
+              if(this.userInfo.status == 1) return;
+              api.actionSheet({
+                  title: '上传方式',
+                  cancelTitle: '取消',
+                  buttons: ['拍照上传', '从相册选择']
+              }, function(ret, err) {
+                  if(ret.buttonIndex == 3) return;
+                  var index = ret.buttonIndex, type;
+                  switch(index){
+                      case 1: type = 'camera';break;
+                      case 2: type = 'album';break;
+                  }
+                  Tool.getPicture(type, 'getPictureAtUserInfo');//选择图片
+              });
+
+              api.addEventListener({
+        name : 'getPictureAtUserInfo'
+      }, function(ret, err) {
+      var json = ret.value;
+      if(json.ret && json.ret.data){
+                    Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUserInfo'); //上传图片
+        api.addEventListener({
+            name : 'uploadImageAtUserInfo'
+          }, function(ret, err) {
+          var json2 = ret.value;
+          if(json2.ret.code == 0){
+                              var src = json2.ret.thumbPath;
+            if(index == 1) vm.userInfo.idCardOnURL = src;
+            if(index == 0) vm.userInfo.idCardOffURL = src;
+                              vm.infochange = true;
+          }else{
+            Tool.toastInfo(errMsg);
+          }
+          });
+                }
+      });
+          },
+      initCalendar: function () {
+        var calendar = new LCalendar();
+        calendar.init({
+              'trigger': '#birthday',
+              'type': 'date',
+              'minDate': '1900-01-01',
+              'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+          });
+      },
+      created :function (){
+          FastClick.attach(document.body);
+      },
+    }
+    new Home();
+  }
+
+    //     var vm = new Vue({
+    //         el: '#app',
+    //         data: {
+    //             userInfo: {
+    //                 phone: $api.getStorage('phone'),
+    //                 realname: '',
+    //                 nickname: '',
+    //                 birthday: '',
+    //                 gender: '', //性别 0:女 1:男
+    //                 genderText: '',
+    //                 headimgurl: ''
+    //             },
+    //             infochange: false,
+    //             pageArr: [
+    //                 { title: "姓名", key: "realname", type: "text"},
+    //                 { title: "昵称", key: "nickname", type: "text"},
+    //             ]
+    //         },
+    //         methods: {
+    //             init: function() {
+    //                 this.listenEvent();
+    //                 this.getData();
+    //                 this.initCalendar();
+    //             },
+    //             listenEvent: function(){
+    //                 api.addEventListener({
+    //                     name: 'userInfoEdit'
+    //                 }, function(ret, err){
+    //                     if( ret ){
+    //                         vm.userInfo[ret.value.key] = ret.value.value;
+    //                         vm.infochange = true;
+    //                     }
+    //                 });
+    //             },
+    //             getData: function(){
+    //                 var self = this;
+    //                 api.ajax({
+    //                     url: SERVER_PATH + 'User/showUser',
+    //                     method: 'post',
+    //                     data: {
+    //                         values: {
+    //                             AccessToken: $api.getStorage('token'),
+    //                             id: $api.getStorage('userId')
+    //                         },
+    //                         files: {}
+    //                     }
+    //                 }, function(ret, err) {
+
+    //                     if (ret && ret.code == 0) {
+    //                         if(ret.data){
+    //                             var data = ret.data[0];
+    //                             vm.userInfo.realname = data.realname || '';
+    //                             vm.userInfo.nickname = data.nickname || '';
+    //                             vm.userInfo.headimgurl = data.headimgurl || '';
+    //                             vm.userInfo.gender = data.gender;
+    //                             vm.userInfo.genderText = data.gender == 0 ? '女' : '男';
+    //                             vm.userInfo.birthday = data.birthday === "0000-00-00" ? null : data.birthday;
+    //                         }
+    //                     } else {
+    //                         Tool.toastInfo(errMsg);
+    //                     }
+    //                 });
+    //             },
+    //             openPage: function(index) {
+    //                 if(this.userInfo.status == 1) return;
+    //                 Tool.openHeader({
+    //                     frame: {
+    //                         title: vm.pageArr[index].title,
+    //                         url: api.wgtRootDir + '/html/my/input.html',
+    //                         param: {
+    //                             title: vm.pageArr[index].title,
+    //                             type: vm.pageArr[index].type,
+    //                             key: vm.pageArr[index].key,
+    //                             value: vm.userInfo[vm.pageArr[index].key]
+    //                         }
+    //                     }
+    //                 });
+    //             },
+    //             confirm: function(){
+    //                 Tool.confirm('确认提交?', 'updateInfo');
+    //                 api.addEventListener({
+    //                     name: 'updateInfo'
+    //                 }, function(ret, err){
+    //                     vm.updateUserInfo();
+    //                 });
+    //             },
+    //             genderChoose: function(){
+    //                 api.actionSheet({
+    //                     title: '选择',
+    //                     cancelTitle: '取消',
+    //                     buttons: ['男', '女']
+    //                 }, function(ret, err) {
+    //                     var index = ret.buttonIndex;
+    //                     if(index == 2){
+    //                         vm.userInfo.gender = 0;
+    //                         vm.userInfo.genderText = '女';
+    //                     }
+    //                     if(index == 1){
+    //                         vm.userInfo.gender = 1;
+    //                         vm.userInfo.genderText = '男';
+    //                     }
+    //                 });
+    //             },
+    //             updateUserInfo: function(){
+    //                 var data = this.userInfo;
+    //                 data.id = $api.getStorage('userId');
+    //                 api.showProgress();
+    //                 api.ajax({
+    //                     url: SERVER_PATH + 'User/updateUser',
+    //                     method: 'post',
+    //                     data: {
+    //                         values: data,
+    //                         files: {}
+    //                     }
+    //                 }, function(ret, err) {
+
+    //                     api.hideProgress();
+    //                     if (ret && ret.code == 0) {
+    //                         Tool.toastInfo(ret.msg || okMsg);
+    //                         setTimeout(function(){
+    //                             api.closeWin();
+    //                         }, 1500);
+    //                     } else {
+    //                         Tool.toastInfo('设置失败或您没有修改任何信息');
+    //                     }
+    //                 });
+    //             },
+    //             uploadImage: function(index){
+    //                 if(this.userInfo.status == 1) return;
+    //                 api.actionSheet({
+    //                     title: '上传方式',
+    //                     cancelTitle: '取消',
+    //                     buttons: ['拍照上传', '从相册选择']
+    //                 }, function(ret, err) {
+    //                     if(ret.buttonIndex == 3) return;
+    //                     var index = ret.buttonIndex, type;
+    //                     switch(index){
+    //                         case 1: type = 'camera';break;
+    //                         case 2: type = 'album';break;
+    //                     }
+    //                     Tool.getPicture(type, 'getPictureAtUserInfo');//选择图片
+    //                 });
+    //
+    //                 api.addEventListener({
+		// 	    		name : 'getPictureAtUserInfo'
+		// 	    	}, function(ret, err) {
+		// 				var json = ret.value;
+		// 				if(json.ret && json.ret.data){
+	  //                       Tool.uploadImage(UploadImageApi, json.ret.data, 'uploadImageAtUserInfo'); //上传图片
+		// 					api.addEventListener({
+		// 			    		name : 'uploadImageAtUserInfo'
+		// 			    	}, function(ret, err) {
+
+		// 						var json2 = ret.value;
+		// 						if(json2.ret.code == 0){
+    //                                 var src = json2.ret.thumbPath;
+		// 							if(index == 1) vm.userInfo.idCardOnURL = src;
+		// 							if(index == 0) vm.userInfo.idCardOffURL = src;
+    //                                 vm.infochange = true;
+		// 						}else{
+		// 							Tool.toastInfo(errMsg);
+		// 						}
+		// 			    	});
+	  //                   }
+		// 	    	});
+    //             },
+    //             initCalendar: function () {
+    //                 vm.calendar = new LCalendar();
+    //                 vm.calendar.init({
+    //                     'trigger': '#date',
+    //                     'type': 'date',
+    //                     'minDate': '1900-01-01',
+    //                     'maxDate': new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()
+    //                 });
+    //             }
+    //         },
+    //         created :function (){
+    //             FastClick.attach(document.body);
+    //         },
+    //         watch: {
+    //             date: function (newVal, oldVal) {
+    //                 vm.userInfo.birthday = newVal;
+    //             }
+    //         }
+    //     });
+    //     vm.init();
+    // };
+</script>
+
+</html>

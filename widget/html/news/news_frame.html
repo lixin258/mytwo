@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+</head>
+<style>
+    .news li{
+        padding: 0.5rem 0.75rem;
+    }
+    .news .title{
+        font-size: 0.8rem;
+    }
+    .h-hide{
+        visibility: hidden !important;
+    }
+</style>
+<body>
+
+    <div v-cloak class="aui-content news" id="app">
+        <ul class="aui-list aui-list-noborder aui-media-list aui-margin-t-10">
+            <li v-for="(value,index) in dataArr" class="z-clearfix aui-border-b" @click="view(value)">
+                <div class="title">{{value.title}}</div>
+                <p class="aui-text-right">{{value.createTime}}</p>
+            </li>
+        </ul>
+        <div v-if="listMsg" class="aui-text-center z-null-data aui-margin-t-15">
+            <span>{{listMsg}}</span>
+        </div>
+        <div v-if="nullData" class="datanull">
+            <img src="../../image/nullData.png" alt="">
+            <p class="aui-text-center">没有数据</p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.js"></script>
+<script type="text/javascript" src="../../script/fastclick.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+        var hideHeader = api.pageParam.hideHeader;
+        if(hideHeader === "false"){
+            $api.removeCls(document.querySelector('.h-hide'), 'h-hide');
+        }
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dataArr: [],
+                page: 1,
+                length: 10,
+                maxPage: 1,
+                listMsg: '',
+                nullData: false
+            },
+            methods: {
+                init: function(){
+                    vm.getData();
+                    vm.loadMore();
+                    vm.refresh();
+                },
+                getData: function(){
+                    api.showProgress();
+                    api.ajax({
+                        url: SERVER_PATH + 'Feedback/headlines',
+                        method: 'post',
+                        data: {
+                            values: {
+                                AccessToken: $api.getStorage('token'),
+                                start: vm.page,
+                                length: vm.length
+                            },
+                            files: {}
+                        }
+                    }, function (ret, err) {
+                      console.log(ret)
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.code == 0 && ret.data && ret.data.length) {
+                                vm.maxPage = Math.ceil(ret.recordsTotal / vm.length);
+                                vm.dataArr = vm.dataArr.concat(ret.data);
+                            } else {
+                                vm.nullData = true;
+                            }
+                        } else {
+
+                            Tool.toastInfo(errMsg);
+                        }
+                    });
+                },
+                view: function(value){
+                    Tool.openHeader({
+                        frame: {
+                            title: '公告详情',
+                            url: api.wgtRootDir + '/html/news/news_detail.html',
+                            param: {
+                                value: value
+                            }
+                        }
+                    });
+                },
+                loadMore: function () {
+                    Tool.loadMore(function () {
+                        if (vm.page && vm.maxPage && !vm.nullData) {
+                            if (parseInt(vm.page) < parseInt(vm.maxPage)) {
+                                vm.page++;
+                                vm.getData();
+                            } else {
+                                vm.listMsg = LoadAll;
+                            }
+                        }
+                    });
+                },
+                refresh: function () {
+                    Tool.refreshPage(function () {
+                        vm.listMsg = '';
+                        vm.nullData = false;
+                        vm.page = 1;
+                        vm.maxPage = 1;
+                        vm.dataArr = [];
+                        vm.getData();
+                    });
+                }
+            },
+            created :function () {
+                FastClick.attach(document.body);
+            },
+        });
+        vm.init();
+    };
+</script>
+</html>

@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+</head>
+<style media="screen">
+    #title{
+        left: 4.5rem;
+        right: 2rem;
+    }
+    #title span{
+        padding: 0.15rem 2rem;
+        display: inline-block;
+        width: 100%;
+        line-height: 1.3rem;
+        background-color: #fff;
+        color: #777;
+        border-radius: 0.8rem;
+        font-size: .8rem;
+    }
+    .fixedHeader{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 99999;
+    }
+	.searchBox{
+		width: calc(100% - 3rem);
+		padding: 0.2rem 0.75rem;
+	}
+	.searchBox input{
+		position: relative;
+		top: 0.375rem;
+    	height: 1.5rem;
+		background-color: #fff;
+		border-radius: 0.75rem;
+		text-align: center;
+		font-size: 0.6rem;
+	}
+	.hot, .history{
+		padding: 0.75rem;
+	}
+	.hot li, .history li{
+		margin: 0.5rem 0.5rem 0 0;
+		padding: 0.25rem 1rem;
+		min-width: 20%;
+		float: left;
+		font-size: 0.6rem;
+		background-color: #f5f5f5;
+		border-radius: 0.7rem;
+	}
+</style>
+<body class="bg-fff">
+    <header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+		<div class="searchBox aui-pull-left">
+			<input type="search" placeholder="搜索你想要的商家/技师" id="input">
+		</div>
+		<a class="aui-pull-right aui-padded-l-15 aui-iconfont" tapmode onclick="closeWin()">取消</a>
+    </header>
+    <div id="place"><div style="height: 2.25rem;"></div></div>
+	<div class="hot clearfix aui-hide">
+		<p class="aui-font-size-12">热门搜索</p>
+		<ul class="aui-text-center" id="hotBox"></ul>
+	</div>
+	<div class="history clearfix" id="history" style="display: none;">
+		<p class="aui-font-size-12">历史搜索<span class="aui-iconfont aui-icon-trash aui-pull-right" id="clear"></span></p>
+		<ul class="aui-text-center" id="itemBox"></ul>
+	</div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/jquery.js"></script>
+<script type="text/javascript" src="../script/template.js"></script>
+<script type="text/javascript" src="../script/tool.js"></script>
+<script type="text/javascript" src="../config.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+
+        var headerHeight = $api.offset(header).h; //header高度
+        var Home = function(){
+            this.init();
+        };
+        Home.prototype = {
+            init: function () {
+                //this.drawData();
+				        this.historyShow();
+				        this.enter();
+                this.addEventListener();
+            },
+            addEventListener: function(){
+
+            },
+            drawData: function(){
+                var dataStr = $api.getStorage('hotSearch');
+                if(dataStr === "undefined") return;
+                var data = JSON.parse(dataStr);
+                var _html = '';
+                for (var i = 0; i < data.length; i++) {
+                    _html = _html + '<li class="carItem">' + data[i].name + '</li>';
+                }
+                $('#hotBox').html(_html);
+            },
+      			historyShow: function(){
+      				var self = this;
+      				if($api.getStorage('history')){
+      					var _arr  = $api.getStorage('history').split(',');
+      					var _html = '';
+      					for (var i = 0; i < _arr.length; i++) {
+      						_html = _html + '<li class="carItem">' + _arr[i] + '</li>';
+      					}
+      					$('#itemBox').html(_html);
+      					$('#history').show();
+      					self.bindClick();
+      				}
+      			},
+      			enter: function(){
+      				$(document).keydown(function(event){
+      					if(event.keyCode == 13){
+      						var input = $('#input');
+      						input.blur();
+      						var _val = input.val();
+      						if($api.getStorage('history')){
+      							var _arr  = $api.getStorage('history').split(',');
+      							if(_arr.length == 4){
+      								_arr.shift();
+      								_arr.push(_val);
+      							}else{
+      								_arr.push(_val);
+      							}
+      							var history = _arr.join(',');
+      							$api.setStorage('history', history);
+      						}else{
+      							var _arr = [];
+      							_arr.push(_val);
+      							$api.setStorage('history', _arr.join(','));
+      						}
+      						api.sendEvent({
+      						    name: 'shopFromSearchPage',
+      						    extra: {
+      						        shopname: _val
+      						    }
+      						});
+                  Tool.openWin({
+                        url: '/html/nearBy/nearBy_index.html',
+                        param: {
+                            shopname:_text
+                        }
+                    });
+                    setTimeout(function () {
+                        api.closeWin();
+                    },800);
+      					}
+      				});
+      			},
+      			bindClick: function(){
+      				$('#clear').off('click').on('click', function(){
+      					$('#history').hide();
+      					$api.rmStorage('history');
+      				});
+      				$('.carItem').off('click').on('click', function(){
+      					var _text = $(this).text();
+      					api.sendEvent({
+      					    name: 'shopFromSearchPage',
+      					    extra: {
+      					        shopname: _text
+      					    }
+      					});
+                Tool.openWin({
+                      url: '/html/nearBy/nearBy_index.html',
+                      param: {
+                          shopname:_text
+                      }
+                  });
+                setTimeout(function () {
+                    api.closeWin();
+                },800);
+      				});
+      			},
+        };
+        new Home();
+    };
+</script>
+</html>

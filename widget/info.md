@@ -1,0 +1,2 @@
+ad_auth_resource 后台菜单配置
+ad_auth_role

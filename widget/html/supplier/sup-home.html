@@ -1,0 +1,754 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      #cityChoose {
+        color: #fff;
+      }
+
+      #cityChoose::before {
+        content: '' !important;
+      }
+
+      #title {
+        width: 85%;
+        padding-left: 1.5rem;
+      }
+
+      .aui-slide-node img {
+        object-fit: cover;
+      }
+
+      .aui-row img.aui-iconfont {
+        display: inline-block;
+        height: 2rem;
+        border-radius: 1rem;
+      }
+
+      .aui-row .aui-grid-label {
+        font-size: 0.6rem;
+      }
+
+      .aui-grid [class*=aui-col-] {
+        padding: 0.2rem 0;
+      }
+
+      .aui-grid .aui-grid-label {
+        margin-top: 0;
+      }
+
+      .carLi h2 {
+        margin-top: 0.25rem;
+        font-size: 0.7rem;
+        font-size: 0.65rem;
+        font-weight: bold;
+      }
+
+      .carLi .new {
+        position: absolute;
+        left: 0.75rem;
+        top: 0.75rem;
+        width: 1.6rem;
+      }
+
+      .fixedHeader {
+
+        width: 100%;
+
+
+        background: #0098ff !important;
+        color: white !important;
+      }
+
+      .fixedHeader img {
+        position: absolute;
+        padding: 0;
+        right: 0rem;
+        top: 1.8rem;
+        width: 2.3rem;
+      }
+
+      .shopBox {
+        background: white;
+        padding-top: 0.5rem;
+      }
+
+      .shopBox > span {
+        font-weight: bold;
+        padding-left: 0.5rem;
+      }
+
+      .shopBox > p {
+        padding-right: 0.5rem;
+      }
+
+      .shopBox > ul {
+        padding: 0.5rem;
+        display: inline-block;
+      }
+
+      .shopBox .recommendItem {
+        display: inline-block;
+        margin-bottom: 0.5rem;
+        width: calc((100% - 1rem) / 2);
+      }
+
+      .shopBox .recommendItem:nth-of-type(odd) {
+        margin-right: 0.5rem;
+      }
+
+      .shopBox .recommendItem > img {
+        margin-bottom: 0.5rem;
+      }
+
+      .shopBox .shopname {
+        width: 100%;
+      }
+
+      .shopBox p {
+        display: inline-block;
+        padding-left: 0.5rem;
+      }
+
+      .stars {
+        display: inline-block;
+      }
+
+      .stars li {
+        display: inline-block;
+
+      }
+
+      .stars img {
+        width: .5rem;
+        display: inline-block;
+      }
+
+      .block {
+        padding: 0.5rem;
+        background: white;
+      }
+
+      .block p {
+        display: inline-block;
+      }
+
+      .block1 .one {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .block1 .one span {
+        display: inline-block;
+        font-size: .85rem;
+        line-height: 30px;
+      }
+
+      .block1 .one p {
+        height: 30px;
+        display: flex;
+        align-items: center;
+      }
+
+      .block1 .one p img {
+        width: 16px;
+        height: 16px;
+      }
+
+      .block1 .two {
+        display: flex;
+        align-items: center;
+      }
+
+      .block1 .two img {
+        width: 16px;
+      }
+
+      .block1 .two p {
+        font-size: .7rem;
+        padding-left: 5px;
+        color: #666;
+      }
+
+      .block1 .two p span {
+        color: #0098ff;
+      }
+
+      .block1 .three {
+        position: relative;
+        margin-top: 5px;
+        display: flex;
+        align-items: center;
+      }
+
+      .block1 .three img {
+        width: 16px;
+        margin-top: 10px;
+        margin-bottom: 10px
+
+
+      }
+
+      .block1 .three p {
+        width: 100%;
+        float: left;
+        padding-left: 5px;
+        font-size: .7rem;
+        color: #666;
+
+      }
+      .daohang{
+        display: inline-block;
+      }
+      .xiaoxi{
+        position: absolute;
+        right: 20px;
+        top: 22px;
+
+      }
+      .block1 .three p span {
+
+      color: #0098ff
+      }
+
+      .block2 {
+        margin-top: 0.5rem;
+      }
+
+      .block3 {
+        background: #f5f5f5;
+      }
+
+      .block3 .title {
+        display: inline-block;
+      }
+
+      .block3 .more {
+        display: inline-block;
+        color: #3a76f1;
+        font-size: 0.7rem;
+        line-height: 1rem;
+      }
+
+      .evaluateItem {
+        position: relative;
+        /*margin-top: 0.5rem;*/
+        /*background: yellow;*/
+      }
+
+      .evaluateItem .headImg {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+      }
+
+      .evaluateItem .details {
+        position: relative;
+        top: -3rem;
+        left: 3.5rem;
+        width: calc(100% - 3.5rem);
+      }
+
+      .evaluateItem .details .date {
+        display: inline-block;
+      }
+
+      .evaluateItem .comments {
+        padding-top: 0.3rem;
+        font-size: 0.7rem;
+      }
+
+      .evaluateItem .details img {
+        width: 5rem;
+        margin: 0.5rem 0.5rem 0 0;
+      }
+
+      .contactBox {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2.2rem;
+      }
+
+      .contactBox .info_1 {
+        width: 6.5rem;
+      }
+
+      .contactBox .info_1 img {
+        width: 1rem;
+        margin: 0.6rem 0.75rem;
+      }
+
+      .contactBox .info_1 p {
+        line-height: 1.1rem;
+        color: #444;
+      }
+
+      .contactBox .info_2 {
+        /*width: calc(100% - 6.5rem);*/
+        width: 100%;
+        line-height: 2.2rem;
+      }
+      .chat_info{
+        text-align: right;
+      }
+      .chat_info i{
+        font-size: 24px;
+        color: green;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <!--html-->
+    <header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         onclick="closeWin()"></a>
+      <div class="" id="title">店家详情</div>
+      <!-- <img class="aui-pull-right" src="../../image/share.png" alt=""> -->
+    </header>
+    <div id="slide" style="height:0.4vw;"></div>
+  <!--  <div class="aui-slide-node bg-dark z-banner shopImg ">
+      <img src="../../image/shop_img1.png"/>
+    </div>-->
+    <div class='block block1'>
+
+    </div>
+    <div class='block block2'>
+      <div>服务项目</div>
+      <p class='serviceItem'>| 轮胎 | 发动机 |</p>
+    </div>
+    <div class='block block3'>
+      <div class='title'>用户评价</div>
+      <span class='aui-pull-right more'>评论数量(<span id="commentNumber">0</span>)</span>
+      <ul class='evaluateList'>
+      </ul>
+    </div>
+    <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+    <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+    <footer class="contactBox clearfix">
+      <!-- <div class="info_1 aui-text-center bodyBc aui-pull-left" id="call">
+        <img class="aui-pull-left" src="../../image/phone.png" alt="">
+        <div class="aui-pull-left">
+          <p class="aui-font-size-12">咨询客服</p>
+          <p class="aui-font-size-12">09:00-21:00</p>
+        </div>
+      </div> -->
+      <div class="info_2 aui-text-center fc-fff aui-pull-left bg button-active" id="order">立即预约</div>
+    </footer>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+    <script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/html" id="tpl-banner">
+      <div class="aui-slide-wrap">
+        {{each data as value index}}
+        <div class="aui-slide-node bg-dark z-banner">
+          <img src="{{value}}"/>
+        </div>
+        {{/each}}
+      </div>
+      <div class="aui-slide-page-wrap"></div>
+    </script>
+    <script type="text/html" id="tpl-one">
+      {{ each data as value index }}
+      <div class='one'>
+        <span>{{ value.shopname }}</span>
+        <p>
+          <img src="../../image/star.svg" alt="">
+          <img src="../../image/star.svg" alt="">
+          <img src="../../image/star.svg" alt="">
+          <img src="../../image/star.svg" alt="">
+          <img src="../../image/star.svg" alt="">
+        </p>
+      </div>
+      <div class="two">
+        <img src="../../image/rench.png" alt="">
+        <p>
+          已服务<span class="aa">0</span>位车主
+        </p>
+      </div>
+      <div class="three">
+
+        <p>
+            <img src="../../image/location.png" alt="">
+          {{ value.address }}
+          <!-- <span class="daohang">距您{{(value.distance / 1000).toFixed(1)}}公里</span> -->
+          <span class="daohang">{{value.cityName}} {{value.regionName}}</span>
+          <img class="xiaoxi"  src="../../image/xiaoxi.png" alt="" onclick="talk()">
+          <!-- <span class="chat_info" id="chat_info"><i class="aui-iconfont aui-icon-wechat"></i></span> -->
+        </p>
+
+      </div>
+
+      {{ /each }}
+    </script>
+    <script type="text/html" id="tpl-two">
+      {{ each data as value index }}
+      <li class='evaluateItem'>
+        <img class='headImg' src="{{value.headimgurl}}" alt="">
+        <div class='details'>
+          <span>{{value.nickname}}</span>
+          <p class='aui-pull-right date'>{{value.createTime}}</p>
+          <div class='comments'>{{value.comments}}</div>
+        </div>
+      </li>
+      {{ /each }}
+    </script>
+    <!--js-->
+    <script type="text/javascript">
+        var endLon="";
+        var endLat="";
+        var lat="";
+        var lon="";
+      apiready = function () {
+        var  map = api.require('bMap');
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var headerHeight = $api.offset(header).h; //header高度
+        var footerH = $api.getStorage('footerH'); //footer高度
+        var Home = function () {
+          this.cityId = '';
+          this.page = 0;
+          this.pagesize = 10;
+          this.maxPage = 0;
+          this.total = 0;
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.getData();
+            this.getBanners();
+            this.bindClick();
+
+            $('#order').off('click').on('click', function () {
+              $api.setStorage('fromTabIndex', 6);
+              Tool.openWin({
+                // name: 'add',
+                url: '/html/reserve/newReserve.html',
+              });
+            });
+
+              talk=function(){
+                if(api.pageParam.id==$api.getStorage('userId')){
+                  Tool.toastInfo("您不能和自己聊天");
+                  return
+                }
+                Tool.openWin({
+                  url: '/html/my/talkweb.html',
+                  param: {
+                    toId: api.pageParam.id,
+                    toType:1
+                  }
+                });
+              }
+            $('.block1').off('click').on('click','.daohang', function () {
+              map.getLocation( {
+                accuracy: '10m',
+                autoStop: true,
+                filter: 10
+              }, function ( ret, err ) {
+                if ( ret.status ) {
+                   lon=ret.lon;
+                   lat=ret.lat;
+                } else {
+                  api.alert( {
+                    msg: "获取位置信息失败，请重试!"
+                  } );
+                }
+              } );
+              var uri="";
+              uri+='androidamap://navi?';
+              uri+='sourceApplication='+api.appName;
+              uri+='&lat='+endLat+'&lon='+endLon;
+              uri+='&dev=0';
+              uri+='&style=2';
+                      api.openApp({
+                              androidPkg: 'android.intent.action.VIEW',
+                  appParam: {
+                              lat: lat,
+                              lon: lon,
+                              dev:'0',
+                              style:'2',
+                              sourceApplication:api.appName
+                          },
+                          uri:uri,
+                  iosUrl: 'iosamap://navi'
+          },function(ret,err){
+                   if(ret){
+              }else{
+                   alert("您还没有安装高德地图");
+              }
+          });
+            });
+          },
+          setDefaultSearch: function () {
+            var self = this;
+            $('#title span').text(' ' + ($api.getStorage('defaultSearch') || '奔驰汽车'));
+            api.ajax({
+              url: SERVER_PATH + 'Index/getDefaultSearch',
+              method: 'post',
+              data: {
+                values: {},
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0) {
+                $api.setStorage('defaultSearch', ret.data);
+              }
+            });
+          },
+          addEventListener: function () {
+            api.addEventListener({
+              name: 'chooseCity'
+            }, function (ret, err) {
+              $('#cityChoose').text(ret.value.city);
+            });
+          },
+          getBanners: function () {
+            var self = this;
+            api.ajax({
+              url: SERVER_PATH + 'Agency/getInfo',
+              method: 'post',
+              data: {
+                values: {
+                  userId: api.pageParam.id,
+                  lng:api.pageParam.lon,
+                  lat:api.pageParam.lat
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0 ) {
+                var arr = [];
+                for (var i = 0; i < ret.data[0].banner.length; i++) {
+                  arr.push(ret.data[0].banner[i]);
+                }
+                self.drawBanners(arr);
+              }
+            });
+          },
+          drawBanners: function (bannersArr) {
+            var self = this;
+            $api.html(document.getElementById("slide"), template('tpl-banner', {"data": bannersArr}))
+            new auiSlide({
+              "container": document.getElementById("slide"),
+              "height": api.winWidth * 0.512,
+              "speed": 500,
+              "autoPlay": 5000, //自动播放
+              "loop": true,
+              "pageShow": true,
+              "pageStyle": 'dot',
+              'dotPosition': 'center'
+            });
+          },
+          getData: function () {
+            var self = this;
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + 'Agency/getInfo', // 获取商铺或者技师的信息
+              method: 'post',
+              data: {
+                values: {
+                  userId: api.pageParam.id,
+                  lng:api.pageParam.lon,
+                  lat:api.pageParam.lat
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              api.hideProgress();
+              if (ret) {
+                var data = ret.data[0];
+                 endLon=data.lng;
+                 endLat=data.lat;
+                 if(data.type==2){
+                   $("#slide").addClass("aui-hide");
+                   $("#title").html("技师详情");
+                   data.shopname=data.realname;
+                 }
+                data.shopimgurl && $('.shopImg img').attr('src', data.shopimgurl);
+                $(".block1").html(template('tpl-one', {data: [data]}));
+
+                api.ajax({
+                    url: SERVER_PATH + 'Agency/ownService',
+                    method: 'post',
+                    data: {
+                        values: {
+                            AccessToken: $api.getStorage('token'),
+                            id: api.pageParam.id
+                        },
+                        files: {}
+                    }
+                }, function(ret, err) {
+                  console.log(api.pageParam.id);
+                  console.log($api.getStorage('userId'));
+                  console.log(ret.recordsTotal );
+                    if (ret && ret.code == 0) {
+                        if(ret.data){
+                            $('.aa').text(ret.recordsTotal||'0');
+                        }
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                });
+
+              }
+              else {
+                Tool.toastInfo('获取信息失败，请稍后重试');
+              }
+            });
+
+
+
+
+            api.ajax({
+              url: SERVER_PATH + 'Agency/getOwnSerInfo',
+              method: 'post',
+              data: {
+                values: {
+                  id: api.pageParam.id
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.data) {
+                console.log(ret.data[0].shopname);
+                var data = ret.data;
+                var html = '';
+                for (var i = 0; i < data.length; i++) {
+                  if (i === 0)
+                    html += data[i].name;
+                  else
+                    html += ' | ' + data[i].name;
+                }
+                $(".serviceItem").html(html);
+              }
+              else if (ret.code === 1) { // 该商户没有相关数据
+                return;
+              }
+              else {
+                Tool.toastInfo('');
+              }
+              api.hideProgress();
+            }); // 服务项目
+            api.ajax({
+              url: SERVER_PATH + 'User/getCommentsList',
+              method: 'post',
+              data: {
+                values: {
+                  id: api.pageParam.id
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret) {
+                $('#commentNumber').html(ret.count || 0);
+                $(".evaluateList").html(template('tpl-two', {data: ret.data}));
+              }
+              else {
+                Tool.toastInfo('获取评论失败，请稍后重试');
+              }
+              api.hideProgress();
+            }); // 评论列表
+          },
+          drawData: function (data) {
+            $('#carList').append(template('tpl-carList', {"data": data}));
+            this.viewCarInfo();
+          },
+          loadMore: function () {
+            var self = this;
+            Tool.loadMore(function () {
+              if (self.maxPage && self.total) {
+                if (parseInt(self.page + 1) < parseInt(self.maxPage)) {
+                  self.page++;
+                  self.getData();
+                } else {
+                  $('#loadAll').removeClass('aui-hide');
+                }
+              }
+            });
+          },
+          refresh: function () {
+            var self = this;
+            Tool.refreshPage(function () {
+              self.page = 0;
+              self.maxPage = 0;
+              $('#loadAll').addClass('aui-hide');
+              $('#dataNull').addClass('aui-hide');
+              $('#carList').html('');
+              self.getData();
+            });
+          },
+          bindClick: function () {
+            var self = this;
+            $api.addEvt(document.getElementById('cityChoose'), 'click', function () {
+              return;
+              Tool.openHeader({
+                name: 'chooseCity',
+                frame: {
+                  title: '选择城市',
+                  url: api.wgtRootDir + '/html/chooseCity.html',
+                  param: {
+                    event: 'chooseCity'
+                  }
+                }
+              });
+            });
+            $('#title').off('click').on('click', function () {
+              Tool.openWin({
+                url: '/html/search_car.html',
+              });
+            });
+            $('#serviceItem>div').off('click').on('click', function () {
+              var serviceId = $(this).data('index');
+              Tool.openHeader({
+                name: 'chooseService',
+                frame: {
+                  title: '服务列表',
+                  url: api.wgtRootDir + '/html/chooseService.html',
+                  param: {
+                    serviceId: serviceId,
+                  }
+                }
+              });
+            });
+          },
+          viewCarInfo: function () {
+            $('.carLi').off('click').on('click', function () {
+              var _id = $(this).data('id');
+              Tool.openWin({
+                url: '/html/buyCar/buyCar_detail.html',
+                param: {
+                  id: _id
+                }
+              });
+            });
+          }
+        };
+        new Home();
+        var character=$api.getStorage('character');
+        if(character==2){
+           $("#order").addClass("aui-hide");
+        }
+    
+      };
+    </script>
+  </body>
+</html>

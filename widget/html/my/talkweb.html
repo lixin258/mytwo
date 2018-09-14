@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/main.css"/>
+    <!--css-->
+    <style>
+     #app header{
+       position: fixed;
+       top: 0px;
+     }
+     #app{
+       padding-top: 50px;
+       padding-bottom: 60px;
+     }
+      .border_text{
+        width: 100%;
+        margin-top: 15px;
+        padding-left: 5px;
+        padding-right: 5px;
+        overflow-y: auto;
+      }
+      .content_chat_img{
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+      }
+      .content_chat_img img{
+        width: 40px;
+        height: 40px;
+      }
+      .content_chat{
+        width: 100%;
+        display: flex;
+        margin-top:5px;
+      }
+      .content_chat_text{
+        margin-left: 10px;
+        background: #fff;
+        padding: 10px;
+        max-width: 70%;
+        border-radius: 5px;
+        color: #000;
+        position: relative;
+        min-height: 40px;
+      }
+      .content_chat1{
+        clear: right;
+        width: 100%;
+        position: relative;
+        margin-top: 5px;
+      }
+      .content_chat_text1{
+        clear: left;
+        float: right;
+        max-width: 70%;
+        min-height: 40px;
+        background: #0098ff;
+        border-radius: 5px;
+        color: #fff;
+        padding: 10px;
+        margin-right: 15px;
+        position: relative;
+      }
+      .content_chat_img1{
+        width: 40px;
+        height: 40px;
+        float: right;
+      }
+      .content_chat_img1 img{
+        width: 40px;
+        height: 40px;
+      }
+      .sj_left{
+        position: absolute;
+        top: 15px;
+        margin-top: -5px;
+        left: -13px;
+        width: 0px;
+        height: 0px;
+        border-top: 7px solid rgba(0,0,0,0);
+        border-right: 7px solid #fff;
+        border-bottom: 7px solid rgba(0,0,0,0);
+        border-left: 7px solid rgba(0,0,0,0);
+      }
+      .sj_right{
+        position: absolute;
+        top: 15px;
+        margin-top: -5px;
+        right: -13px;
+        width: 0px;
+        height: 0px;
+        border-top: 7px solid rgba(0,0,0,0);
+        border-right: 7px solid rgba(0,0,0,0);
+        border-bottom: 7px solid rgba(0,0,0,0);
+        border-left: 7px solid #0098ff;
+      }
+      #chatInput{
+        width: 70%;
+        height: 40px;
+        border-radius: 40px;
+        border: 1px solid #ccc;
+        padding-left: 15px;
+        padding-right: 10px;
+     }
+    .submit{
+      display: flex;
+      position: fixed;
+      bottom: 0px;
+      background: #fff;
+      width: 100%;
+      padding: 10px 10px;
+    }
+    .submit_btn{
+      width: 25%;
+      line-height: 40px;
+      text-align: center;
+      background: #0098ff;
+      margin-left: 10px;
+      color: #fff;
+      border-radius: 40px;
+    }
+    </style>
+  </head>
+  <body ontouchstart>
+    <!--html-->
+    <div  class="aui-content" id="app">
+      <header class="aui-bar aui-bar-nav aui-bar-info" style="height:65px;line-height: 65px">
+        <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+           style="width: 45px;line-height: 65px"
+           tapmode onclick="closeWin()"></a>
+        <div class="aui-title" id="title" >消息</div>
+        <a class="aui-pull-right" tapmode id="text"></a>
+      </header>
+      <div class="border_text" id="border_text" ref="viewBox" v-for="value in dataArr">
+        <div :class="value.fromId==userId&&value.fromType==type?'content_chat1':'content_chat'" >
+          <div :class="value.fromId==userId&&value.fromType==type?'content_chat_img1':'content_chat_img'">
+            <img :src="value.fromId==userId&&value.fromType==type?value.headimgurl:value.headimgurl"/>
+          </div>
+          <div :class="value.fromId==userId&&value.fromType==type?'content_chat_text1':'content_chat_text'">
+            <div :class="value.fromId==userId&&value.fromType==type?'sj_right':'sj_left'"></div>
+            {{value.info}}
+          </div>
+        </div>
+      </div>
+      <div class="submit">
+        <input type="text"  v-model="charInfo" id="chatInput">
+        <div class="submit_btn" @click="chatSubmit">发送</div>
+      </div>
+      <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+      <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/vue.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var vm = new Vue({
+          el: '#app',
+          data: {
+            dataArr: [],
+            page: 1,
+            length: 10,
+            maxPage: 1,
+            userId:'',
+            charInfo:'',
+            type:'',
+            headimgurl:''
+          },
+
+          mounted () {
+          },
+
+          methods: {
+            init: function () {
+              vm.getChatList();
+              vm.userId = $api.getStorage('userId');
+              if($api.getStorage('type')==2){
+                vm.type=1
+              }else{
+                vm.type=$api.getStorage('type');
+              }
+
+            },
+            scrollToBottom: function () {
+            this.$nextTick(function() {
+             var container = this.$el.querySelector(".border_text");
+               container.scrollTop = container.scrollHeight;
+            })
+          },
+            getChatList: function () {
+
+              api.ajax({
+                url: SERVER_PATH + 'User/toViewChat',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    fromId: $api.getStorage('userId'),
+                    fromType:$api.getStorage('type'),
+                    toId: api.pageParam.toId,
+                    toType: api.pageParam.toType,
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret) {
+                  if (ret.code == 0 && ret.data && ret.data.length) {
+                      vm.maxPage = Math.ceil(ret.recordsTotal / vm.length);
+                      vm.dataArr = ret.data;
+                      setTimeout(function () {
+                          vm.getChatList({}, 1500);
+                      });
+                  } else {
+                      vm.nullData = true;
+                  }
+                } else {
+                  Tool.toastInfo(ret.msg || errMsg);
+                  vm.referralsCode = '';
+                }
+              });
+            },
+            chatSubmit:function(){
+              api.ajax({
+                url: SERVER_PATH + 'User/addChat',
+                method: 'post',
+                data: {
+                  values: {
+                    AccessToken: $api.getStorage('token'),
+                    fromId: $api.getStorage('userId'),
+                    fromType:$api.getStorage('type'),
+                    toId:api.pageParam.toId,
+                    toType:api.pageParam.toType,
+                    info:vm.charInfo
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret) {
+                  if (ret.code == 0) {
+                      vm.dataArr = [];
+                      vm.getChatList();
+                      vm.charInfo='';
+                  }
+                } else {
+                  Tool.toastInfo(ret.msg || errMsg);
+                  vm.referralsCode = '';
+                }
+              });
+            },
+            refresh: function () {
+                Tool.refreshPage(function () {
+                    vm.listMsg = '';
+                    vm.nullData = false;
+                    vm.page = 1;
+                    vm.maxPage = 1;
+                    vm.dataArr = [];
+                    vm.getChatList();
+                });
+            }
+          },
+          created: function () {
+
+          FastClick.attach(document.body);
+        }
+        });
+        vm.init();
+      };
+    </script>
+  </body>
+</html>

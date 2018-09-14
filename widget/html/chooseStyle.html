@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title></title>
+        <link rel="stylesheet" type="text/css" href="../css/aui/aui.css" />
+        <link rel="stylesheet" type="text/css" href="../css/main.css" />
+	</head>
+    <style>
+        html,body{
+            height: 100vh;
+						position: relative;
+            background-color: white;
+        }
+				.right-panel{
+					position: absolute;
+					top:0;
+					right:0;
+					height:100%;
+					width:70%;
+					display:show;
+					background: #f5f5f5;
+					transition:all 2s linear;
+				}
+				.hide{
+					display: none;
+				}
+				#carStyle>li{
+					width:100%;
+					padding-left:0.5rem;
+					line-height: 1.5rem;
+				}
+				#carStyle>.active{
+					background: #f5f5f5;
+				}
+				#carModel>li{
+					padding-left:0.2rem;
+					line-height: 1.5rem;
+				}
+    </style>
+	<body>
+			<ul id='carStyle'></ul>
+			<ul id='carModel' class='right-panel hide'></ul>
+	</body>
+	<script type="text/javascript" src="../script/api.js"></script>
+	<script type="text/javascript" src="../script/tool.js"></script>
+	<script type="text/javascript" src="../script/jquery.js"></script>
+	<script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript">
+        apiready = function(){
+					var Home = function(){
+						this.brand = '';
+						this.style ='';
+						this.modelNum = '';
+						this.modelId='';
+						this.init();
+					}
+					Home.prototype = {
+						init:function(){
+							this.getData();
+							//this.addEventListener();
+							//this.bindClick();
+						},
+						getData: function(){
+                var self = this;
+                api.ajax({
+                    url: SERVER_PATH + 'Car/getCarStyle',
+                    method: 'post',
+                    data: {
+                        values: {
+                            AccessToken: $api.getStorage('token'),
+                            id: api.pageParam.id,
+														brand:api.pageParam.brand
+                        },
+                        files: {}
+                    }
+                }, function(ret, err) {
+										self.brand=api.pageParam.brand;
+                        if(ret){
+														var html = '';
+														var style ='';
+														for(var i=0;i<ret.length;i++){
+															if (ret[i].id==0) {
+																style = ret[i].name;
+															}else{
+																style = ret[i].style;
+															}
+															html += '<li data-styleId='+ret[i].id+'>'+style+'</li>';
+														}
+                            $('#carStyle').html(html);
+														self.bindClick();
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                });
+            },
+						getModelNum:function(brand,style){
+							var self = this;
+							api.ajax({
+									url: SERVER_PATH + 'Car/getCarModelNum',
+									method: 'post',
+									data: {
+											values: {
+													AccessToken: $api.getStorage('token'),
+													style:style,
+													brand:brand
+											},
+											files: {}
+									}
+							}, function(ret, err) {
+											if(ret){
+													var html = '';
+													var modelNum ='';
+													for(var i=0;i<ret.length;i++){
+														if (ret[i].id==0) {
+															modelNum = ret[i].name;
+														}else{
+															modelNum = ret[i].modelNum;
+														}
+														html += '<li data-modelid='+ret[i].id+'>'+modelNum+'</li>';
+													}
+													$('#carModel').html(html);
+													self.bindClick();
+									} else {
+											Tool.toastInfo(errMsg);
+									}
+							});
+						},
+						bindClick:function(){
+							var self = this;
+							$('#carStyle li').off('click').on('click',function(){
+									self.style=$(this).html();
+									self.getModelNum(self.brand,self.style);
+									$(this).addClass('active');
+									$('.right-panel').show();
+							});
+							$('#carModel li').off('click').on('click',function(){
+									self.modelNum=$(this).html();
+									self.modelId=$(this).data('modelid');
+									api.sendEvent({
+											name: 'chooseCarType',
+											extra: {
+													brand:self.brand,
+													style:self.style,
+													model:self.modelNum,
+													modelId:self.modelId
+											}
+									});
+									if ($api.getStorage('character')==0) {
+										setTimeout(function(){
+											api.closeToWin({
+											    name: 'myInfo'
+											});
+										});
+									}else{
+										setTimeout(function(){
+											api.closeToWin({
+											    name: 'tec-certify'
+											});
+										});
+									}
+
+							})
+						},
+					}
+				new Home();
+    }
+    </script>
+</html>

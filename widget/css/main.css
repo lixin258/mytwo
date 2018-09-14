@@ -1,0 +1,926 @@
+[v-cloak] {
+  display: none;
+}
+.z-null-data {
+  margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.z-null-data span {
+  padding: 5px 15px;
+  font-size: 14px;
+  color: #666;
+}
+.z-clearfix {
+  clear: both;
+}
+
+.z-clearfix::after,
+.z-clearfix::before {
+  display: block;
+  height: 0;
+  content: "";
+  clear: both;
+}
+.aui-bar-nav .aui-title{
+  right: 3rem;
+  left: 3rem;
+}
+.aui-list .aui-list-item:last-child {
+  background-image: none;
+}
+.z-ml-0 {
+  margin-left: 0;
+}
+
+.z-hide {
+  visibility: hidden;
+}
+.mt-40 {
+  margin-top: 1rem;
+}
+.z-bg {
+  background:  #0098ff !important;
+}
+.aui-bar-nav,
+.z-btn-bc {
+  background:  #0098ff;
+}
+.aui-bar-tab .aui-active {
+  color: #e71434;
+}
+.aui-list li:nth-last-child(1){
+  border: none;
+  background-image: none;
+}
+.z-no-bt {
+  border: none;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-image: none;
+}
+.fc-fen{
+  color: #e71434 !important;
+}
+.fc-lan{
+  color: #eb6117 !important;
+  font-style: normal;
+}
+.bg-fen{
+  background-color: #e71434 !important;
+}
+.bg-lan{
+  background-color: #eb6117 !important;
+}
+.z-no-b {
+  background-image: none !important;
+}
+.z-pos-rel {
+  position: relative;
+}
+.aui-dialog-header {
+  background-color: #e71434;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+  padding-bottom: 0.5rem;
+  color: #fff;
+}
+
+.aui-dialog-btn[button-index="1"] {
+  color: #e71434;
+}
+
+.aui-dialog-btn {
+  color: #444;
+}
+
+.aui-dialog-body {
+  font-size: 0.8rem;
+}
+
+.z-confirm {
+  position: fixed;
+  width: 100%;
+  height: auto;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  padding-bottom: 0.75rem;
+}
+
+.z-confirm .z-header {
+  height: 2.2rem;
+  line-height: 2.2rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #000;
+}
+
+.z-confirm ul {
+  padding: 0 0.75rem;
+}
+
+.z-confirm ul li {
+  height: 2.2rem;
+  line-height: 2.2rem;
+  color: #666;
+}
+
+.z-confirm ul li:nth-last-child(1) {
+  font-size: 0.6rem;
+}
+
+.z-confirm ul li:nth-last-child(1) input {
+  float: left;
+  margin-top: 0.65rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.5rem;
+  font-size: 0.6rem;
+}
+
+.z-confirm ul li:nth-last-child(1) input:checked {
+  background-color: #e71434;
+  border-color: #e71434;
+}
+
+.z-confirm .aui-btn {
+  background-color: #e71434 !important;
+}
+
+.signIn .z-logo,
+.signUp .z-logo {
+  width: 34vw;
+  border-radius: 17vw;
+  margin-left: 33vw;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.signIn .z-icon,
+.signUp .z-icon {
+  height: 2.2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.signIn .aui-list,
+.signUp .aui-list {
+  padding: 0.5rem 0.75rem;
+  background-color: inherit;
+}
+
+.signIn .aui-list .aui-list-item-inner,
+.signUp .aui-list .aui-list-item-inner {
+  width: 76vw;
+  margin-left: calc(12% - 1.3rem);
+}
+.signIn .aui-list .aui-list-item,
+.signUp .aui-list .aui-list-item {
+  background-image: none;
+}
+.signIn .aui-list .aui-border-b,
+.signUp .aui-list .aui-border-b {
+  background-image: -webkit-linear-gradient(90deg, #fff, #fff 50%, transparent 50%);
+}
+
+.signIn .aui-list input,
+.signUp .aui-list input {
+  color: #000;
+}
+
+.signIn .aui-list input::-webkit-input-placeholder,
+.signUp .aui-list input::-webkit-input-placeholder {
+  color: #ccc !important;
+}
+
+.signIn .z-prefix-phone,
+.signUp .z-prefix-phone {
+  width: 1.6rem;
+  margin-top: 0.4rem;
+  margin-right: 0.4rem;
+  height: 1.4rem;
+  line-height: 1.4rem;
+  float: left;
+}
+
+.signIn .z-phone,
+.signUp .z-phone {
+  width: calc(100% - 2rem);
+  color:#ccc;
+}
+
+.signIn .z-btn,
+.signUp .z-btn {
+  width: 76%;
+  margin-left: 12%;
+  background-color: #0098ff !important;
+  color: #fff !important;
+  border-radius: 2rem;
+}
+
+.signIn .bgCCC,
+.signUp .bgCCC {
+  background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#eee), to(#eee));
+}
+
+.signIn .z-go,
+.signUp .z-go {
+  width: 76%;
+  margin-left: 12%;
+  padding-top: .5rem;
+  color: #0098ff;
+}
+
+.signIn .z-smsBtn,
+.signUp .z-smsBtn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  height: 1.4rem;
+  padding: 0.25rem 0.8rem;
+  line-height: 0.9rem;
+  font-size: 0.7rem;
+  color: #0098ff;
+}
+
+.signUp li:nth-last-child(1) {
+  margin-top: 0.5rem;
+  color: #fff;
+  font-size: 0.6rem;
+}
+
+.signUp li:nth-last-child(1) input {
+  float: left;
+  margin-top: 0.2rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  margin-right: 0.25rem;
+  margin-left: 1.25rem;
+  font-size: 0.6rem;
+}
+
+.signUp li:nth-last-child(1) input:checked {
+  background-color: #e71434;
+  border-color: #e71434;
+}
+
+.resetPwd .z-logo {
+  width: 60vw;
+  margin-left: 20vw;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.resetPwd .z-icon {
+  height: 2.2rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.resetPwd .aui-list {
+  padding: 0.5rem 0.75rem;
+}
+
+.resetPwd .aui-list .aui-list-item-inner {
+  width: 76vw;
+  margin-left: calc(12% - 1.3rem);
+}
+
+.resetPwd .z-prefix-phone {
+  width: 1.6rem;
+  margin-top: 0.4rem;
+  margin-right: 0.4rem;
+  height: 1.4rem;
+  line-height: 1.4rem;
+  float: left;
+}
+
+.resetPwd .z-phone {
+  width: calc(100% - 2rem);
+}
+
+.resetPwd .z-btn {
+  background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#e71434), to(#eb6117));
+  width: 76%;
+  margin-left: 12%;
+}
+
+.resetPwd .bgCCC {
+  background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#ccc), to(#ccc));
+}
+
+.resetPwd .z-go {
+  width: 76%;
+  margin-left: 12%;
+  padding-top: 1rem;
+}
+
+.resetPwd .z-smsBtn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0;
+  height: 1.4rem;
+  padding: 0.25rem 0.5rem;
+  line-height: 0.9rem;
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.moneyRecord .aui-list.aui-list-in .aui-list-item {
+  background-position: 2.25rem bottom;
+}
+
+.moneyRecord .aui-list .aui-list-item-label-icon {
+  padding-right: 0.5rem;
+}
+
+.moneyRecord .aui-list .aui-list-item-inner {
+  min-height: 2.5rem;
+}
+
+.moneyRecord img {
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  max-width: 1rem;
+}
+
+.statusPage ul {
+  background-color: #fff;
+  padding: 0.5rem 0.5rem 0 0;
+}
+
+.statusPage ul li {
+  padding: 0 0 0.5rem 0.5rem;
+}
+
+.statusPage ul li span {
+  display: inline-block;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 0.1rem;
+  color: #444;
+  text-align: center;
+  font-size: 0.7rem;
+  line-height: 2.2;
+}
+
+.statusPage ul li span.active {
+  border-color: #e71434;
+  color: #e71434;
+}
+
+.userCenter .z-bgPhoto {
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  padding-top: 3rem;
+  text-align: center;
+  background: -webkit-gradient(linear, 100% 0%, 0% 0%, from(rgba(231, 20, 52, 0.85)), to(rgba(235, 97, 23, 0.85)));
+}
+
+.userCenter .z-bgPhoto .z-photo {
+  width: 5rem;
+  height: 5rem;
+  max-width: 5rem;
+  border-radius: 50%;
+  border: 4px solid rgba(231, 20, 52, 0.35);
+}
+
+.userCenter .z-bgPhoto .z-border-deal {
+  background-position: 100%;
+  background-size: 1px 60%;
+  background-image: linear-gradient(270deg, #fff, #fff 50%, transparent 50%);
+}
+
+.userCenter .z-bgPhoto .z-border-color {
+  background-size: 100% 1px;
+  background-image: linear-gradient(0deg, #fff, #fff 50%, transparent 50%);
+}
+
+.userCenter .z-bgPhoto .z-bgImg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  object-fit: cover;
+}
+
+.userCenter .z-numDot {
+  display: inline-block;
+  width: 0.8rem;
+  line-height: 0.8rem;
+  text-align: center;
+  font-size: 0.6rem;
+  background-color: #EF3255;
+  color: #fff;
+  border-radius: 0.4rem;
+  position: absolute;
+  right: 1.5rem;
+  top: 0.85rem;
+}.z-kfzx .z-versionInfo {
+  padding: 3rem 0;
+  text-align: center;
+  position: relative;
+}
+.z-kfzx .z-versionInfo img {
+  display: inline-block;
+  height: 4rem;
+  border-radius: 1rem;
+}
+.z-kfzx .z-versionInfo .z-versionNum {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 0.6rem;
+  color: #fff;
+  background-image: url('../image/icon2.png');
+  background-size: contain;
+  top: 1.5rem;
+  left: calc(50% + 2rem);
+}
+.z-kfzx .z-versionInfo {
+  padding: 3rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.z-kfzx .z-versionInfo img {
+  display: inline-block;
+  height: 4rem;
+  border-radius: 1rem;
+}
+
+.z-kfzx .z-versionInfo .z-versionNum {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+  font-size: 0.6rem;
+  color: #fff;
+  background-image: url('../image/icon2.png');
+  background-size: contain;
+  top: 1.5rem;
+  left: calc(50% + 2rem);
+}
+
+.moneyRecord .aui-list.aui-list-in .aui-list-item {
+  background-position: 2.25rem bottom;
+}
+
+.moneyRecord .aui-list .aui-list-item-label-icon {
+  padding-right: 0.5rem;
+}
+
+.moneyRecord .aui-list .aui-list-item-inner {
+  min-height: 2.5rem;
+}
+
+.moneyRecord img {
+  position: relative;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  max-width: 1rem;
+}
+.userInfo .aui-list.aui-list-in .aui-list-item {
+  background-position: 0.75rem bottom !important;
+}
+
+.userInfo span {
+  display: inline-block;
+  color: #666;
+  max-width: 9rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.userInfo .z-upbtn {
+  background: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#e71434), to(#eb6117));
+  color: #fff;
+  border-radius: 0.15rem;
+}
+
+.userInfo img {
+  width: 8rem;
+  height: 6rem;
+  max-width: 8rem;
+  max-height: 6rem;
+  padding: 0.5rem 0;
+}
+.z-callCenter {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #fff;
+  padding-bottom: 2rem;
+}
+.z-callCenter .z-header {
+  padding-top: 1.2rem;
+  font-size: 0.8rem;
+  line-height: 2;
+}
+.z-callCenter .z-header .z-line {
+  display: inline-block;
+  position: relative;
+  top: 0.5rem;
+  height: 0.8rem;
+  width: 0.3rem;
+  margin: 0 0.25rem;
+  border-top: 1px solid #212121;
+}
+.z-callCenter .z-list {
+  position: relative;
+  left: 50%;
+  width: 18em;
+  margin-left: -9em;
+  font-size: 0.7rem;
+}
+.z-callCenter .z-list li {
+  width: 6em;
+  float: left;
+  color: #b7b7b7;
+}
+.z-callCenter .z-list .z-active {
+  color: #212121;
+}
+.z-callCenter .z-text {
+  margin: 0.5rem;
+  margin-top: 1rem;
+  border: 1px solid #646464;
+  border-radius: 0.05rem;
+}
+.z-callCenter .z-text textarea {
+  height: 6rem;
+  padding: 0.5rem;
+  font-size: 0.7rem;
+  overflow-y: scroll;
+}
+.z-callCenter .z-text .z-clipImg {
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: calc(30vw - 0.5rem);
+  height: calc(30vw - 0.5rem);
+  float: left;
+  object-fit: cover;
+}
+.z-callCenter .z-text .z-addBtn {
+  position: relative;
+  margin-left: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: calc(30vw - 0.5rem);
+  height: calc(30vw - 0.5rem);
+  text-align: center;
+  float: left;
+  border: 1px dashed #777;
+  border-radius: 0.15rem;
+}
+.z-callCenter .z-text .z-addBtn img {
+  display: inline-block;
+  position: relative;
+  top: calc(15vw - 1.15rem);
+  width: 1.6rem;
+  object-fit: cover;
+}
+.z-callCenter .z-text .z-addBtn p {
+  position: absolute;
+  right: 5px;
+  bottom: 2px;
+  height: 1rem;
+}
+.z-callCenter .backInfo {
+  background-color: #fff;
+  border: 1px solid #eb6117;
+  color: #eb6117;
+}
+.z-callCenter .z-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  z-index: 99;
+}
+.z-callCenter .z-view .z-box {
+  height: 90vh;
+  line-height: 90vh;
+  width: 100%;
+  text-align: center;
+}
+.z-callCenter .z-view .z-box img {
+  display: inline-block;
+}
+.z-callCenter .z-view .z-box img.z-h {
+  height: 100%;
+}
+.z-callCenter .z-view .z-box img.z-w {
+  width: 100%;
+  vertical-align: middle;
+}
+.z-callCenter .z-view .z-delete {
+  height: 10vh;
+  line-height: 10vh;
+  text-align: center;
+  font-size: 2rem;
+  color: #fff;
+}
+.z-tab {
+  background-color: #eee;
+}
+.z-tab .aui-bar-btn-item {
+  border-style: none;
+  border-bottom: solid;
+  border-color: #eee;
+  padding-top: 0.075rem;
+}
+.z-tab .aui-bar-btn-item.aui-active {
+  border-color: #eb6117;
+  background-color: #eee;
+  color: #eb6117;
+}
+.datanull {
+  width: 100%;
+}
+.datanull img {
+  position: relative;
+  left: 50%;
+  width: 7rem !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin-left: -3.5rem;
+  margin-top: 5rem;
+}
+.z-orderList .orderList{
+  padding: 0 0.75rem 0.5rem 0.75rem;
+}
+.z-orderList .orderList .orderListHeader {
+  line-height: 2rem;
+  font-size: 0.7rem;
+  color: #999;
+}
+.z-orderList .orderListCon .orderListImg{
+  width: 3rem;
+  height: 3rem;
+  object-fit: cover;
+  float: left;
+}
+.z-orderList .orderListCon .orderListInfo{
+  width: calc(100% - 3rem);
+  height: 3rem;
+  padding: 0 0 0 .5rem;
+  float: right;
+}
+.z-orderList .orderListInfo .text1{
+  padding-bottom: 0.8rem;
+  font-size: 0.8rem;
+  line-height: 1rem;
+}
+.z-orderList .orderListInfo .text2 span:nth-child(1){
+  color: #999;
+  font-size: .7rem;
+}
+.z-orderList .orderListInfo .text2 span:nth-child(2){
+  color: #e71434;
+  font-size: .8rem;
+}
+.z-orderList .orderListInfo .text2{
+  font-size: 0.8rem;
+  line-height: 1.2rem;
+}
+.z-frinedList .frinedList{
+  padding: 0.5rem 0.75rem;
+}
+.z-frinedList .frinedListImg{
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  border-radius: 1.25rem;
+  float: left;
+}
+.z-frinedList .frinedListInfo{
+  width: calc(100% - 2.5rem);
+  height: 2.5rem;
+  padding: 0 0 0 .5rem;
+  float: right;
+}
+.z-frinedList .frinedListInfo .text1{
+  padding-bottom: .5rem;
+  font-size: 0.8rem;
+  line-height: 1rem;
+}
+.z-frinedList .frinedListInfo .text2 span:nth-child(1){
+  color: #999;
+  font-size: .7rem;
+  line-height: 1rem;
+}
+.z-frinedList .z-tgBtn{
+  margin-top: -1rem;
+  padding: 0.1rem 0.5rem;
+  color: #eb6117;
+  font-size: 0.8rem;
+  border: 1px solid #eb6117;
+  border-radius: 0.25rem;
+}
+.z-frinedList .btnTwo{
+  margin-top: -0.7rem;
+  font-size: 0.7rem;
+  color: #999;
+  float: right;
+}
+.z-frinedList .btnOne{
+  margin-top: -0.95rem;
+  padding: .1rem .25rem;
+  line-height: 1rem;
+  font-size: 0.7rem;
+  background-color: #eb6117;
+  border-radius: 0.25rem;
+  border: 1px solid #eb6117;
+  color: #fff;
+  float: right;
+}
+.z-bikeTicket ul li{
+  padding: 0 .75rem;
+  padding-bottom: .25rem;
+}
+.z-bikeTicket li p{
+  padding-top: .25rem;
+  line-height: 1rem;
+  font-size: 0.7rem;
+}
+.z-dealList .dealH{
+  position: fixed;
+  width: 100%;
+  border-top: .25rem solid #fff;
+  text-align: center;
+  line-height: 2rem;
+  background-color: #eb6117;
+  color: #fff;
+  z-index: 99;
+}
+.z-dealList .dealH span {
+  display: inline-block;
+  width: 15%;
+  float: left;
+}
+.z-dealList .dealH span:nth-child(5) {
+  width: 40%;
+}
+.z-dealList li>div {
+  width: 15%;
+  font-size: .7rem;
+  text-align: center;
+  line-height: 2rem;
+  float: left;
+}
+.z-dealList li>div:nth-child(5) {
+  width: 40%;
+}
+.z-dealList li:nth-child(even){
+  background-color: #F0F1F3;
+}
+.z-pushList .pushList{
+  padding: 0.25rem 0.75rem 0 0.75rem;
+}
+.z-pushList .userPhoto{
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-top: 0.25rem;
+  border-radius: 1.1rem;
+  object-fit: cover;
+  float: left;
+}
+.z-pushList .pushInfo{
+  width: calc(100% - 2.7rem);
+  float: right;
+}
+.z-pushList .text1{
+  padding-bottom: 0.25rem;
+}
+.z-pushList .text2{
+  padding-bottom: 0.25rem;
+  color: #999;
+}
+.z-pushList .text2 .aui-pull-right{
+  font-size: .8rem;
+  margin-top: -0.75rem;
+  color: #000;
+}
+.pushForm .friendPhoto{
+  position: relative;
+  width: 6rem;
+  height: 6rem;
+  object-fit: cover;
+  border-radius: 3rem;
+  margin-top: 2rem;
+  margin-left: -3rem;
+  left: 50vw;
+}
+.pushForm .friendName{
+  text-align: center;
+  line-height: 2rem;
+}
+.rechargeLink .z-sqcz {
+  margin-left: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0 0 0 0.35rem;
+  line-height: 1;
+  color: #eb6117;
+  border-left: 3px solid #eb6117;
+}
+.rechargeLink .z-lxkf{
+  padding: 0.5rem 0.75rem;
+}
+.rechargeLink .z-name{
+  display: inline-block;
+  height: 2.5rem;
+  width: 5rem;
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  background-color: #eb6117;
+  border-radius: .25rem;
+  color: #fff;
+  text-align: center;
+  float: left;
+}
+.rechargeLink img{
+  display: inline-block;
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0.7rem;
+  text-align: justify;
+  background-color: #F5F5F5;
+  float: left;
+}
+.rechargeLink .z-phone{
+  display: inline-block;
+  height: 2.5rem;
+  width: calc(100% - 8.5rem);
+  line-height: 2.5rem;
+  padding: 0 0.75rem;
+  background-color: #F5F5F5;
+  color: #eb6117;
+  float: left;
+}
+.sheet .z-sheet-header {
+  text-align: center;
+  padding: 1rem 0.75rem;
+}
+
+.sheet .z-sheet-header img {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  max-width: 2rem;
+  float: left;
+}
+
+.sheet .z-sheet-header span {
+  color: #eb6117;
+  float: left;
+  line-height: 2rem;
+  padding-left: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.sheet .z-sheet {
+  background-color: #fff;
+}
+
+.sheet .z-sheet .z-tip {
+  padding: 0.5rem 0.75rem 1rem 0.75rem;
+  border-bottom: 1px dashed #eee;
+  color: #000;
+  text-align: center;
+}
+
+.sheet .z-sheet .z-tip .z-money {
+  font-size: 2rem;
+  line-height: 2;
+}
+
+.sheet .z-sheet ul {
+  padding: 0.5rem 0.75rem;
+}
+
+.sheet .z-sheet li {
+  font-size: 0.7rem;
+  color: #444;
+  line-height: 2;
+}
+
+.sheet .z-sheet li span:nth-child(2) {
+  float: right;
+}
+
+.sheet .z-sheet .btn-center {
+  margin-left: 30vw;
+  width: 40vw;
+}

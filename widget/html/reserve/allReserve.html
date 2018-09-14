@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+    <!--css-->
+    <style media="screen">
+        .fixedHeader{
+            padding-top:1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 2;
+        }
+        .reserveList{
+            margin:0rem 0.75rem;
+        }
+        .reserveList .reLi{
+            margin:0.5rem 0;
+            background:white;
+            border-radius: 0.3rem;
+        }
+        .reLi>.line1{
+            line-height: 1.5rem;
+            border-bottom:1px dashed #d5d5d5;
+        }
+        .line1 .name{
+            display: inline-block;
+            padding:0 0.5rem;
+            color:#5891f5;
+        }
+        .line1 .date{
+            display: inline-block;
+            padding:0 0.5rem;
+            color:#777;
+            float: right;
+        }
+        .line1 img{
+            width:1rem;
+            display:inline-block;
+            float:right;
+            padding-top:0.2rem;
+        }
+        .reLi .line2{
+            padding:0.5rem;
+            position: relative;
+            color:#777;
+        }
+        .reLi .line2 span{
+            color:rgb(33,33,33);
+        }
+        .line2 img{
+            position:absolute;
+            width:3rem;
+            right:1rem;
+            top:0.8rem;
+        }
+    </style>
+</head>
+<body ontouchstart class="bodyBc">
+    <header class="aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left" tapmode onclick="closeWin()"></a>
+      <div class="aui-title" id="title">可接受预约</div>
+      <a class="aui-pull-right" tapmode id="text"></a>
+    </header>
+    <ul class="reserveList" id="reserveList"></ul>
+    <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+    <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/html" id="tpl-reserveList">
+        {{each data as value index}}
+        <li class="reLi" data-id="{{value.id}}">
+            <div class="line1">
+                <div class='name'>{{value.nickname || '昵称未填写'}}</div>
+                <div class="date">{{value.serviceTime}}</div>
+                <img src="../../image/clock.png" alt="">
+            </div>
+            <div class="reInfo line2">
+                <div class="info_1">服务类型:<span>&nbsp;{{value.servicename}}</span></div>
+                <div class="info_2">服务方式:<span>&nbsp;{{value.type}}</span></div>
+                <div class="info_3">车主车型:<span>&nbsp;{{value.carInfo}}</span></div>
+                <img src="../../image/re-button.png" alt="">
+            </div>
+        </li>
+        {{/each}}
+    </script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var priceArr = [
+          {
+            priceStart: "",
+            priceEnd: "",
+          },{
+            priceStart: 0,
+            priceEnd: 5,
+          },{
+            priceStart: 5,
+            priceEnd: 10,
+          },{
+            priceStart: 10,
+            priceEnd: 15,
+          },{
+            priceStart: 15,
+            priceEnd: 20,
+          },{
+            priceStart: 20,
+            priceEnd: 25,
+          },{
+            priceStart: 25,
+            priceEnd: "",
+          }
+        ];
+        var Home = function(){
+          this.cityId = '';
+          this.title = '';
+          this.page = 0;
+          this.pagesize = 10;
+          this.maxPage = 0;
+          this.total = 0;
+          this.priceId = 0;
+          this.sort = 'default';
+          this.brandId = '';
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.addEventListener();
+            this.getData();
+            // this.loadMore();
+            // this.refresh();
+            // this.setDefaultSearch();
+            // this.chooseCity();
+            // this.chooseSortType();
+            // this.choosePrice();
+            // this.selectInit();
+          },
+          addEventListener: function(){
+            var self = this;
+            api.addEventListener({
+              name: 'chooseCity'
+            }, function(ret, err){
+              $('#cityChoose').text(ret.value.city);
+              self.resetList();
+            });
+            api.addEventListener({
+              name: 'chooseCar'
+            }, function(ret, err){
+              $('#select li[data-select="select_3"]').html(ret.value.carInfo.city == "#全部" ? "品牌" : ret.value.carInfo.city + '&ensp;');
+              self.brandId = ret.value.carInfo.id;
+              self.resetList();
+            });
+            api.addEventListener({
+              name: 'carFromSearchPage'
+            }, function(ret, err){
+              self.title = ret.value.car;
+              $('#select li[data-select="select_3"]').html(self.title + '&ensp;');
+              self.resetList();
+            });
+          },
+          setDefaultSearch: function(){
+            $('#title span').text(' '+($api.getStorage('defaultSearch') || '奔驰汽车'));
+          },
+          getData: function(){
+            var self = this;
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + 'Agency/getServiceList',
+              method: 'post',
+              data: {
+                values: {
+                  AccessToken: $api.getStorage('token'),
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+
+              if (ret) {
+                if(ret.code == 0 && ret.data && ret.data.length){
+                  self.total = ret.recordsTotal;
+                  self.maxPage = Math.ceil(ret.recordsTotal / self.pagesize);
+                  self.drawData(ret.data);
+                }else{
+                  $('#dataNull').removeClass('aui-hide');
+                }
+              } else {
+                Tool.toastInfo(errMsg);
+              }
+              api.hideProgress();
+            });
+          },
+          drawData: function(data){
+            $('#reserveList').append(template('tpl-reserveList', {"data": data}));
+            this.viewReserveInfo();
+          },
+          loadMore: function () {
+            var self = this;
+            Tool.loadMore(function () {
+              if (self.maxPage && self.total) {
+                if (parseInt(self.page+1) < parseInt(self.maxPage)) {
+                  self.page++;
+                  self.getData();
+                } else {
+                  $('#loadAll').removeClass('aui-hide');
+                }
+              }
+            });
+          },
+          refresh: function () {
+            var self = this;
+            Tool.refreshPage(function () {
+              self.resetList();
+            });
+          },
+          resetList: function(){
+            this.page = 0;
+            this.maxPage = 0;
+            $('#loadAll').addClass('aui-hide');
+            $('#dataNull').addClass('aui-hide');
+            $('#carList').html('');
+            this.getData();
+          },
+          chooseCity: function(){
+            $api.addEvt(document.getElementById('cityChoose'), 'click', function(){
+              return;
+              Tool.openHeader({
+                name: 'chooseCity',
+                frame: {
+                  title: '选择城市',
+                  url: api.wgtRootDir + '/html/chooseCity.html',
+                  param: {
+                    event: 'chooseCity'
+                  }
+                }
+              });
+            });
+            $('#title').off('click').on('click', function(){
+              Tool.openWin({
+                url: '/html/search_car.html',
+              });
+            });
+          },
+          selectInit: function(){
+            var self = this;
+            $('#select li').off('click').on('click', function(){
+              var _select = $(this).data('select');
+              var _id = '#' + _select;
+              if($(_id).length && !$(_id).hasClass('aui-hide')){
+                $(_id).addClass('aui-hide');
+                self.select = '';
+                return;
+              }
+              if(self.select){
+                $('#'+self.select).addClass('aui-hide');
+              }
+              if(_select === 'select_3'){
+                Tool.openHeader({
+                  name: 'chooseCar',
+                  frame: {
+                    title: '选择品牌',
+                    url: api.wgtRootDir + '/html/chooseCar.html',
+                    param: {
+                      event: 'chooseCar'
+                    }
+                  }
+                });
+              }else{
+                $(_id).removeClass('aui-hide');
+                self.select = _select;
+              }
+            });
+          },
+          chooseSortType: function(){
+            var self = this;
+            $('#select_1 li').off('click').on('click', function(){
+              $('#select_1 li.fc').removeClass('fc').find('.aui-icon-correct').removeClass('aui-icon-correct');
+              $(this).addClass('fc').find('.aui-iconfont').addClass('aui-icon-correct');
+            });
+            $('#select_1 .confirm-btn').off('click').on('click', function(){
+              self.sort = $('#select_1 li.fc').data('sort');
+              $('#select_1').addClass('aui-hide');
+              $('#select li[data-select="select_1"]').html($('#select_1 li.fc').data('text') + '&ensp;');
+              self.resetList();
+            });
+          },
+          choosePrice: function(){
+            var self = this;
+            $('#select_2 li').off('click').on('click', function(){
+              $('#select_2 li.active').removeClass('active');
+              $(this).addClass('active');
+            });
+            $('#select_2 .confirm-btn').off('click').on('click', function(){
+              self.priceId = $('#select_2 li.active').data('id');
+              $('#select_2').addClass('aui-hide');
+              $('#select li[data-select="select_2"]').html($('#select_2 li.active').data('text') + '&ensp;');
+              self.resetList();
+            });
+          },
+          viewReserveInfo: function(){
+            $('.reLi').off('click').on('click', function(){
+              var _id = $(this).data('id');
+              Tool.openWin({
+                url: '/html/reserve/reserve-details.html',
+                param: {
+                  id: _id
+                }
+              });
+            });
+          }
+        };
+        new Home();
+      };
+    </script>
+</body>
+</html>

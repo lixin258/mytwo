@@ -1,0 +1,233 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <!--css-->
+    <style>
+        html, body {
+            height: 100vh;
+            position: relative;
+            background-color: white;
+        }
+
+        .right-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 55%;
+            /*display: show;*/
+            background: #f5f5f5;
+            transition: all 2s linear;
+        }
+
+        .right-panel li {
+            line-height: 2.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        #serviceList {
+            position: absolute;
+            top: 0;
+            left: 1.5rem;
+            width: 35%;
+        }
+
+        #serviceList > li {
+            width: 100%;
+            padding-left: 0.5rem;
+            line-height: 2.5rem;
+        }
+
+        #serviceList > .active {
+            background: #f5f5f5;
+        }
+
+        .icon {
+            width: 10%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .icon li {
+            padding-left: 0.5rem;
+            padding-top: 0.75rem;
+            height: 2.5rem;
+        }
+
+        .icon img {
+            width: 1rem;
+        }
+    </style>
+</head>
+<body ontouchstart>
+<!--html-->
+<ul class='icon'>
+    <li><img src="../image/icon1.png" alt=""></li>
+    <li><img src="../image/icon2.png" alt=""></li>
+    <li><img src="../image/icon3.png" alt=""></li>
+    <li><img src="../image/icon4.png" alt=""></li>
+    <li><img src="../image/icon5.png" alt=""></li>
+    <li><img src="../image/icon6.png" alt=""></li>
+    <li><img src="../image/icon7.png" alt=""></li>
+    <li><img src="../image/icon8.png" alt=""></li>
+</ul>
+<style>
+    /*#serviceList li:active {*/
+    /*background: #f0f0f0;*/
+    /*}*/
+</style>
+<ul id='serviceList'></ul>
+<ul id='serviceItem' class='right-panel hide'></ul>
+<!--js-->
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/tool.js"></script>
+<script type="text/javascript" src="../script/jquery.js"></script>
+<script type="text/javascript" src="../config.js"></script>
+<!--js-->
+<script>
+    apiready = function () {
+        var Home = function () {
+            this.serviceName = '';
+            this.serviceId = '';
+            this.infoName = '';
+            this.infoId = '';
+            this.init();
+        }
+        Home.prototype = {
+            init: function () {
+                this.getData();
+                //this.addEventListener();
+                //this.bindClick();
+            },
+            getData: function () {
+                var self = this;
+                api.ajax({
+                    url: SERVER_PATH + 'Agency/getService',
+                    method: 'post',
+                    data: {
+                        values: {},
+                        files: {}
+                    }
+                }, function (ret, err) {
+                    if (ret) {
+                        var html = '';
+                        var data = ret;
+                        for (var i = 0; i < data.length; i++) {
+                            if (data[i].id == 0) continue;
+                            if (i == (api.pageParam.serviceId + 1)) {
+                                // html += `<li class="tab-active" data-typeid = '${data[i].id}'><span>${data[i].name}</span><p class='aui-pull-right'>></p></li>`;
+                                html += '<li class="tab-active" data-typeid="' + data[i].id + '"><span>' + data[i].name + '</span><p class="aui-pull-right">></p></li>';
+                                self.getServiceInfo(data[i].id);
+                                $('.right-panel').show();
+                            }
+                            else {
+                                // html += `<li class="tab-active" data-typeid = '${data[i].id}'><span>${data[i].name}</span><p class='aui-pull-right aui-hide'>></p></li>`;
+                                html += '<li class="tab-active" data-typeid = "' + data[i].id + '"><span>' + data[i].name + '</span><p class="aui-pull-right aui-hide">></p></li>';
+                            }
+                        }
+                        $("#serviceList").html(html);
+                        self.bindClick();
+                    }
+                    else {
+                        Tool.toastInfo(errMsg);
+                    }
+                });
+            },
+            getServiceInfo: function (pid) {
+                var self = this;
+                api.ajax({
+                    url: SERVER_PATH + 'Agency/getServiceInfo',
+                    method: 'post',
+                    data: {
+                        values: {
+                            AccessToken: $api.getStorage('token'),
+                            pid: pid
+                        },
+                        files: {}
+                    }
+                }, function (ret, err) {
+                    if (ret) {
+                        var html = '';
+                        var name = '';
+                        for (var i = 0; i < ret.length; i++) {
+                            if (ret[i].id == 0) {
+                                name = ret[i].name;
+                            } else {
+                                name = ret[i].name;
+                            }
+                            if (name !== '全部')
+                                html += '<li class="tab-active" data-infoid=' + ret[i].id + '>' + name + '</li>';
+                        }
+                        $('#serviceItem').html(html);
+                        self.bindClick();
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                });
+            },
+            selectService: function () {
+
+            },
+            bindClick: function () {
+                var self = this;
+                $('#serviceList li').off('click').on('click', function () {
+                    self.serviceId = $(this).data('typeid');
+                    self.serviceName = $(this).find('span').html();
+                    self.getServiceInfo(self.serviceId);
+                    $(this).find("p").removeClass('aui-hide');
+                    $(this).siblings().find("p").addClass('aui-hide');
+                    $('.right-panel').show();
+                });
+                $('#serviceItem li').off('click').on('click', function () {
+                    self.infoName = $(this).html();
+                    self.infoId = $(this).data('infoid');
+                    if (true) {
+                        if (api.pageParam.newService == 1) {
+                            setTimeout(function () {
+                                api.sendEvent({
+                                    name: 'chooseServiceType1',
+                                    extra: {
+                                        serviceId: self.serviceId,
+                                        serviceName: self.serviceName,
+                                        infoId: self.infoId,
+                                        infoName: self.infoName
+                                    }
+                                });
+                                api.closeWin({}, 1500);
+                            });
+                        }
+                        else {
+                            api.sendEvent({
+                                name: 'chooseServiceType',
+                                extra: {
+                                    serviceId: self.serviceId,
+                                    serviceName: self.serviceName,
+                                    infoId: self.infoId,
+                                    infoName: self.infoName
+                                }
+                            });
+                            setTimeout(function () {
+                                api.closeWin({}, 1500);
+                            });
+                        }
+                    }
+                })
+            },
+        };
+        new Home();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    #main{
+        background-color: #fff;
+    }
+    #main .box{
+        text-align: center;
+    }
+    #main .box img{
+        display: inline-block;
+        width: 100px;
+        margin-top: 40px;
+    }
+    #main .box .gg{
+        margin-top: 0.5rem;
+        padding: 0 1rem;
+        line-height: 1.5rem;
+        border-radius: 0.75rem;
+        background-color: #3a76f1;
+        color: #fff;
+    }
+</style>
+<body>
+    <div id="main">
+        <header class="aui-bar aui-bar-nav aui-bar-info">
+			<a class="aui-pull-left aui-iconfont aui-icon-left"  style="visibility: hidden;"></a>
+			<div class="aui-title" id="title">服务</div>
+		</header>
+        <div class="box">
+            <img src="../../image/car.png" alt="">
+            <div class="aui-margin-t-15">您还没有购买爱车</div>
+            <div><span class="gg" id="go">去逛逛</span></div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $('#go').click(function(){
+            api.setFrameGroupIndex({
+                name : 'app_index',
+                index : 1,
+                scroll : true
+            });
+        });
+    };
+</script>
+
+</html>

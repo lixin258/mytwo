@@ -1,0 +1,267 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    .reserve-info {
+        padding: 0 0.4rem;
+        background: #fff;
+    }
+
+    .reserve-car {
+        padding: 0.4rem 0;
+        width: 100%;
+        height: 4.3rem;
+        background: #fff;
+        position: relative;
+    }
+
+    .reserve-car .carImg {
+        display: inline-block;
+        width: 4.5rem;
+        height: 3.5rem;
+    }
+
+    .reserve-car .carInfo {
+        display: inline-block;
+        width: calc(100% - 5.3rem);
+        height: 3.5rem;
+        position: relative;
+        top: -0.4rem;
+    }
+
+    .carInfo .info_1 {
+        padding-top: 0.25rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+    }
+
+    .carInfo .info_1 span {
+        display: inline-block;
+        max-width: calc(100% - 0.75rem);
+        padding-right: 0.25rem;
+        line-height: 1;
+        vertical-align: top;
+        font-weight: bold;
+        font-size: 0.7rem;
+    }
+
+    .carInfo .info_1 .newIcon {
+        display: inline-block;
+        font-size: 0px;
+        width: 0.75rem;
+        vertical-align: top;
+    }
+
+    .carInfo .info_2 {
+        height: 1rem;
+        line-height: 1rem;
+        font-size: .6rem;
+        color: #777;
+    }
+
+    .carInfo .info_3 {
+        position: relative;
+        padding-bottom: 0.25rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+    }
+
+    .carInfo .info_3 span {
+        line-height: 1;
+        font-size: .6rem;
+    }
+
+    .carInfo .info_3 .price {
+        line-height: 1;
+        font-size: .7rem;
+        font-weight: bold;
+    }
+
+    .carInfo .info_3 .other {
+        line-height: 1;
+        font-size: .6rem;
+        padding: 0.15rem 0.2rem;
+        border-radius: 0.15rem;
+        color: #fff;
+        position: absolute;
+        right: 0;
+        bottom: 0.25rem;
+    }
+
+    .reserve-time {
+        background: white;
+        padding: 0.2rem 0;
+        border-top: 1px solid #EEE;
+        font-size: 0.6rem;
+    }
+
+    .reserve-time span {
+        padding-right: 0.2rem;
+    }
+
+    .reserve-img {
+        background: #F3F2F7;
+        text-align: center;
+        padding: 2rem 0 1rem 0;
+    }
+
+    .reserve-img img {
+        width: 6rem;
+        margin: auto;
+    }
+
+    .reserve-img p {
+        margin: 0 auto;
+        width: 10rem;
+    }
+    /*购车经理*/
+
+    .manager-info {
+        padding: 1rem 1.5rem;
+        background: #fff;
+        position: relative;
+    }
+
+    .manager-info .photo {
+        display: inline-block;
+        width: 3rem;
+        border-radius: 50%;
+    }
+
+    .manager-details {
+        display: inline-block;
+        padding: 0 0.4rem;
+        width: calc(100% - 4rem);
+        font-size: 0.6rem;
+        color: #777;
+        position: relative;
+    }
+
+    .manager-details .name {
+        display: inline-block;
+        font-size: 0.8rem;
+        line-height: 1rem;
+        font-weight: bold;
+        line-height: 1rem;
+        color: black;
+    }
+
+    .manager-details>span {
+        padding: 0 0.4rem;
+        line-height: 1rem;
+    }
+
+    .manager-details .number {
+        line-height: 1rem;
+    }
+
+    .manager-details .stars>li {
+        display: inline-block;
+        color: orange;
+    }
+
+    .manager-info .phone {
+        display: inline-block;
+        width: 2rem;
+        position: absolute;
+        top: 1.7rem;
+        right: 1.5rem;
+    }
+
+    .contact-me {
+        margin: 0.4rem 0;
+        padding: 0.2rem 0rem;
+        border: 0.05rem solid #3a76f1;
+        border-radius: 1rem;
+        text-align: center;
+        font-size: 0.7rem;
+        position: relative;
+    }
+
+    .contact-me .triangle {
+        width: 0.5rem;
+        height: 0.5rem;
+        background: white;
+        transform: rotate(45deg);
+        border-top: 0.05rem solid #3a76f1;
+        border-left: 0.05rem solid #3a76f1;
+        position: absolute;
+        top: -0.3rem;
+        left: 1.5rem;
+    }
+</style>
+
+<body class="bodyBc">
+    <div id="reserve-info" class="reserve-info">
+        <div id="reserve-car" class="reserve-car">
+            <img class="carImg" src="../../image/demo3.png" alt="">
+            <div class="carInfo">
+                <div class="info_1"><span id="title" class="aui-ellipsis-1"></span></div>
+                <div class="info_2"><span>厂商指导价 50W</span></div>
+                <div class="info_3">
+                    <span class="fc">蚂蚁有车价：</span>
+                    <span class="price aui-text-danger">33.56万</span>
+                    <span class="other bg">零月供</span>
+                </div>
+            </div>
+        </div>
+        <div id="reserve-time" class="reserve-time">
+            <span>预约时段&nbsp;:</span>
+            <span id="appointTime" class="fc">2018.02.08&nbsp;9:00-10:00</span>
+        </div>
+    </div>
+
+    <div id="reserve-img" class="reserve-img">
+        <img src="../../image/reserve_success.png" alt="">
+        <p>您的专属购车顾问将在1小时内联系您,请保持手机通畅!</p>
+    </div>
+    <div id="manager-info" class="manager-info">
+        <img class="photo" src="../../image/manager.png" alt="">
+        <div class="manager-details">
+            <h1 class="name">吴家兴</h1><span>市场经理</span>
+            <div class="number">电话&nbsp;:&nbsp;132-5566-5755</div>
+            <ul class="stars">
+                <li><i class="aui-iconfont aui-icon-star"></i></li>
+                <li><i class="aui-iconfont aui-icon-star"></i></li>
+                <li><i class="aui-iconfont aui-icon-star"></i></li>
+                <li><i class="aui-iconfont aui-icon-star"></i></li>
+                <li><i class="aui-iconfont aui-icon-star"></i></li>
+            </ul>
+        </div>
+        <img class="phone" src="../../image/icon_phone.png" alt="">
+        <div class="contact-me">
+            <div class="triangle"></div>
+            <span class="fc">您有任何购车疑问,都可以联系我!</span>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var title = api.pageParam.title;
+        $('#title').text(title);
+        var imageurl = api.pageParam.imageurl;
+        $("#reserve-car .carImg").attr('src', imageurl);
+        var factoryprice = api.pageParam.factoryprice;
+        $('#reserve-car .info_2 span').text("厂商指导价:" + factoryprice);
+        var saleprice = api.pageParam.saleprice;
+        $('#reserve-car .info_3 > .price').text(saleprice + "万");
+        var appointTime = api.pageParam.appointmenttime;
+        $('#appointTime').text(appointTime);
+    };
+</script>
+
+</html>

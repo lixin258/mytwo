@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      header {
+        padding-top: 1rem;
+        height: 3.25rem;
+      }
+
+      .reserveList {
+        margin: 0rem 0.75rem;
+      }
+
+      .reserveList .reLi {
+        margin: 0.5rem 0;
+        background: white;
+        border-radius: 0.3rem;
+      }
+
+      .reLi > .line1 {
+        line-height: 1.5rem;
+        border-bottom: 1px dashed #d5d5d5;
+      }
+
+      .line1 .name {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #5891f5;
+      }
+
+      .line1 .date {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #777;
+        float: right;
+      }
+
+      .line1 img {
+        width: 1rem;
+        display: inline-block;
+        float: right;
+        padding-top: 0.2rem;
+      }
+
+      .reLi .line2 {
+        padding: 0.5rem;
+        position: relative;
+        color: #777;
+        border-bottom: 1px dashed #d5d5d5
+      }
+
+      .reLi .line2 span {
+        color: rgb(33, 33, 33);
+      }
+
+      .line2 img {
+        position: absolute;
+        width: 3rem;
+        right: 1rem;
+        top: 0.8rem;
+      }
+
+      .line3 {
+        padding: 0.5rem;
+        position: relative;
+      }
+
+      .line3 .serviceInfo {
+        min-height: 5rem;
+      }
+
+      .line3 .serviceImg img {
+        width: 5rem;
+        padding: 0.5rem;
+        display: inline-block;
+      }
+
+      .line3 .ball-left, .ball-right {
+        position: absolute;
+        width: 1rem;
+        height: 1rem;
+        background: #f5f5f5;
+        border-radius: 50%;
+      }
+
+      .line3 .ball-left {
+        left: -0.5rem;
+        top: -0.5rem;
+      }
+
+      .line3 .ball-right {
+        right: -0.5rem;
+        top: -0.5rem;
+      }
+
+      #submit,#submit2 {
+        background: #0098ff !important;
+        color: white;
+        padding: 0;
+      }
+      #submit2 a{
+        color: white;
+        display: block;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <!--html-->
+    <header class="aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         tapmode onclick="closeWin()"></a>
+      <div class="aui-title" id="title">预约详情</div>
+      <a class="aui-pull-right" tapmode id="text"></a>
+    </header>
+    <ul class="reserveList" id="reserveDetails">
+      <li class="reLi" data-id="{{value.id}}">
+        <div class="line1">
+          <div class='name'>{{value.nickname || '昵称未填写'}}</div>
+          <div class="date">2018-5-2 9:00</div>
+          <img src="../../image/clock.png" alt="">
+        </div>
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>{{value.servicename}}</span></div>
+          <div class="info_2">服务方式:<span>{{value.type}}</span></div>
+          <div class="info_3">车主车型:<span>{{value.carInfo}}</span></div>
+          <div class="info_3">车主车型:<span>{{value.shopphone}}</span></div>
+        </div>
+        <div class="line3">
+          <div class='ball-left'></div>
+          <div class='ball-right'></div>
+          <div class='serviceInfo'>123</div>
+          <div class='serviceImg'>
+            <img src="../../image/clock.png" alt="">
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="aui-padded-r-10 aui-padded-l-10 mt-40">
+      <div class="aui-btn aui-btn-block z-bg button-active aui-hide" id='submit'>抢单</div>
+      <div class="aui-btn aui-btn-block z-bg button-active aui-hide" id='submit2'><a class="button-active" href="tel:{{value.phone}}">立即沟通</a></div>
+
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../../script/api.js"></script>
+    <script type="text/javascript" src="../../script/jquery.js"></script>
+    <script type="text/javascript" src="../../script/fastclick.js"></script>
+    <script type="text/javascript" src="../../script/template.js"></script>
+    <script type="text/javascript" src="../../script/tool.js"></script>
+    <script type="text/javascript" src="../../config.js"></script>
+    <script type="text/html" id="tpl-one">
+      {{ each data as value index }}
+      <li class="reLi">
+        <div class="line1">
+          <div class='name'>{{value.form == 0 ? (value.nickname || '昵称未填写') : value.shopname}}</div>
+          <div class="date">{{value.serviceTime}}</div>
+          <img src="../../image/clock.png" alt="">
+        </div>
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>{{value.servicename}}</span></div>
+          <div class="info_2">服务方式:<span>{{value.type}}</span></div>
+          <div class="info_3">车主车型:<span>{{value.carInfo || '未填写'}}</span></div>
+        </div>
+        <div class="line3">
+          <div class='ball-left'></div>
+          <div class='ball-right'></div>
+          <div class='serviceInfo'>{{value.serviceInfo}}</div>
+          <div class='serviceImg'>
+            {{ if (value.serviceImg01) }}
+            <img src="{{value.serviceImg01}}" alt="">
+            {{ /if }}
+            {{ if (value.serviceImg02) }}
+            <img src="{{value.serviceImg02}}" alt="">
+            {{ /if }}
+            {{ if (value.serviceImg03) }}
+            <img src="{{value.serviceImg03}}" alt="">
+            {{ /if }}
+          </div>
+        </div>
+      </li>
+      {{ /each }}
+    </script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var Home = function () {
+          if ($api.getStorage('character') == 0) {
+            $('#submit').css('display', 'none');
+          }
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.addEventListener();
+            this.getData();
+            this.bindClick();
+            FastClick.attach(document.body);
+          },
+          addEventListener: function () {
+          },
+          getData: function () {
+            var self = this;
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + 'Agency/oneService',
+              method: 'post',
+              data: {
+                values: {
+                  orderId: api.pageParam.id
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret) {
+                var data = ret.data[0];
+                if(data.form==0){
+                  $("#submit").removeClass("aui-hide")
+                }
+                if(data.form==1){
+
+                  $("#submit2").removeClass("aui-hide");
+                  var shopphone= data.shopphone;
+                  $("#submit2 a").attr("href","tel:"+data.shopphone)
+                }
+                $('#reserveDetails').html(template('tpl-one', {data: [data]}));
+              }
+              else {
+                Tool.toastInfo(errMsg);
+              }
+              api.hideProgress();
+            });
+          },
+          bindClick: function () {
+            $('#submit').off('click').on('click', function () {
+              var self = this;
+              api.showProgress();
+              api.ajax({
+                url: SERVER_PATH + 'Agency/getServiceOrder',
+                method: 'post',
+                data: {
+                  values: {
+                    orderId: api.pageParam.id,
+                    id: $api.getStorage('userId')
+                  },
+                  files: {}
+                }
+              }, function (ret, err) {
+                if (ret.code == 0) {
+                  api.sendEvent({
+                    name: 'hasNewReserve',
+                  });
+                  Tool.toastInfo(ret.msg);
+                } else {
+                  Tool.toastInfo(ret.msg);
+                }
+                api.hideProgress();
+                setTimeout(function () {
+                  closeWin();
+                }, 1500);
+              });
+            })
+          },
+        };
+        new Home();
+      };
+    </script>
+  </body>
+</html>

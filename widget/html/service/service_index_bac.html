@@ -1,0 +1,285 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+  #main{
+    background:#FFF;
+  }
+  .fixedHeader{
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 99999;
+  }
+  .service-header{
+      line-height:2.25rem;
+  }
+  .service-header .search{
+      display:inline-block;
+      padding:0 0.5rem;
+  }
+  .service-header .search span{
+      padding: 0.15rem 0.5rem;
+      display: inline-block;
+      width: 100%;
+      line-height: 1.3rem;
+      background-color: #fff;
+      color: #777;
+      border-radius: 0.8rem;
+      font-size: 0.8rem;
+  }
+  .service-header .search-location{
+      font-size:0.8rem;
+  }
+
+  /*block2*/
+  .service-item1{
+      padding:0.6rem 0;
+      width: 100%;
+  }
+  .service-item1 >li{
+    font-size:0.65rem;
+    text-align: center;
+ }
+  .service-item1 img{
+    width:2rem;
+    margin:auto;
+    margin-bottom:0.2rem;
+}
+/*block3*/
+.service-item2{
+  background:#EEE;
+  padding: 0.2rem 2%;
+  width: auto;
+  overflow: hidden;
+}
+.service-item2 li{
+  display: inline-block;
+  float:left;
+  width:24%;
+  padding:0.15rem 0;
+  text-align:center;
+}
+.service-item2 span{
+  background: white;
+  line-height: 1.1rem;
+  width:2.5rem;
+  font-size:0.65rem;
+  border-radius:.5rem;
+}
+.service-item2 .active{
+  background:linear-gradient(to right ,#3a76f1,#0ba8ef);
+  color:white;
+}
+/*服务产品列表*/
+.service-list{
+}
+.service-item{
+  padding:0.5rem;
+  border-top:1px solid #eee;
+  box-sizing: content-box;
+  position:relative;
+}
+.service-item > div{
+  display:inline-block;
+}
+.service-img{
+  width:6rem;
+}
+.service-info{
+  width:calc(100% - 7rem);
+  padding-left:0.4rem;
+  font-size:0.6rem;
+  position:absolute;
+}
+.service-info .title{
+  max-width: calc(100% - 2rem);
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+.service-info .aui-icon-star{
+  font-size:0.5rem;
+}
+.service-info .avg-price{
+  padding-left:0.3rem;
+  font-size:0.7rem;
+  font-weight: 500;
+}
+.service-info .tag{
+  padding:0.1rem 0;
+}
+.service-info .tag li{
+  display:inline-block;
+  line-height: 0.7rem;
+  padding:0 0.1rem;
+  font-size:0.6rem;
+  color:#0ba8ef;
+  text-align: center;
+  border:1px solid #0ba8ef;
+  border-radius: 0.1rem;
+}
+.service-info .headCount{
+  font-size:0.6rem;
+  color:#666;
+}
+.service-item .location{
+  font-size:0.6rem;
+  color:#666;
+  position:absolute;
+  top:40%;
+  right:2%;
+}
+</style>
+<body>
+    <div id="main">
+        <header id="service-header" class="service-header aui-bar aui-bar-nav aui-bar-info fixedHeader">
+            <div id="search-location" class="search-location aui-col-xs-3">
+                <i class="aui-iconfont aui-icon-location"></i>
+                <span class>科技路</span>
+            </div>
+            <div class="search aui-col-xs-9" id="search"><span class="aui-iconfont aui-icon-search">找附近的汽车服务</span></div>
+        </header>
+        <div id="place"><div style="height: 2.25rem;"></div></div>
+        <ul id="service-item1" class="service-item1 aui-row">
+            <li class="aui-col-xs-3">
+              <img src="../../image/icon3.png" alt="">
+              <span>帮我找车</span>
+            </li>
+            <li class="aui-col-xs-3">
+              <img src="../../image/icon6.png" alt="">
+              <span>服务保障</span>
+            </li>
+            <li class="aui-col-xs-3">
+              <img src="../../image/icon5.png" alt="">
+              <span>订单跟踪</span>
+            </li>
+            <li class="aui-col-xs-3">
+              <img src="../../image/icon4.png" alt="">
+              <span>车辆抵押</span>
+            </li>
+        </ul>
+        <ul id="service-item2" class="service-item2">
+            <li><span class="active">热门</span></li>
+            <li><span>洗车</span></li>
+            <li><span>维修</span></li>
+            <li><span>保养</span></li>
+            <li><span>加油</span></li>
+            <li><span>拆车</span></li>
+            <li><span>砸车</span></li>
+            <li><span>保镖</span></li>
+        </ul>
+        <ul class="service-list">
+            <li class="service-item">
+                <div class="service-img">
+                    <img src="../../image/service.jpg" alt="">
+                </div>
+                <div class="service-info">
+                    <h1 class="title aui-ellipsis-1">时代洗车服务</h1>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <span class="avg-price">¥80/人</span>
+                    <ul class="tag">
+                      <li>修车</li>
+                      <li>洗车</li>
+                      <li>保养</li>
+                    </ul>
+                    <i class="aui-iconfont aui-icon-menu headCount ">&nbsp;383人消费</i>
+                </div>
+                <span class="location">282m</span>
+            </li>
+            <li class="service-item">
+                <div class="service-img">
+                    <img src="../../image/service.jpg" alt="">
+                </div>
+                <div class="service-info">
+                    <h1 class="title aui-ellipsis-1">时代洗车服务</h1>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <span class="avg-price">¥80/人</span>
+                    <ul class="tag">
+                      <li>修车</li>
+                      <li>洗车</li>
+                      <li>保养</li>
+                    </ul>
+                    <i class="aui-iconfont aui-icon-menu headCount ">&nbsp;383人消费</i>
+                </div>
+                <span class="location">282m</span>
+            </li>
+            <li class="service-item">
+                <div class="service-img">
+                    <img src="../../image/service.jpg" alt="">
+                </div>
+                <div class="service-info">
+                    <h1 class="title aui-ellipsis-1">时代洗车服务</h1>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <span class="avg-price">¥80/人</span>
+                    <ul class="tag">
+                      <li>修车</li>
+                      <li>洗车</li>
+                      <li>保养</li>
+                    </ul>
+                    <i class="aui-iconfont aui-icon-menu headCount ">&nbsp;383人消费</i>
+                </div>
+                <span class="location">282m</span>
+            </li>
+            <!-- <li class="service-item">
+                <div class="service-img">
+                    <img src="../../image/service.jpg" alt="">
+                </div>
+                <div class="service-info">
+                    <h1 class="title aui-ellipsis-1">时代洗车服务</h1>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <i class="aui-iconfont aui-icon-star"></i>
+                    <span class="avg-price">¥80/人</span>
+                    <ul class="tag">
+                      <li>修车</li>
+                      <li>洗车</li>
+                      <li>保养</li>
+                    </ul>
+                    <i class="aui-iconfont aui-icon-menu headCount ">&nbsp;383人消费</i>
+                </div>
+                <span class="location">282m</span>
+            </li> -->
+
+        </ul>
+
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/aui/aui-slide.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+      var header = $api.dom('header');
+      $api.fixStatusBar(header);
+      $api.fixStatusBar($api.dom('#place'));
+    };
+</script>
+</html>

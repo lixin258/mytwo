@@ -1,0 +1,428 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      header {
+        padding-top: 1rem;
+        height: 3.25rem;
+      }
+
+      .reserveList {
+        margin: 0rem 0.75rem;
+      }
+
+      .reserveList .reLi {
+        margin: 0.5rem 0;
+        background: white;
+        border-radius: 0.3rem;
+      }
+
+      .reLi > .line1 {
+        line-height: 1.5rem;
+        border-bottom: 1px dashed #d5d5d5;
+      }
+
+      .line1 .name {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #5891f5;
+      }
+
+      .line1 .date {
+        display: inline-block;
+        padding: 0 0.5rem;
+        color: #777;
+        float: right;
+      }
+
+      .line1 img {
+        width: 1rem;
+        display: inline-block;
+        float: right;
+        padding-top: 0.2rem;
+      }
+
+      .reLi .line2 {
+        padding: 0.5rem;
+        position: relative;
+        color: #777;
+        border-bottom: 1px dashed #d5d5d5
+      }
+
+      .reLi .line2 span {
+        color: rgb(33, 33, 33);
+      }
+
+      .line2 img {
+        position: absolute;
+        width: 3rem;
+        right: 1rem;
+        top: 0.8rem;
+      }
+
+      .line3 {
+        padding: 0.5rem;
+        position: relative;
+      }
+
+      .line3 .serviceInfo {
+        min-height: 5rem;
+      }
+
+      .line3 .serviceImg img {
+        width: 5rem;
+        padding: 0.5rem;
+        display: inline-block;
+      }
+
+      .line3 .ball-left, .ball-right {
+        position: absolute;
+        width: 1rem;
+        height: 1rem;
+        background: #f5f5f5;
+        border-radius: 50%;
+      }
+
+      .line3 .ball-left {
+        left: -0.5rem;
+        top: -0.5rem;
+      }
+
+      .line3 .ball-right {
+        right: -0.5rem;
+        top: -0.5rem;
+      }
+
+      #submit {
+        background: #0098ff !important;
+        color: white;
+      }
+
+      .list {
+        background: white;
+      }
+
+      .list > div {
+        line-height: 2rem;
+        padding-left: 0.75rem;
+        font-size: 0.8rem;
+        border-bottom: 1px solid #f5f5f5;
+      }
+
+      #selectList {
+
+      }
+
+      #selectList .selectItem {
+        padding: 0.5rem;
+        display: flex;
+      }
+
+      #selectList .selectItem > img {
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+        flex-shrink: 0;
+      }
+
+      .selectItem .info {
+        padding: 0 10px;
+        width: 99%;
+      }
+
+      .selectItem .info p {
+        height: 30px;
+      }
+
+      .selectItem .info p:nth-child(1) {
+        line-height: 30px;
+        font-size: .8rem;
+        color: #666;
+      }
+
+      .selectItem .info p:nth-child(2) {
+        display: flex;
+        align-items: center;
+      }
+
+      .selectItem .info p:nth-child(2) img {
+        width: 16px;
+        height: 16px;
+      }
+
+      .selectItem .button-con {
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /*.selectItem .button-con:first-child {*/
+      /*margin-right: 5px;*/
+      /*}*/
+
+      .selectItem .button-con .button {
+        font-size: .7rem;
+        height: 30px;
+        padding: 0 15px;
+        border-radius: 3px;
+        white-space: nowrap;
+        background: none;
+      }
+
+      .selectItem .button-con .button1 {
+        background: #0098ff;
+        color: white;
+        line-height: 30px;
+      }
+
+      .selectItem .button-con .button2 {
+        background: #f1f2f4;
+        color: grey;
+        line-height: 30px;
+      }
+
+      .selectItem .button-con .button3 {
+        border: 1px solid #0098ff;
+        color: #0098ff;
+        line-height: 28px;
+      }
+
+      .selectItem .button-con .button4 {
+        border: 1px solid dimgrey;
+        color: dimgray;
+        line-height: 28px;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <header class="aui-bar aui-bar-nav aui-bar-info">
+      <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+         style="width: 45px;"
+         tapmode onclick="closeWin()"></a>
+      <div class="aui-title" id="title">预约详情</div>
+      <a class="aui-pull-right" tapmode id="text"></a>
+    </header>
+    <ul class="reserveList" id="reserveDetails"></ul>
+    <div class='list'>
+      <div>报名人选</div>
+      <ul id='selectList'></ul>
+    </div>
+    <!--js-->
+    <script src="../../script/api.js"></script>
+    <script src="../../script/jquery.js"></script>
+    <script src="../../script/template.js"></script>
+    <script src="../../script/tool.js"></script>
+    <script src="../../config.js"></script>
+    <script src="../../script/fastclick.js"></script>
+    <script type="text/html" id="tpl-one">
+      {{ each data as value index }}
+      <li class="reLi">
+        <div class="reInfo line2">
+          <div class="info_1">服务类型:<span>{{value.servicename}}</span></div>
+          <div class="info_2">预约时间:<span>{{value.serviceTime}}</span></div>
+          <div class="info_3">服务方式:<span>{{value.type}}</span></div>
+          <div class="info_3">车主车型:<span>{{value.carInfo}}</span></div>
+        
+        </div>
+        <div class="line3">
+          <div class="ball-left"></div>
+          <div class="ball-right"></div>
+          <div class="serviceInfo">{{value.serviceInfo}}</div>
+
+          <div class="serviceImg">
+            <img src="{{value.serviceImg01}}" alt="">
+            {{ if (value.serviceImg02) }}
+            <img src="{{value.serviceImg02}}" alt="">
+            {{ /if }}
+            {{ if (value.serviceImg03) }}
+            <img src="{{value.serviceImg03}}" alt="">
+            {{ /if }}
+          </div>
+        </div>
+      </li>
+      {{ /each }}
+    </script>
+    <script type="text/html" id="tpl-two">
+      {{ each data as value index }}
+      <li class="selectItem">
+        <img data-id="{{ value.id }}"  src="{{value.headimgurl || value.shopimgurl}}" alt="">
+        <div class="info">
+          <p>{{value.realname || value.shopname}}</p>
+          <p>
+            <img src="../../image/star.svg" alt="">
+            <img src="../../image/star.svg" alt="">
+            <img src="../../image/star.svg" alt="">
+            <img src="../../image/star.svg" alt="">
+            <img src="../../image/star.svg" alt="">
+          </p>
+        </div>
+        <div class="button-con" data-orderid="{{ value.orderId }}"data-id="{{ value.id }}" data-serviceid="{{ value.serviceId }}">
+          {{ if value.serviceStatus == 0 }}
+          <button class="button button1">选他</button>
+          &nbsp;
+          <button class="button button4" disabled>评价</button>
+          {{ else }}
+          <button class="button button2" disabled>选他</button>
+          &nbsp;
+          <button class="button button3">评价</button>
+          {{ /if }}
+        </div>
+      </li>
+      {{ /each }}
+    </script>
+    <!--js-->
+    <script>
+      apiready = function () {
+        map = api.require( 'bMap' );
+        var Home = function () {
+          if ($api.getStorage('character') == 0) {
+            $('#submit').css('display', 'none');
+          }
+          this.status = api.pageParam.status;
+          this.serviceStatus = '';
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.addEventListener();
+            this.getData();
+            this.bindClick();
+          },
+          addEventListener: function () {
+          },
+          getData: function () {
+            var self = this;
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + 'Agency/oneService',
+              method: 'post',
+              data: {
+                values: {
+                  orderId: api.pageParam.id
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret) {
+                var data = ret.data[0];
+                $('#reserveDetails').html(template('tpl-one', {data: [data]}));
+              }
+              else {
+                Tool.toastInfo(errMsg);
+              }
+              api.hideProgress();
+            });
+            api.ajax({
+              url: SERVER_PATH + '/User/orderView',
+              method: 'post',
+              data: {
+                values: {
+                  orderId: api.pageParam.id,
+                  id: $api.getStorage('userId')
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret) {
+
+                var html = '';
+                ret.data.forEach(function (val, index) {
+                  html += template('tpl-two', {data: [val]});
+                });
+                $('#selectList').html(html);
+              }
+              else {
+                Tool.toastInfo(errMsg);
+              }
+              api.hideProgress();
+              self.bindClick();
+            });
+          },
+          bindClick: function () {
+            $('#selectList .selectItem .button-con button:nth-child(1)').off('click').on('click', function () {
+              var that = $(this);
+              Tool.confirm('确定将联系方式发送给对方?', 'choose');
+              api.addEventListener({
+                name: 'choose',
+              }, function () {
+                api.showProgress();
+                api.ajax({
+                  url: SERVER_PATH + 'User/updateOrder',
+                  method: 'post',
+                  data: {
+                    values: {
+                      orderId: that.parent().data('orderid'),
+                      serviceId: that.parent().data('serviceid')
+                    },
+                    files: {}
+                  }
+                }, function (ret, err) {
+                  api.hideProgress();
+                  if (ret && ret.code === 0) {
+                    that.removeClass('button1')
+                      .addClass('button2')
+                      .attr('disabled', true);
+                    that.next()
+                      .removeClass('button4')
+                      .addClass('button3')
+                      .attr('disabled', false);
+                  }
+                  else {
+                    Tool.toastInfo(errMsg);
+                  }
+                  api.hideProgress();
+                });
+              })
+            });
+            $('#selectList .selectItem .button-con button:nth-child(2)').off('click').on('click', function () {
+              var that = $(this);
+              console.log(that.parent().data('id'))
+              Tool.openWin({
+                url: '/html/new-comment.html',
+                param: {
+                  orderId: that.parent().data('orderid'),
+                  id:that.parent().data('id')
+                }
+              })
+            });
+            $('#selectList .selectItem >img').off('click').on('click', function () {
+              var that = $(this);
+              map.getLocation( {
+                accuracy: '10m',
+                autoStop: true,
+                filter: 10
+              }, function ( ret, err ) {
+                if ( ret.status ) {
+                  var lon=ret.lon;
+                  var lat=ret.lat;
+                  Tool.openWin({
+                    url: '/html/supplier/sup-home.html',
+                    param: {
+                      id: that.data('id'),
+                      lat:lat,
+                      lon:lon
+                    }
+                  })
+                }
+
+              });
+
+
+            });
+          },
+        };
+        new Home();
+      };
+    </script>
+  </body>
+</html>

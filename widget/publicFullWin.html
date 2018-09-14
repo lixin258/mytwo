@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="./css/aui/aui.css" />
+		<link rel="stylesheet" type="text/css" href="./css/main.css" />
+	</head>
+	<body>
+
+	</body>
+	<script type="text/javascript" src="./script/api.js" ></script>
+	<script type="text/javascript" src="./script/tool.js" ></script>
+	<script type="text/javascript">
+		apiready = function() {
+			var param = api.pageParam;
+			api.openFrame({
+				name : param.frameName,
+				url : param.frameUrl,
+				rect : {
+					x : 0,
+					y : 0,
+					w : api.winWidth,
+					h : api.winHeight
+				},
+				pageParam : param.param,
+				vScrollBarEnabled : false,
+				hScrollBarEnabled : false
+			});
+		};
+	</script>
+</html>

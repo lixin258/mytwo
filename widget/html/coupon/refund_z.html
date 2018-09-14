@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+</head>
+<style>
+    .addCardNo {
+        line-height: 1.5rem;
+        font-size: 0.7rem;
+    }
+
+    .addCardNo .okBtn {
+        padding: 0.25rem 0.5rem;
+        line-height: 1;
+        margin-top: 0.15rem;
+        border-radius: 0.25rem;
+        color: #fff;
+
+    }
+    .a{
+      background-image:url("../../image/yhj.png");
+      background-size: 100% 100%;
+      height: 148px;
+      right: 0;
+      top:0;
+      left: 0;
+    }
+    .b{
+      padding-right: 10px;
+      padding-top: 10px;
+      color:#f5f5f5;
+      text-align: right;
+    }
+    .c{
+      text-align: right;
+      padding-right: 10px;
+      padding-top: 5px;
+      color:red;
+      font-size: 30px;
+      font-weight: bold;
+}
+.d{
+  text-align: right;
+  padding-right: 10px;
+  padding-top: 1px;
+  font-size: 14px;
+  font-weight: bold;
+}
+.e{
+  margin-left: 10px;
+  padding-top: 10px;
+
+
+}
+</style>
+
+<body>
+    <div  v-cloak class="aui-content aui-margin-b-15 " id="app">
+        <ul class="aui-list aui-list-noborder aui-media-list" style="background-color:#f5f5f5;">
+            <li v-for="(value,index) in dataArr" class="orderList aui-margin-b-10 " style="background-color:#fff;" @click="orderView(index)">
+                <div class="a">
+                  <div  class="b">
+                    <span>{{value.shopname}}</span>
+                  </div>
+                  <div class="c">
+                    <span><span style="font-size:18px">￥</span>{{value.money}}</span>
+                  </div>
+                  <div class="d" >
+                    <span>仅限{{value.name}}类服务使用</span>
+                  </div>
+                  <div class='e'>
+                    <span >使用期限：{{value.endTime}}</span>
+                    <span style="margin-left: 50px">未使用</span>
+                  </div>
+                </div>
+                <!-- <div class="orderListCon z-clearfix" @click="orderView(index)">
+                    <img src="" :src="value.items[0].imageUrl" class="orderListImg">
+                    <div class="orderListInfo">
+                        <div class="text1 aui-ellipsis-1">{{value.items[0].title}}</div>
+                        <div class="text2">
+                            <span>X{{value.items[0].count}}</span>
+                            <span v-if="value.categoryId==25||value.categoryId==24" class="aui-pull-right">{{value.items[0].price}}积分</span>
+                            <span v-if="value.categoryId!=25&&value.categoryId!=24" class="aui-pull-right">¥{{value.items[0].price}}</span>
+                        </div>
+                    </div>
+                </div> -->
+            </li>
+        </ul>
+
+        <div v-if="nullData" class="datanull">
+            <img src="../../image/nullData.png" alt="">
+            <p class="aui-text-center">没有数据</p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.js"></script>
+<script type="text/javascript" src="../../script/fastclick.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                dataArr: [],
+                listMsg: '',
+                nullData: false,
+                page: 1,
+                length: 10,
+                maxPage: 1,
+
+            },
+            methods: {
+                init: function () {
+                    vm.getData();
+                    vm.listentEvent();
+                    vm.refresh();
+                    vm.loadMore();
+                },
+                listentEvent: function () {
+                    api.addEventListener({
+                        name: 'inputCardNo'
+                    }, function (ret, err) {
+                        var orderId = ret.value.orderId;
+                        var cardNo = ret.value.cardNo;
+                        var provinceId = ret.value.provinceId;
+                        var cityId = ret.value.cityId;
+                        var bindName = ret.value.bindName;
+                        var phone = ret.value.phone;
+                        vm.dataArr.forEach(function (item, index) {
+                            if (item.id == orderId) {
+                                Vue.set(vm.dataArr[index], 'oilCardNum', cardNo);
+                                Vue.set(vm.dataArr[index], 'provinceId', provinceId);
+                                Vue.set(vm.dataArr[index], 'bindPhone', phone);
+                                Vue.set(vm.dataArr[index], 'cityId', cityId);
+                                Vue.set(vm.dataArr[index], 'bindName', bindName);
+                            }
+                        });
+                    });
+                },
+                getData: function () {
+                    api.showProgress();
+                    api.ajax({
+                        url: SERVER_PATH + 'User/vouchersList',
+                        method: 'post',
+                        data: {
+                            values: {
+                                AccessToken: $api.getStorage('token'),
+                                start: vm.page,
+                                length: vm.length,
+                                status:  0,//可使用
+                                id: $api.getStorage('userId')
+                            },
+                            files: {}
+                        }
+                    }, function (ret, err) {
+                      console.log(ret.data);
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.code == 0 && ret.data && ret.data.length) {
+                                console.log(ret.code);
+                                vm.dataArr = vm.dataArr.concat(ret.data);
+
+                            } else {
+                                vm.nullData = true;
+                            }
+                        } else {
+                          console.log(errMsg);
+                          Tool.toastInfo(errMsg);
+                        }
+                    });
+                },
+                orderView: function (index) {
+
+                    Tool.openHeader({
+                        frame: {
+                            title: '二维码',
+                            url: api.wgtRootDir + '/html/coupon/two_code.html',
+                            param: {
+                              qrCodeUrL  : vm.dataArr[index].qrCodeUrL
+                            }
+                        }
+                    });
+                },
+                input: function (index, type) {
+                    if (vm.dataArr[index].oilCardNumStatus == '1') return;
+                    Tool.openHeader({
+                        frame: {
+                            title: '信息录入',
+                            url: api.wgtRootDir + '/html/order/input.html',
+                            param: {
+                                orderId: vm.dataArr[index].id,
+                                type: type
+                            }
+                        }
+                    });
+                },
+                updateCardNo: function (index) {
+                    var _api = '';
+                    if(vm.dataArr[index].type == 2){
+                        _api = SERVER_PATH + 'MallOrder/updateOrderOilCardNum';
+                    }
+                    if(vm.dataArr[index].type == 5 || vm.dataArr[index].type == 6){
+                        _api = SERVER_PATH + 'MallOrder/updateDiscountAndShareCardStatus';
+                    }
+                    api.showProgress();
+                    api.ajax({
+                        url: _api,
+                        method: 'post',
+                        data: {
+                            values: {
+                                accessToken: $api.getStorage('token'),
+                                userId: $api.getStorage('userId'),
+                                orderId: vm.dataArr[index].id,
+                                orderNo: vm.dataArr[index].serialNumber,
+                                oilCardNum: vm.dataArr[index].oilCardNum,
+                                provinceId: vm.dataArr[index].provinceId,
+                                cityId: vm.dataArr[index].cityId,
+                                bindName: vm.dataArr[index].bindName,
+                                bindPhone: vm.dataArr[index].bindPhone,
+                            }
+                        }
+                    }, function (ret, err) {
+                        api.hideProgress();
+                        if (ret && ret.code == 0) {
+                            Vue.set(vm.dataArr[index], 'oilCardNumStatus', '1');
+                            Tool.toastInfo(ret.msg || okMsg);
+                        } else {
+                            Tool.toastInfo(ret.msg || errMsg);
+                        }
+                    });
+                },
+                loadMore: function () {
+                    Tool.loadMore(function () {
+                        if (vm.page && vm.maxPage && !vm.nullData) {
+                            if (parseInt(vm.page) < parseInt(vm.maxPage)) {
+                                vm.page++;
+                                vm.getData();
+                            } else {
+                                vm.listMsg = LoadAll;
+                            }
+                        }
+                    });
+                },
+                refresh: function () {
+                    Tool.refreshPage(function () {
+                        vm.listMsg = '';
+                        vm.nullData = false;
+                        vm.page = 1;
+                        vm.maxPage = 1;
+                        vm.dataArr = [];
+                        vm.getData();
+                    });
+                },
+                is16Card: function(val){
+                    return /^[0-9]{16}$/.test(val);
+                },
+                is19Card: function(val){
+                    return /^[0-9]{19}$/.test(val);
+                }
+           },
+            created: function () {
+                FastClick.attach(document.body);
+            },
+        });
+        vm.init();
+    };
+</script>
+
+</html>

@@ -1,0 +1,390 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+  />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/aui/aui-slide.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+  <!--css-->
+  <style media="screen">
+  <style type="text/css">
+          html{height:100%}
+          body{height:100%;margin:0px;padding:0px}
+          #container{height:100%}
+  </style>
+  </style>
+</head>
+<body ontouchstart class="bodyBc">
+<!--html-->
+<div id="container"></div>
+<!--js-->
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hr1LbaYP5VEVUff1KXx0VB27i5FzxPmj"></script>
+<script type="text/javascript">
+var map = null
+
+apiready = function () {
+// 加载百度地图模块
+map = api.require( 'bMap' );
+var endLon=api.pageParam.endLon;
+var endLat=api.pageParam.endLat;
+
+map.open( {
+  // （可选项）模块的位置及尺寸
+  rect: {
+    x: 0, //（可选项）数字类型；地图左上角的 x 坐标（相对于所属的 Window 或 Frame）；默认：0
+    y: 0, //（可选项）数字类型；地图左上角的 y 坐标（相对于所属的 Window 或 Frame）；默认：0
+    w: api.frameWidth, //（可选项）数字类型；地图的宽度；默认：所属的 Window 或 Frame 的宽度
+    h: api.frameHeight //（可选项）数字类型；地图的高度；默认：所属的 Window 或 Frame 的高度
+  },
+  zoomLevel: 18, //（可选项）设置百度地图缩放等级，取值范围：3-18级
+  showUserLocation: true, //（可选项）是否在地图上显示用户位置
+  fixedOn: api.frameName, //（可选项）模块视图添加到指定 frame 的名字（只指 frame，传 window 无效）
+  fixed: true //（可选项）模块是否随所属 window 或 frame 滚动
+}, function ( ret ) {
+  if ( ret.status ) {
+    map.getLocation( {
+      accuracy: '10m',
+      autoStop: true,
+      filter: 10
+    }, function ( ret, err ) {
+      if ( ret.status ) {
+        map.setCenter( {
+          coords: {
+            lon: ret.lon,
+            lat: ret.lat
+          },
+          animation: true
+        } );
+        map.searchRoute( {
+          id:1,
+          type: 'drive',
+          policy: 'ecar_fee_first',
+          start: {
+          lon:ret.lon,
+          lat:ret.lat
+          },
+          end: {
+          lon: endLon,
+          lat: endLat
+          }
+        }, function ( ret, err ) {
+          //alert( ret.status )
+          if ( ret.status ) {
+            //绘制路线
+            map.drawRoute( {
+              id: 1,
+              autoresizing: false,
+              index: 0,
+              styles: {
+                start: {
+                  icon: ''
+                },
+
+                end: {
+                  icon: ''
+                }
+              }
+            }, function ( ret ) {
+              alert("sss")
+
+            } );
+          } else {
+            api.alert( "..");
+          }
+        } );
+
+      } else {
+        api.alert( {
+          msg: "获取位置信息失败，请重试!2"
+        } );
+      }
+    } );
+    // 显示用户的位置
+    map.showUserLocation( {
+      isShow: true,
+      trackingMode: 'none' //罗盘compass
+    } );
+    // 是否显示比例尺
+    map.setScaleBar( {
+      show: true,
+      position: {
+        x: 25, //（可选项）数字类型；比例尺左上角的 x 坐标（相对于地图）；默认：0
+        y: api.frameHeight - 60 //（可选项）数字类型；比例尺左上角的 y 坐标（相对于地图）；默认：0
+      }
+    } );
+
+    //搜索路线
+
+  } else {
+    alert( "地图打开失败" );
+  }
+} );
+
+// 判断定位功能是否开启
+// 监听到进入后台时停止定位
+api.addEventListener( {
+  name: 'click'
+}, function ( ret, err ) {
+  map.stopLocation();
+} );
+}
+//关闭地图
+function closeMap() {
+map.close();
+}
+//地图监听事件
+function addEventListener() {
+  map.addEventListener( {
+    name: 'click'
+  }, function ( ret ) {
+
+   });
+   map.addEventListener({
+    name: 'click'
+}, function(ret) {
+  alert(ret)
+    if (ret.status) {
+        alert(JSON.stringify(ret));
+    }
+});
+}
+//判断已知点是否在指定的多边形区域内
+function isPolygonContantsPoint() {
+map.isPolygonContantsPoint( {
+  point: {
+    lon: 116.39432327,
+    lat: 39.98963192
+  },
+  points: [ {
+    lon: 116.39432327,
+    lat: 39.98963192
+  }, {
+    lon: 116.49432328,
+    lat: 39.98963192
+  }, {
+    lon: 116.39432327,
+    lat: 39.88933191
+  } ]
+}, function ( ret ) {
+  alert( ret.status );
+} );
+}
+//获取地图缩放等级
+function getZoomLevel() {
+map.getZoomLevel( function ( ret ) {
+  alert( ret.level );
+} );
+}
+
+// 已打点地块addPolygon形成轨迹
+function addPolygon( num, pointArr ) {
+map.addPolygon( {
+  id: 2,
+  styles: {
+    borderColor: '#ffc65c',
+    borderWidth: 3,
+    fillColor: '#ffc65c'
+  },
+  points: [ {
+    lon: 116.39432327,
+    lat: 39.98963192
+  }, {
+    lon: 116.49432328,
+    lat: 39.98963192
+  }, {
+    lon: 116.39432327,
+    lat: 39.88933191
+  } ]
+} );
+}
+
+//调用addLine方法画轨迹
+function addline( lineId, pointsArr ) {
+map.addLine( {
+  id: 1,
+  styles: {
+    borderColor: '#49aff0',
+    borderWidth: 3
+  },
+  points: [ {
+    lon: 116.39432327,
+    lat: 39.98963192
+  }, {
+    lon: 116.49432328,
+    lat: 39.98963192
+  }, {
+    lon: 116.39432327,
+    lat: 39.88933191
+  } ]
+} );
+}
+//调用addCircle方法画轨迹
+function addCircle( CirId, pointsObj ) {
+map.addCircle( {
+  id: 4,
+  center: {
+    lon: 116.39432327,
+    lat: 39.98963192
+  },
+  radius: 500,
+  styles: {
+    borderColor: '#FF0000',
+    borderWidth: 3,
+    fillColor: '#0000ff'
+  }
+} );
+}
+
+//地图添加布告牌
+function addBillboard( billBoardId, position, bgImgUrl, title, illusUrl ) {
+map.addBillboard( {
+  id: 4,
+  coords: {
+    lon: 116.233,
+    lat: 39.134
+  },
+  bgImg: 'widget://image/bMapTest.png',
+  content: {
+    title: '大标题大标题大标题大标题',
+    subTitle: '概述内容概述内容概述内容',
+    illus: 'http://ico.ooopic.com/ajax/iconpng/?id=145044.png'
+  },
+  styles: {
+    titleColor: '#000',
+    titleSize: 16,
+    subTitleColor: '#999',
+    subTitleSize: 12,
+    illusAlign: 'left'
+  }
+}, function ( ret ) {
+  if ( ret ) {
+    alert( JSON.stringify( ret ) );
+  }
+} );
+}
+
+//地图添加标注信息
+function annotation_( pointArr, iconUrl ) {
+map.addAnnotations( {
+  annotations: [ {
+    id: 1,
+    lon: 116.297,
+    lat: 40.109
+  }, {
+    id: 2,
+    lon: 116.29,
+    lat: 40.109
+  }, {
+    id: 3,
+    lon: 116.298,
+    lat: 40.11
+  } ],
+  icon: 'widget://',
+  draggable: true
+}, function ( ret ) {
+  if ( ret ) {
+    alert( ret.id );
+  }
+} );
+}
+
+
+// 重新设置我的位置
+function ownPositionEvent() {
+bMap.getLocation( {
+  accuracy: '10m',
+  autoStop: true,
+  filter: 10
+}, function ( ret, err ) {
+  if ( ret.status ) {
+    bMap.setCenter( {
+      coords: {
+        lon: ret.lon,
+        lat: ret.lat
+      },
+      animation: true
+    } );
+  } else {
+    api.alert( {
+      msg: "获取位置信息失败，请重试!3"
+    } )
+  }
+} )
+}
+
+//获取地图两点之间距离
+function getDistance() {
+map.getDistance( {
+  start: {
+    lon:122.06407928725535,
+    lat:37.5279292497251
+  },
+  end: {
+    lon:122.070349459715,
+    lat:37.53770894705878
+  }
+}, function ( ret ) {
+  if ( ret.status ) {
+    alert( ret.distance );
+  }
+} )
+}
+
+//点击标注时弹出气泡信息
+function setBubble( bubbleId, bgImgUrl, title, illusUrl ) {
+map.setBubble( {
+  id: 2,
+  bgImg: 'widget://res/bubble_bg.png',
+  content: {
+    title: '大标题',
+    subTitle: '概述内容',
+    illus: 'http://ico.ooopic.com/ajax/iconpng/?id=145044.png'
+  },
+  styles: {
+    titleColor: '#000',
+    titleSize: 16,
+    subTitleColor: '#999',
+    subTitleSize: 12,
+    illusAlign: 'left'
+  }
+}, function ( ret ) {
+  if ( ret ) {
+    alert( JSON.stringify( ret ) );
+  }
+} );
+}
+
+// 将地图切换到卫星地图模式
+function satellite() {
+map.setMapAttr( {
+  type: 'satellite'
+} );
+}
+
+// 将地图切换到标准模式
+function standard() {
+map.setMapAttr( {
+  type: 'standard'
+} );
+}
+
+// 显示地图
+function show() {
+map.show();
+}
+
+// 隐藏地图
+function hide() {
+map.hide();
+}
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width" />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    .bc{
+        width: 70vw;
+        margin-left: 15vw;
+        margin-top: 1rem;
+        background-color: #3a76f1 !important;
+    }
+    .box img{
+        display: inline-block;
+        width: 100px;
+        margin-top: 100px;
+    }
+    .bc2{
+        background-color: #fff !important;
+        color: #3a76f1 !important;
+        border: 1px solid #3a76f1;
+    }
+</style>
+<body class="bodyBc">
+    <div class="aui-text-center box">
+        <img src="../../image/logo_hui.png" alt="">
+        <div class="aui-font-size-18" style="margin-top: 20px;color: #3a76f1;">您已经预约成功！</div>
+        <p class="aui-margin-t-10">稍后会有工作人员与您联系</p>
+    </div>
+    <div class="aui-btn aui-btn-danger aui-btn-block bc" id="view">查看预约</div>
+    <div class="aui-btn aui-btn-danger aui-btn-block bc bc2" id="back">返回</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript">
+    apiready = function() {
+        var appointId = api.pageParam.appointId;
+        $('#view').off('click').on('click', function(){
+          Tool.openHeader({
+              name: "my-order",
+              frame: {
+                  title: '我的订单',
+                  url: api.wgtRootDir + '/html/my/my-order.html',
+                  param: {
+                      userId:$api.getStorage('userId')
+                  }
+              }
+          });
+        });
+        $('#back').off('click').on('click', function(){
+          api.openWin({
+            name: 'myShare',
+            url: api.wgtRootDir + '/html/main.html',
+            //pageParam: self.urlArr[index].param
+          });
+        });
+    };
+</script>
+
+</html>

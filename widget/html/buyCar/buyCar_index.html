@@ -1,0 +1,454 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/common.css" />
+</head>
+<style media="screen">
+    #cityChoose{
+        padding-left: 30px;
+    }
+    #cityChoose::before{
+        content: '' !important;
+    }
+    #title{
+        left: 4.5rem;
+        right: 2rem;
+        
+    }
+    #title span{
+        padding: 0.15rem 2rem;
+        display: inline-block;
+        width: 100%;
+        line-height: 1.3rem;
+        background-color: #fff;
+        color: #777;
+        border-radius: 0.8rem;
+        font-size: .8rem;
+    }
+    .fixedHeader{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 2;
+    }
+    .z-icon-down::after{
+        content: "\e6f7";
+        font-size: .6rem;
+    }
+    .carList .carImg{
+        height: 3.5rem;
+        width: 4.5rem;
+    }
+    .carList .carInfo{
+        height: 3.5rem;
+        width: calc(100% - 4.5rem);
+        padding-left: .5rem;
+    }
+    .carInfo .newIcon{
+        width: 1rem;
+    }
+    .carInfo span{
+        line-height: 1;
+    }
+    .carInfo .info_1{
+        padding-top: 0.25rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+    }
+    .carInfo .info_1 span{
+        display: inline-block;
+        max-width: calc(100% - 0.75rem);
+        padding-right: 0.25rem;
+        line-height: 1.2;
+        vertical-align: top;
+        font-weight: bold;
+        font-size: 0.7rem;
+        color: #454253;
+    }
+    .carInfo .info_1 .newIcon{
+        display: inline-block;
+        font-size: 0px;
+        width: 0.75rem;
+        vertical-align: top;
+    }
+    .carInfo .info_2{
+        height: 1rem;
+        line-height: 1rem;
+        font-size: .6rem;
+        color: #777;
+    }
+    .carInfo .info_3{
+        position: relative;
+        padding-bottom: 0.25rem;
+        height: 1.25rem;
+        line-height: 1.25rem;
+    }
+    .carInfo .info_3 span{
+        line-height: 1;
+        font-size: .6rem;
+    }
+    .carInfo .info_3 .price{
+        line-height: 1;
+        font-size: .8rem;
+    }
+    .carInfo .info_3 .other{
+        line-height: 1;
+        font-size: .6rem;
+        border-radius: 0.15rem;
+        color: #7C798C;
+        position: absolute;
+        right: 0;
+        bottom: 0.25rem;
+    }
+    #select{
+        position: fixed;
+        top: 70px;
+        left: 0px;
+        width: 100%;
+        z-index: 3;
+    }
+    .selectBox{
+        position: fixed;
+        top: 111px;
+        left: 0px;
+        width: 100%;
+        height: calc(100% - 111px);
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .select_1 ul{
+        padding-left: 1.2rem;
+    }
+    .select_1 li{
+        padding: 0.5rem 0.75rem 0.5rem 0;
+        font-size: 0.7rem;
+        color: #666;
+    }
+    .confirm-btn{
+        padding: 0.35rem;
+        text-align: center;
+        color: #fff;
+        background-color: #3a76f1;
+    }
+    .select_2 ul{
+        padding: 3.5vw 2vw 0.5vw 5vw;
+    }
+    .select_2 li{
+        width: 28vw;
+        margin-right: 3vw;
+        margin-bottom: 3vw;
+        text-align: center;
+        float: left;
+        color: #666;
+        background-color: #eee;
+        border-radius: 5px;
+        font-size: .7rem;
+        line-height: 2;
+    }
+    .select_2 li.active{
+        color: #fff;
+        background-color: #3a76f1;
+    }
+</style>
+<body class="bodyBc">
+    <header class="aui-bar aui-bar-nav aui-bar-info fixedHeader">
+        <a id="cityChoose" class="aui-pull-left aui-text-center">搜索</a>
+        <div class="aui-title" id="title"><span class="aui-iconfont aui-icon-search"> 宝马汽车</span></div>
+    </header>
+    <div id="place"><div style="height: 2.25rem;"></div></div>
+    <ul id="select" class="clearfix aui-text-center aui-padded-t-10 aui-padded-b-10 aui-font-size-14 bg fc-fff">
+        <li class="aui-col-xs-4 aui-iconfont z-icon-down" data-select="select_1">默认排序&ensp;</li>
+        <li class="aui-col-xs-4 aui-iconfont z-icon-down" data-select="select_3">品牌&ensp;</li>
+        <li class="aui-col-xs-4 aui-iconfont z-icon-down" data-select="select_2">售价&ensp;</li>
+    </ul>
+    <ul class="carList aui-list bg-fff" style="padding-top: 41px;" id="carList"></ul>
+    <div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+    <div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+    <section id="select_1" class="selectBox select_1 aui-hide">
+        <ul class="bg-fff">
+            <li class="aui-border-b fc" data-sort="default" data-text="默认排序"><span>默认排序</span><span class="aui-iconfont aui-icon-correct aui-pull-right"></span></li>
+            <li class="aui-border-b" data-sort="salesDesc" data-text="销量优先"><span>销量优先</span><span class="aui-iconfont aui-pull-right"></span></li>
+            <li class="aui-border-b" data-sort="pvDesc" data-text="人气优先"><span>人气优先</span><span class="aui-iconfont aui-pull-right"></span></li>
+            <li class="aui-border-b" data-sort="priceDesc" data-text="价格由高到低"><span>价格由高到低</span><span class="aui-iconfont aui-pull-right"></span></li>
+            <li data-sort="priceAsc" data-text="价格由低到高"><span>价格由低到高</span><span class="aui-iconfont aui-pull-right"></span></li>
+        </ul>
+        <div class="confirm-btn">确定</div>
+    </section>
+    <section id="select_2" class="selectBox select_2 aui-hide">
+        <ul class="bg-fff clearfix">
+            <li class="active" data-id="0" data-text="售价">不限</li>
+            <li data-id="1" data-text="5W以内">5W以内</li>
+            <li data-id="2" data-text="5-10W">5-10W</li>
+            <li data-id="3" data-text="10-15W">10-15W</li>
+            <li data-id="4" data-text="15-20W">15-20W</li>
+            <li data-id="5" data-text="20-25W">20-25W</li>
+            <li data-id="6" data-text="25W以上">25W以上</li>
+        </ul>
+        <div class="confirm-btn">确定</div>
+    </section>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/html" id="tpl-carList">
+    {{each data as value index}}
+        <li class="carLi clearfix aui-padded-t-10 aui-padded-b-10 aui-padded-l-15 aui-padded-r-15 aui-border-b" data-id="{{value.id}}">
+            <img class="carImg aui-pull-left" src="{{value.images}}" alt="">
+            <div class="carInfo aui-pull-left">
+                <div class="info_1"><span class="aui-ellipsis-1">{{value.title}}</span></div>
+                <div class="info_2"><span>厂商指导价 {{value.price}}W</span></div>
+                <div class="info_3"><span class="fc">首付</span><span class="fc price">{{value.oncepayment}}万</span>
+                    <span class="other">月供{{value.installment}}元</span>
+                </div>
+            </div>
+        </li>
+    {{/each}}
+</script>
+<script type="text/javascript">
+    apiready = function () {
+        var header = $api.dom('header');
+        $api.fixStatusBar(header);
+        $api.fixStatusBar($api.dom('#place'));
+        var priceArr = [
+            {
+                priceStart: "",
+                priceEnd: "",
+            },{
+                priceStart: 0,
+                priceEnd: 5,
+            },{
+                priceStart: 5,
+                priceEnd: 10,
+            },{
+                priceStart: 10,
+                priceEnd: 15,
+            },{
+                priceStart: 15,
+                priceEnd: 20,
+            },{
+                priceStart: 20,
+                priceEnd: 25,
+            },{
+                priceStart: 25,
+                priceEnd: "",
+            }
+        ];
+        var Home = function(){
+            this.cityId = '';
+            this.title = '';
+            this.page = 0;
+            this.pagesize = 10;
+            this.maxPage = 0;
+            this.total = 0;
+            this.priceId = 0;
+            this.sort = 'default';
+            this.brandId = '';
+            this.init();
+        };
+        Home.prototype = {
+            init: function () {
+                this.addEventListener();
+                this.getData();
+                this.loadMore();
+                this.refresh();
+                this.setDefaultSearch();
+                this.chooseCity();
+                this.chooseSortType();
+                this.choosePrice();
+                this.selectInit();
+            },
+            addEventListener: function(){
+                var self = this;
+                api.addEventListener({
+                    name: 'chooseCity'
+                }, function(ret, err){
+                    $('#cityChoose').text(ret.value.city);
+                    self.resetList();
+                });
+                api.addEventListener({
+                    name: 'chooseCar'
+                }, function(ret, err){
+                    $('#select li[data-select="select_3"]').html(ret.value.carInfo.city == "#全部" ? "品牌" : ret.value.carInfo.city + '&ensp;');
+                    self.brandId = ret.value.carInfo.id;
+                    self.resetList();
+                });
+                api.addEventListener({
+                    name: 'carFromSearchPage'
+                }, function(ret, err){
+                    self.title = ret.value.car;
+                    $('#select li[data-select="select_3"]').html(self.title + '&ensp;');
+                    self.resetList();
+                });
+            },
+            setDefaultSearch: function(){
+                $('#title span').text(' '+($api.getStorage('defaultSearch') || '奔驰汽车'));
+            },
+            getData: function(){
+                var self = this;
+                api.showProgress();
+                api.ajax({
+                    url: SERVER_PATH + 'Car/carList',
+                    method: 'post',
+                    data: {
+                        values: {
+                            AccessToken: $api.getStorage('token'),
+                            cityId: self.cityId,
+                            title: self.title,
+                            brandId: self.brandId,
+                            priceStart: priceArr[self.priceId]["priceStart"],
+                            priceEnd: priceArr[self.priceId]["priceEnd"],
+                            sort: self.sort,
+                            start: self.page,
+                            pagesize: self.pagesize,
+                        },
+                        files: {}
+                    }
+                }, function (ret, err) {
+
+                    if (ret) {
+                        if(ret.code == 0 && ret.data && ret.data.length){
+                            self.total = ret.recordsTotal;
+                            self.maxPage = Math.ceil(ret.recordsTotal / self.pagesize);
+                            self.drawData(ret.data);
+                        }else{
+                            $('#dataNull').removeClass('aui-hide');
+                        }
+                    } else {
+                        Tool.toastInfo(errMsg);
+                    }
+                    api.hideProgress();
+                });
+            },
+            drawData: function(data){
+                $('#carList').append(template('tpl-carList', {"data": data}));
+                this.viewCarInfo();
+            },
+            loadMore: function () {
+                var self = this;
+                Tool.loadMore(function () {
+                    if (self.maxPage && self.total) {
+                        if (parseInt(self.page+1) < parseInt(self.maxPage)) {
+                            self.page++;
+                            self.getData();
+                        } else {
+                            $('#loadAll').removeClass('aui-hide');
+                        }
+                    }
+                });
+            },
+            refresh: function () {
+                var self = this;
+                Tool.refreshPage(function () {
+                    self.resetList();
+                });
+            },
+            resetList: function(){
+                this.page = 0;
+                this.maxPage = 0;
+                $('#loadAll').addClass('aui-hide');
+                $('#dataNull').addClass('aui-hide');
+                $('#carList').html('');
+                this.getData();
+            },
+            chooseCity: function(){
+                $api.addEvt(document.getElementById('cityChoose'), 'click', function(){
+                    return;
+                    Tool.openHeader({
+                        name: 'chooseCity',
+                        frame: {
+                            title: '选择城市',
+                            url: api.wgtRootDir + '/html/chooseCity.html',
+                            param: {
+                                event: 'chooseCity'
+                            }
+                        }
+                    });
+                });
+                $('#title').off('click').on('click', function(){
+                    Tool.openWin({
+                        url: '/html/search_car.html',
+                    });
+                });
+            },
+            selectInit: function(){
+                var self = this;
+                $('#select li').off('click').on('click', function(){
+                    var _select = $(this).data('select');
+                    var _id = '#' + _select;
+                    if($(_id).length && !$(_id).hasClass('aui-hide')){
+                        $(_id).addClass('aui-hide');
+                        self.select = '';
+                        return;
+                    }
+                    if(self.select){
+                        $('#'+self.select).addClass('aui-hide');
+                    }
+                    if(_select === 'select_3'){
+                        Tool.openHeader({
+                            name: 'chooseCar',
+                            frame: {
+                                title: '选择品牌',
+                                url: api.wgtRootDir + '/html/chooseCar.html',
+                                param: {
+                                    event: 'chooseCar'
+                                }
+                            }
+                        });
+                    }else{
+                        $(_id).removeClass('aui-hide');
+                        self.select = _select;
+                    }
+                });
+            },
+            chooseSortType: function(){
+                var self = this;
+                $('#select_1 li').off('click').on('click', function(){
+                    $('#select_1 li.fc').removeClass('fc').find('.aui-icon-correct').removeClass('aui-icon-correct');
+                    $(this).addClass('fc').find('.aui-iconfont').addClass('aui-icon-correct');
+                });
+                $('#select_1 .confirm-btn').off('click').on('click', function(){
+                    self.sort = $('#select_1 li.fc').data('sort');
+                    $('#select_1').addClass('aui-hide');
+                    $('#select li[data-select="select_1"]').html($('#select_1 li.fc').data('text') + '&ensp;');
+                    self.resetList();
+                });
+            },
+            choosePrice: function(){
+                var self = this;
+                $('#select_2 li').off('click').on('click', function(){
+                    $('#select_2 li.active').removeClass('active');
+                    $(this).addClass('active');
+                });
+                $('#select_2 .confirm-btn').off('click').on('click', function(){
+                    self.priceId = $('#select_2 li.active').data('id');
+                    $('#select_2').addClass('aui-hide');
+                    $('#select li[data-select="select_2"]').html($('#select_2 li.active').data('text') + '&ensp;');
+                    self.resetList();
+                });
+            },
+            viewCarInfo: function(){
+                $('.carLi').off('click').on('click', function(){
+                    var _id = $(this).data('id');
+                    Tool.openWin({
+                        url: '/html/buyCar/buyCar_detail.html',
+                        param: {
+                            id: _id
+                        }
+                    });
+                });
+            }
+        };
+        new Home();
+    };
+</script>
+</html>

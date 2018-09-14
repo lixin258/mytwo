@@ -1,0 +1,644 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+  />
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title></title>
+  <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+  <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+  <!--css-->
+  <style media="screen">
+    .fixedHeader {
+      padding-top: 1rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    .reserveList {
+      margin: 0rem 0.75rem;
+    }
+
+    .reserveList .reLi {
+      margin: 0.5rem 0;
+      background: white;
+      border-radius: 0.3rem;
+    }
+
+    .reLi > .line1 {
+      line-height: 1.5rem;
+      border-bottom: 1px dashed #d5d5d5;
+    }
+
+    .line1 .name {
+      display: inline-block;
+      padding: 0 0.5rem;
+      color: #5891f5;
+    }
+
+    .line1 .date {
+      display: inline-block;
+      padding: 0 0.5rem;
+      color: #777;
+      float: right;
+    }
+
+    .line1 img {
+      width: 1rem;
+      display: inline-block;
+      float: right;
+      padding-top: 0.2rem;
+    }
+
+    .reLi .line2 {
+      padding: 0.5rem;
+      position: relative;
+      color: #777;
+    }
+
+    .reLi .line2 span {
+      color: rgb(33, 33, 33);
+    }
+
+    .line2 .headCount {
+      position: absolute;
+
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .line2 img {
+      position: absolute;
+      width: 3rem;
+      right: 1rem;
+      top: 0.8rem;
+    }
+
+    .fixedHeader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+    }
+
+    #dataNull {
+      text-align: center;
+    }
+
+    #dataNull img {
+      margin: 3rem auto;
+      width: 3rem;
+    }
+
+    #submit {
+      margin: 0 auto;
+      width: 50%;
+      background: #0098ff !important;
+      color: white;
+    }
+
+    header {
+      height: 3.25rem;
+    }
+
+    .goCertify {
+      margin: 0 auto;
+      text-align: center;
+      color: #0098ff;
+    }
+
+    .tab {
+      background: #fff;
+    }
+
+    .tab > div {
+      display: inline-block;
+      width: 49%;
+      text-align: center;
+      line-height: 2rem;
+      border-bottom: 2px solid #f5f5f5;
+    }
+
+    .tab .active {
+      border-bottom: 2px solid #0098ff;
+    }
+
+    .list .shopImg {
+      height: 4.5rem;
+      width: 5.5rem;
+    }
+
+    .list .shopInfo {
+      height: 3.5rem;
+      width: calc(100% - 5.5rem);
+      padding-left: .5rem;
+    }
+
+    .shopInfo {
+      padding-left: 0.5rem
+    }
+
+    .shopInfo .newIcon {
+      width: 1rem;
+    }
+
+    .shopInfo span {
+      line-height: 1;
+    }
+
+    .shopInfo .info_1 {
+      padding-top: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+    }
+
+    .shopInfo .info_1 span {
+      display: inline-block;
+      max-width: calc(100% - 0.75rem);
+      padding-right: 0.25rem;
+      line-height: 1.2;
+      vertical-align: top;
+      font-weight: bold;
+      font-size: 0.7rem;
+      color: #454253;
+    }
+
+    .shopInfo .info_1 img {
+      width: 0.8rem;
+    }
+
+    .shopInfo .info_1 .newIcon {
+      display: inline-block;
+      font-size: 0px;
+      width: 0.75rem;
+      vertical-align: top;
+    }
+
+    .shopInfo .info_2 {
+      height: 1rem;
+      line-height: 1rem;
+      font-size: .6rem;
+      color: #777;
+    }
+
+    .shopInfo .info_2 span {
+      border: 1px solid #0097fe;
+      border-radius: 0.2rem;
+      margin-right: 0.2rem;
+      padding: 0.1rem 0.2rem;
+      color: #0097fe;
+
+    }
+
+    .shopInfo .info_3 {
+      position: relative;
+      padding-bottom: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+      margin-top: 0.3rem;
+      vertical-align: top;
+    }
+
+    .shopInfo .info_3 img {
+      width: 5%;
+      display: inline-block;
+    }
+
+    .shopInfo .info_3 > div {
+      display: inline-block;
+      line-height: 1rem;
+      width: 90%;
+      vertical-align: top;
+    }
+
+    .shopInfo .info_3 span {
+      line-height: 1rem;
+      font-size: .6rem;
+      display: inline-block;
+    }
+
+    .shopInfo .info_3 p {
+      display: inline-block;
+    }
+
+    .list .tecImg {
+      height: 4rem;
+      width: 4rem;
+      border-radius: 50%;
+    }
+
+    .list .tecInfo {
+      height: 3.5rem;
+      width: calc(100% - 4rem);
+      padding-left: .5rem;
+    }
+
+    .tecInfo {
+      padding-left: 0.5rem
+    }
+
+    .tecInfo .newIcon {
+      width: 1rem;
+    }
+
+    .tecInfo span {
+      line-height: 1;
+    }
+
+    .tecInfo .info_1 {
+      padding-top: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+    }
+
+    .tecInfo .info_1 span {
+      display: inline-block;
+      max-width: calc(100% - 0.75rem);
+      padding-right: 0.25rem;
+      line-height: 1.2;
+      vertical-align: top;
+      font-weight: bold;
+      font-size: 0.7rem;
+      color: #454253;
+    }
+
+    .tecInfo .info_1 img {
+      width: 0.8rem;
+    }
+
+    .tecInfo .info_1 .newIcon {
+      display: inline-block;
+      font-size: 0px;
+      width: 0.75rem;
+      vertical-align: top;
+    }
+
+    .tecInfo .info_2 {
+      height: 1rem;
+      line-height: 1rem;
+      font-size: .6rem;
+      color: #777;
+      padding-top: 0.2rem;
+    }
+
+    .tecInfo .info_2 span {
+      border: 1px solid #0097fe;
+      border-radius: 0.2rem;
+      margin-right: 0.2rem;
+      padding: 0.1rem 0.2rem;
+      color: #0097fe;
+
+    }
+
+    .tecInfo .info_3 {
+      position: relative;
+      padding-bottom: 0.25rem;
+      height: 1.25rem;
+      line-height: 1.25rem;
+      padding-top: 0.3rem;
+      vertical-align: top;
+    }
+
+    .tecInfo .info_3 img {
+      width: 5%;
+      display: inline-block;
+    }
+
+    .tecInfo .info_3 > div {
+      display: inline-block;
+      line-height: 1rem;
+      width: 90%;
+      vertical-align: top;
+    }
+
+    .tecInfo .info_3 span {
+      line-height: 1rem;
+      font-size: .6rem;
+      display: inline-block;
+    }
+
+    .tecInfo .info_3 p {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body ontouchstart class="bodyBc">
+<!--html-->
+<header class="fixedHeader aui-bar aui-bar-nav aui-bar-info">
+  <a class="aui-pull-left aui-iconfont aui-icon-left button-active2"
+     style="width: 45px;"
+     tapmode onclick="closeWin()" id='icon-left'></a>
+  <div class="aui-title" id="title">周边</div>
+  <a class="aui-pull-right" tapmode id="text"></a>
+</header>
+<div id="place">
+  <div style="height: 2.25rem;"></div>
+</div>
+<div class='tab'>
+  <div class='active tab-active' data-value='1'>周边商户</div>
+  <div class="tab-active" data-value='2'>周边技师</div>
+</div>
+<!--<div id='dataNull' class='aui-hide'><img src="../../image/no-data.png" alt="">-->
+<!--<p>没有数据~</p></div>-->
+<style>
+  #list li:active {
+    background: #f0f0f0;
+  }
+</style>
+<ul class="list" id="list" style="background: white;">
+</ul>
+<div class="aui-text-center loadAll aui-hide" id="loadAll"><span>没有更多数据了</span></div>
+<div class="aui-text-center loadAll aui-hide" id="dataNull"><span>没有数据</span></div>
+<!--js-->
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/jquery.js"></script>
+<script type="text/javascript" src="../../script/template.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/html" id="tpl-one">
+  {{ each data as value index }}
+  <li class="shop clearfix aui-padded-t-10 aui-padded-b-10 aui-padded-l-15 aui-padded-r-15 aui-border-b"
+      data-id="{{value.id}}">
+    <img class="shopImg aui-pull-left" src="{{value.shopimgurl}}" alt="">
+    <div class="shopInfo aui-pull-left">
+      <div class="info_1">
+        <span class="aui-ellipsis-1">{{value.shopname}}</span>
+        <!-- <img class='aui-pull-right' src="../../image/chat.png" alt=""> -->
+      </div>
+      <div class="info_2">{{value.service}}</div>
+      <div class="info_3">
+        <img src="../../image/location.png" alt="">
+        <div>
+          <span>{{value.address}}</span>
+          <p>| 距您{{ (value.distance / 1000).toFixed(1) }}公里</p>
+        </div>
+      </div>
+    </div>
+  </li>
+  {{ /each }}
+</script>
+<script type="text/html" id="tpl-two">
+  {{ each data as info index }}
+  <li class="tecnician clearfix aui-padded-t-10 aui-padded-b-10 aui-padded-l-15 aui-padded-r-15 aui-border-b"
+      data-id="{{info.id}}">
+    <img class="tecImg aui-pull-left" src="{{info.headimgurl}}" alt="">
+    <div class="tecInfo aui-pull-left">
+      <div class="info_1"><span class="aui-ellipsis-1">{{info.realname}}</span>
+      <div class="info_2">{{info.service}}</div>
+      <!-- <div class="info_3">
+        <img src="../../image/location.png" alt="">
+        <div class="aui-ellipsis-1">
+          <span>{{info.address || '地址未填写'}}|距您{{(info.distance / 1000).toFixed(1)}}公里</p></span>
+        </div> 
+      </div> -->
+      <div class="info_3">
+        <p>{{info.introduce}}</p>
+      </div>
+    </div>
+  </li>
+  {{ /each }}
+</script>
+<!--js-->
+<script type="text/javascript">
+  apiready = function () {
+    var header = $api.dom('header');
+    $api.fixStatusBar(header);
+    $api.fixStatusBar($api.dom('#place'));
+    var subs = location.search.split("=");
+    var hide = subs[1];
+    if (hide == 1) {
+      $('#icon-left').css('display', 'none')
+    }
+    var Home = function () {
+      this.cityId = '';
+      this.title = '';
+      this.page = 0;
+      this.pagesize = 10;
+      this.maxPage = 0;
+      this.total = 0;
+      this.priceId = 0;
+      this.sort = 'default';
+      this.brandId = '';
+      this.status = '';
+      this.character = '';
+      this.serviceId = api.pageParam.serviceId;
+      this.serviceListId = api.pageParam.serviceListId;
+      this.shopname = api.pageParam.shopname || '';
+      var subs = location.search.split("=");
+      var hide = subs[1];
+      if (hide == 1) {
+        $('#icon-left').css('display', 'none')
+      }
+      ;
+      this.init();
+    };
+    Home.prototype = {
+      init: function () {
+        this.addEventListener();
+        this.getData();
+        this.bindClick();
+        this.refresh();
+        this.loadMore();
+      },
+      addEventListener: function () {
+        var self = this;
+        api.addEventListener({
+          name: 'chooseCity'
+        }, function (ret, err) {
+          $('#cityChoose').text(ret.value.city);
+          self.resetList();
+        });
+        api.addEventListener({
+          name: 'chooseCar'
+        }, function (ret, err) {
+          $('#select li[data-select="select_3"]').html(ret.value.carInfo.city == "#全部" ? "品牌" : ret.value.carInfo.city + '&ensp;');
+          self.brandId = ret.value.carInfo.id;
+          self.resetList();
+        });
+        api.addEventListener({
+          name: 'shopFromSearchPage'
+        }, function (ret, err) {
+          self.shopname = ret.value.shopname;
+          // setTimeout(function () {
+          //   Tool.openWin({
+          //       url: '/html/nearBy/nearBy_index.html',
+          //       param: {
+          //           shopname:ret.value.shopname
+          //       }
+          //   });
+          // },500);
+        });
+      },
+      setDefaultSearch: function () {
+        $('#title span').text(' ' + ($api.getStorage('defaultSearch') || '奔驰汽车'));
+      },
+      bindClick: function () {
+        var self = this;
+        $('.tab div').off('click').on('click', function () {
+          $(this).addClass('active');
+          $(this).siblings().removeClass('active');
+          self.getData();
+        });
+      },
+      getData: function () {
+        var self = this;
+        $('#list').html('');
+        $('#dataNull').addClass('aui-hide');
+        api.ajax({
+          url: SERVER_PATH + 'User/getAllShop',
+          method: 'post',
+          data: {
+            values: {
+              AccessToken: $api.getStorage('token'),
+              type: $('.tab .active').data('value'),
+              serviceId: self.serviceId,
+              serviceListId: self.serviceListId,
+              shopname: self.shopname,
+              realname: self.realname,
+              introduce:self.introduce,
+              lng: $api.getStorage('longitude'),
+              lat: $api.getStorage('latitude'),
+            },
+            files: {}
+          }
+        }, function (ret, err) {
+          api.hideProgress();
+          if (ret) {
+            if (ret.code == 0 && ret.data && ret.data.length) {
+              self.total = ret.recordsTotal;
+              self.maxPage = Math.ceil(ret.recordsTotal / self.pagesize);
+              if ($('.tab .active').data('value') == 1) {
+                self.drawData(ret.data);
+              } else if ($('.tab .active').data('value') == 2) {
+                self.drawData0(ret.data);
+              }
+            } else {
+              $('#dataNull').removeClass('aui-hide');
+            }
+          }
+          else {
+            Tool.toastInfo('服务器错误，请稍后重试');
+          }
+        });
+      },
+      drawData: function (data) {
+        var self = this;
+        // var html = ``;
+        var info = '';
+        var arr = [];
+        var data2 = [];
+        for (var i = 0; i < data.length; i++) {
+          var service = '';
+          info = data[i];
+          if (data[i].service != "") {
+            arr = data[i].service.split(',');
+            if(arr.length>3){
+              for (var j = 0; j < 3; j++) {
+
+                service += (arr[j]+" |"+" ");
+              }
+              service=service+"..."
+            }else{
+              for (var j = 0; j < arr.length; j++) {
+
+                service += (arr[j]+" |"+" ");
+              }
+            }
+
+          }
+          info['service'] = service;
+          data2.push(info);
+
+        }
+        // $('#list').html(html);
+        $('#list').html(template('tpl-one', {data: data2}));
+
+        this.viewReserveInfo();
+      },
+      drawData0: function (data) {
+
+        var info = '';
+        var arr = [];
+        var data2 = [];
+        for (var i = 0; i < data.length; i++) {
+          var service = '';
+          info = data[i];
+          if (data[i].service != "") {
+            arr = data[i].service.split(',');
+            for (var j = 0; j < arr.length; j++) {
+              // service += '<span>' + arr[j] + '</span>';
+              service += (arr[j]+" |"+" ");
+            }
+          }
+          info['service'] = service;
+          data2.push(info);
+          $('#list').html(template('tpl-two', {data: data2}));
+        }
+        this.viewReserveInfo0();
+      },
+      viewReserveInfo: function () {
+        $('.shop').off('click').on('click', function () {
+          var _id = $(this).data('id');
+          Tool.openWin({
+            url: '/html/supplier/sup-home.html',
+            param: {
+              id: _id,
+              lon: $api.getStorage('longitude'),
+              lat: $api.getStorage('latitude'),
+            }
+          });
+        });
+      },
+      viewReserveInfo0: function () {
+        $('.tecnician').off('click').on('click', function () {
+          var _id = $(this).data('id');
+          Tool.openWin({
+            url: '/html/technician/tec-home.html',
+            param: {
+              id: _id,
+              lng: $api.getStorage('longitude'),
+              lat: $api.getStorage('latitude'),
+            }
+          });
+        });
+      },
+      refresh: function () {
+        var self = this;
+        Tool.refreshPage(function () {
+          self.resetList();
+        });
+      },
+      resetList: function () {
+        this.page = 0;
+        this.maxPage = 0;
+        $('#loadAll').addClass('aui-hide');
+        $('#dataNull').addClass('aui-hide');
+        $('#reserveList').html('');
+        this.getData();
+      },
+      loadMore: function () {
+        var self = this;
+        Tool.loadMore(function () {
+          if (self.maxPage && self.total) {
+            if (parseInt(self.page + 1) < parseInt(self.maxPage)) {
+              self.page++;
+              self.getData();
+            } else {
+              $('#loadAll').removeClass('aui-hide');
+            }
+          }
+        });
+      },
+    };
+    new Home();
+  };
+</script>
+</body>
+</html>

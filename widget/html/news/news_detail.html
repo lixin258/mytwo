@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/quill.snow.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../../css/main.css" /> -->
+</head>
+<style media="screen">
+    .dynamicDetail{
+        padding: 0.5rem 0.75rem;
+    }
+    /*公告详情图片样式*/
+    .announcement{
+      background-image: url("../../image/ggbj.png");
+      background-size: contain;
+      width:100%;
+      height: 203px;
+      right: 0;
+      top:0;
+      left: 0;
+    }
+
+</style>
+
+<body>
+    <div class="announcement">
+
+        <img   src="../../image/ggt.png" />
+    </div>
+    <div v-cloak class="aui-content dynamicDetail ql-editor  aaa" id="app" >
+        <h2 class="aui-text-center">{{value.title}}</h2>
+        <p class="aui-text-right aui-border-b aui-padded-b-10">{{value.createTime}}</p>
+        <div v-html="value.content"></div>
+    </div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript">
+    apiready = function () {
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                value: api.pageParam.value
+            },
+            methods: {
+                init: function () {
+                    vm.value.content = this.escapeHTML(vm.value.content);
+                },
+                escapeHTML: function (str) {
+                    var entity = {
+                        quot: '"',
+                        lt: '<',
+                        gt: '>',
+                        nbsp: ' ',
+                        amp: '&',
+                    };
+                    return str.replace(/&([^&;]+);/g, unit).replace(/&([^&;]+);/g, unit);
+                    function unit(a, b) {
+                        var r = entity[b];
+                        return typeof r === 'string' ? r : a;
+                    }
+                },
+            }
+        });
+        vm.init();
+    };
+</script>
+
+</html>

@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=no,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/api.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <!--css-->
+    <style media="screen">
+      .userCenter .z-bgPhoto {
+        position: relative;
+        width: 100%;
+        height: 7rem;
+        background-size: cover;
+        padding: 1rem;
+        padding-top: 2rem;
+        text-align: left;
+        background: #0098ff;
+      }
+
+      .userCenter .z-bgPhoto .z-photo {
+        width: 4rem;
+        height: 4rem;
+        max-width: 5rem;
+        border-radius: 50%;
+        border: 4px solid rgba(255, 255, 255, 0.8);
+      }
+
+      .z-info {
+        position: absolute;
+        left: 6rem;
+        top: 3rem;
+      }
+
+      .userCenter .z-bgPhoto .z-border-deal {
+        background-position: 100%;
+        background-size: 1px 60%;
+        background-image: linear-gradient(270deg, #fff, #fff 50%, transparent 50%);
+      }
+
+      .userCenter .z-bgPhoto .z-border-color {
+        background-size: 100% 1px;
+        background-image: linear-gradient(0deg, #fff, #fff 50%, transparent 50%);
+      }
+
+      .userCenter .z-bgPhoto .z-bgImg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        object-fit: cover;
+      }
+
+      .userCenter .z-numDot {
+        display: inline-block;
+        width: 0.8rem;
+        line-height: 0.8rem;
+        text-align: center;
+        font-size: 0.6rem;
+        background-color: #EF3255;
+        color: #fff;
+        border-radius: 0.4rem;
+        position: absolute;
+        right: 1.5rem;
+        top: 0.85rem;
+      }
+
+      .itemBox .aui-list.aui-list-in .aui-list-item {
+        background-position: 2.25rem bottom;
+      }
+
+      .itemBox .aui-list .aui-list-item-label-icon {
+        padding-right: 0.5rem;
+      }
+
+      .itemBox .aui-list .aui-list-item-inner {
+        min-height: 2.5rem;
+      }
+
+      .itemBox img {
+        position: relative;
+        display: inline-block;
+        width: 1rem;
+        height: 1rem;
+        max-width: 1rem;
+      }
+
+      .logOut {
+        margin-top: 0.5rem;
+        text-align: center;
+        line-height: 2.4rem;
+        background-color: #fff;
+      }
+    </style>
+  </head>
+  <body ontouchstart class="bodyBc">
+    <!--html-->
+    <div class="aui-content aui-padded-b-10 itemBox userCenter" id="userCenter">
+      <div class="z-bgPhoto z-pos-rel">
+        <img class="z-photo logo" src="../../image/logo.png" alt="" id="uploadPhoto">
+        <div class="z-info">
+          <p class="aui-font-size-20 aui-text-white " id='nickname'></p>
+          <p class="aui-font-size-14 aui-text-white" id="phone"></p>
+        </div>
+        <img class="z-bgImg logo" src="../../image/logo.png" id="bgPhoto" alt="">
+      </div>
+      <ul class="aui-list aui-list-in z-no-bt" id="itemBox1">
+        <li class="aui-list-item" data-index="0">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/my01.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            个人资料
+          </div>
+        </li>
+        <li class="aui-list-item" data-index="1">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/xiaoxi.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            我的消息
+          </div>
+        </li>
+
+        <li class="aui-list-item" data-index="2">
+            <div class="aui-list-item-label-icon">
+                <img src="../../image/ggjl.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                公告记录
+            </div>
+        </li>
+
+        <li class="aui-list-item" data-index="3">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/my02.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            我的团队
+          </div>
+        </li>
+        <li class="aui-list-item" data-index="4">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/my03.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            修改密码
+          </div>
+        </li>
+        <li class="aui-list-item" data-index="5">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/yaoqing1.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            我的邀请
+          </div>
+        </li>
+
+        <li class="aui-list-item" data-index="6">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/yhjlb.png" alt="">
+          </div>
+          <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+            我的优惠券
+          </div>
+        </li>
+
+
+      </ul>
+      <ul class="aui-list aui-list-in aui-margin-t-10 z-no-bt" id="itemBox2">
+
+        <li class="aui-list-item" data-index="7">
+            <div class="aui-list-item-label-icon">
+                <img src="../../image/yjfk.png" alt="">
+            </div>
+            <div class="aui-list-item-inner aui-list-item-arrow z-inner">
+                意见反馈
+            </div>
+        </li>
+
+        <li class="aui-list-item" id="logOut">
+          <div class="aui-list-item-label-icon">
+            <img src="../../image/my04.png" alt="">
+          </div>
+          <div class="aui-list-item-inner z-inner">
+            退出登录
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!--js-->
+    <script src="../../script/api.js"></script>
+    <script src="../../script/jquery.js"></script>
+    <script src="../../script/fastclick.js"></script>
+    <script src="../../script/tool.js"></script>
+    <script src="../../config.js"></script>
+    <!--js-->
+    <script>
+      apiready = function () {
+        var Home = function () {
+          this.urlArr = [
+            {
+              name: 'myInfo',
+              title: '个人资料',
+              url: '/html/my/my-info.html',
+            },
+            {
+              name: 'message',
+              title: '我的消息',
+              url: '/html/my/talklist.html',
+            },
+            {
+              name: 'news_detail',
+              title: '公告记录',
+              url: '/html/news/news_frame.html',
+            },
+            {
+              name: 'myOrder',
+              title: '我的团队',
+              win: true,
+              url: '/html/my/my-reserve.html',
+              param: {
+                name: 'test'
+              }
+            },
+            {
+              name: 'passwordAdmin',
+              title: '修改密码',
+              win: true,
+              url: '/html/resetPwd.html',
+              param: {
+                phone: $api.getStorage('phone')
+              }
+            },
+            {
+              name: 'myInviteCode',
+              title: '我的邀请码',
+              // win: true,
+              url: '/html/share.html',
+            },
+            {
+              name: 'coupon',
+              win: true,
+              title: '我的优惠券',
+              url: '/html/coupon/refund_index.html',
+            },
+            {
+                name: 'feedback',
+                title: '意见反馈',
+                url: '/html/my/feedback.html',
+            }
+          ];
+          this.userInfo = {};
+          this.init();
+          FastClick.attach(document.body);
+        };
+        Home.prototype = {
+          init: function () {
+            this.getData();
+            this.bindClick();
+            this.addEventListener();
+          },
+          addEventListener: function () {
+
+          },
+          getData: function () {
+            var self = this;
+            api.ajax({
+              url: SERVER_PATH + 'User/getUserInfo',
+              method: 'post',
+              data: {
+                values: {
+                  AccessToken: $api.getStorage('token'),
+                  id: $api.getStorage('userId')
+                },
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0) {
+                if (ret.data) {
+                  self.userInfo = ret.data[0];
+                  if (self.userInfo.headimgurl) {
+                    $('#uploadPhoto').attr('src', self.userInfo.headimgurl);
+                    $('#nickname').html(self.userInfo.nickname);
+                  }
+                }
+              } else {
+                Tool.toastInfo(errMsg);
+              }
+            });
+          },
+          bindClick: function () {
+            var self = this;
+            $('#itemBox1 li, #itemBox2 li').off('click').on('click', function () {
+              var index = parseInt($(this).data('index'));
+              if (self.urlArr[index].win) {
+
+                if (!self.urlArr[index].url) {
+                  Tool.toastInfo('开发中...');
+                  return;
+                }
+                api.openWin({
+                  name: self.urlArr[index].name,
+                  url: api.wgtRootDir + self.urlArr[index].url,
+                  pageParam: self.urlArr[index].param
+                });
+              } else {
+                if (!self.urlArr[index].url) {
+                  Tool.toastInfo('开发中...');
+                  return;
+                }
+                Tool.openHeader({
+                  name: self.urlArr[index].name,
+                  frame: {
+                    title: self.urlArr[index].title,
+                    url: api.wgtRootDir + self.urlArr[index].url,
+                    pageParam: self.urlArr[index].param
+                  }
+                });
+              }
+            });
+            $('#phone').html($api.getStorage('phone'));
+            $('#logOut').off('click').on('click', function () {
+              Tool.confirm('退出登录?', 'confirmLogOut');
+              api.addEventListener({
+                name: 'confirmLogOut'
+              }, function (ret, err) {
+                api.showProgress();
+                $api.setStorage('password', '');
+                setTimeout(function () {
+                  api.closeWidget({
+                    id: api.appId,
+                    silent: true
+                  });
+                }, 1500);
+              });
+            });
+          },
+          updatePhoto: function (url) {
+            var self = this;
+            self.userInfo.id = $api.getStorage('userId');
+            self.userInfo.headimgurl = url;
+            api.ajax({
+              url: SERVER_PATH + 'User/updateUser',
+              method: 'post',
+              data: {
+                values: self.userInfo.id,
+                files: {}
+              }
+            }, function (ret, err) {
+              if (ret && ret.code == 0) {
+                $('#uploadPhoto').attr('src', url);
+                Tool.toastInfo('头像上传成功');
+              } else {
+                Tool.toastInfo(errMsg);
+              }
+            });
+          },
+        };
+        new Home();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html class="sign">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"
+    />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <!--css-->
+    <style>
+      html, body {
+        height: 100vh;
+      }
+
+      header {
+        background-color: rgba(255, 255, 255, 0) !important;
+        color: #ccc;
+        text-align: center;
+        padding-top: 1rem;
+      }
+
+      header span {
+        color: black !important;
+      }
+
+      header > div {
+        color: black;
+      }
+
+      .fr {
+        float: right;
+      }
+
+      .signIn {
+        margin: 0 auto;
+      }
+
+      .signIn .logo {
+        width: 100%;
+        text-align: center;
+        margin: 1rem auto;
+      }
+
+      .signIn .logo img {
+        width: 4rem;
+        margin: 0 auto;
+      }
+
+      .aui-list-item {
+        margin: 0.5rem auto !important;
+        width: 80%;
+        border: 1px solid silver !important;
+        border-radius: 2rem;
+        position: relative;
+      }
+
+      .chooseCaracter {
+        position: absolute;
+        display: inline-block;
+        width: 30%;
+        line-height: 2rem;
+        padding-left: 0rem;
+      }
+
+      .z-character {
+        line-height: 2rem;
+        width: 100%;
+        padding-right: 1.5rem;
+        direction: rtl;
+      }
+
+      .z-btn {
+        background: #5990f4 !important;
+      }
+    </style>
+  </head>
+  <body ontouchstart style="background-color: #fff;">
+    <!--html-->
+    <header class="aui-bar aui-bar-nav">
+      <a class="aui-pull-left aui-btn button-active2"
+         style="width: 45px;"
+         onclick="closeWin();">
+        <span class="aui-iconfont aui-icon-close" style="margin: auto;"></span>
+      </a>
+      <div></div>
+    </header>
+    <div id="signIn" class="signIn">
+      <div class="logo">
+        <img src="../image/logo.png" style="border-radius: 17vw;">
+      </div>
+      <div class="aui-content aui-margin-b-15">
+        <ul class="aui-list aui-form-list z-no-bt">
+          <li class="aui-list-item">
+            <div class='chooseCaracter'>选择角色</div>
+            <select class="z-character " name="" id="character">
+              <option value="0">用户</option>
+              <option value="1">商户</option>
+              <option value="2">技师</option>
+            </select>
+            <div class='aui-list-item-arrow'></div>
+          </li>
+          <li class="aui-list-item">
+            <input id='phone' type="tel" placeholder="输入手机号">
+          </li>
+          <li class="aui-list-item">
+            <input id='pwd' type="password" placeholder="输入密码(6~16位)">
+          </li>
+        </ul>
+        <p class="aui-margin-t-15">
+        <div class="aui-btn aui-btn-block z-btn button-active" id='logIn'>登&nbsp;&nbsp;录</div>
+        </p>
+        <p class="z-go">
+          <span class="z-fc-fff" id='signUp'>立即注册</span>
+          <span class="z-fc-fff aui-pull-right" id='resetPwd'>忘记密码</span>
+        </p>
+      </div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/jquery.js"></script>
+    <script type="text/javascript" src="../script/fastclick.js"></script>
+    <script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript" src="../script/tool.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+      apiready = function () {
+        var Home = function () {
+          this.characterDom = '';
+          this.phoneDom = $('#phone');
+          this.passwordDom = $('#pwd');
+          this.init();
+        };
+        Home.prototype = {
+          init: function () {
+            this.bindClick();
+            // FastClick.attach(document.body);
+            this.phoneDom.val('18615053873'); // user test
+            // this.phoneDom.val('13361307302'); // shop test
+            this.passwordDom.val('123456'); // pwd test
+          },
+          signIn: function () {
+            var self = this;
+            if (!isPhone(self.phoneDom.val())) {
+              Tool.toastInfo('手机号格式不正确');
+              return;
+            }
+            if (!isPwd(self.passwordDom.val())) {
+              Tool.toastInfo('密码格式6~16位数字字母组合');
+              return;
+            }
+            if (self.signInIng) {
+              return;
+            }
+            self.signInIng = true;
+            $api.setStorage('character', $('#character option:selected').val());
+            $api.setStorage('phone', self.phoneDom.val());
+            $api.setStorage('password', self.passwordDom.val());
+            api.showProgress();
+            api.ajax({
+              url: SERVER_PATH + 'User/login',
+              method: 'post',
+              data: {
+                values: {
+                  type: $('#character option:selected').val(),
+                  phone: self.phoneDom.val(),
+                  password: self.passwordDom.val(),
+                  accessToken: $api.getStorage('token'),
+                  deviceToken: api.deviceId,
+                  OS: api.deviceModel + '(' + api.systemType + api.systemVersion + ')' + '[' + api.deviceId + ']',
+                }
+              }
+            }, function (ret, err) {
+              api.hideProgress();
+              if (ret) {
+                if (ret.code == 1) {
+                  self.signInIng = false;
+                  Tool.toastInfo(ret.msg || okMsg);
+                  $api.setStorage('character', $('#character option:selected').val());
+                  $api.setStorage('userId', ret.data[0].id);
+                  $api.setStorage('phone', ret.data[0].phone);
+                  $api.setStorage('status', ret.data[0].status);
+                  $api.setStorage('type', ret.data[0].type);
+                  $api.setStorage('isLogin', 'true');
+                  if ($api.getStorage('logOut') === "true") {
+                    $api.setStorage('logOut', 'false');
+                    api.closeWin({
+                      name: 'main'
+                    });
+                    setTimeout(function () {
+                      Tool.openWin({
+                        name: 'main',
+                        url: '/html/main.html',
+                      });
+                    }, 800);
+                  } else {
+                    //api.closeWin();
+                    Tool.openWin({
+                      name: 'main',
+                      url: '/html/main.html',
+                    });
+                  }
+                  // 保存经纬度
+                  {
+                    api.ajax({
+                      url: SERVER_PATH + 'User/savePosition',
+                      method: 'post',
+                      data: {
+                        values: {
+                          lng: $api.getStorage('longitude'),
+                          lat: $api.getStorage('latitude'),
+                          id: ret.data[0].id
+                        },
+                      }
+                    }, function (ret, err) {
+                      if (ret) {
+                        //
+                      } else {
+                        //
+                      }
+                    });
+                  }
+                }
+                else {
+                  self.signInIng = false;
+                  Tool.toastInfo(ret.msg || errMsg);
+                }
+              }
+              else {
+                self.signInIng = false;
+                Tool.toastInfo(errMsg);
+              }
+            });
+          },
+          bindClick: function () {
+            var self = this;
+            $('#logIn').off('click').on('click', function () {
+              self.signIn();
+            });
+            $('#signUp').off('click').on('click', function () {
+              Tool.openWin({
+                name: 'signUp',
+                url: '/html/signUp.html'
+              });
+            });
+            $('#resetPwd').off('click').on('click', function () {
+              Tool.openWin({
+                name: 'resetPwd',
+                url: '/html/resetPwd.html'
+              });
+            });
+          },
+          checkForm: function () {
+            var self = this;
+            if (!isPhone(self.phone)) {
+              return false;
+            }
+            if (!isPwd(self.password)) {
+              return false;
+            }
+            return true;
+          },
+        };
+        new Home();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE HTML>
+<html class="sign">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.css" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <!--js-->
+    <style>
+        html,
+        body {
+            height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0) !important;
+            color: #ccc;
+            text-align: center;
+            padding-top: 1rem;
+        }
+
+        header span {
+            color: black !important;
+        }
+
+        header>div {
+            color: black;
+        }
+
+        .fr {
+            float: right;
+        }
+
+        .signIn {
+            margin: 0 auto;
+        }
+
+        .signIn .logo {
+            width: 100%;
+            text-align: center;
+            margin: 1rem auto;
+        }
+
+        .signIn .logo img {
+            width: 4rem;
+            margin: 0 auto;
+        }
+
+        .aui-list-item {
+            margin: 0.5rem auto !important;
+            width: 80%;
+            border: 1px solid silver !important;
+            border-radius: 2rem;
+            position: relative;
+        }
+
+        .chooseCaracter {
+            position: absolute;
+            display: inline-block;
+            width: 30%;
+            line-height: 2rem;
+            padding-left: 0rem;
+        }
+
+        .z-character {
+            line-height: 2rem;
+            width: 100%;
+            padding-right: 1.5rem;
+            direction: rtl;
+        }
+
+        .z-btn {
+            background: #5990f4 !important;
+        }
+
+        .z-smsBtn {
+            border-left: 1px solid silver;
+            padding: 0 1rem;
+        }
+        .a{
+
+          width: 20px;
+          margin-left: 50px
+
+        }
+        .b{
+          position: absolute;
+          left: 80px;
+          bottom: 2px;
+        }
+        .c{
+          position: relative;
+        }
+
+    </style>
+</head>
+
+<body ontouchstart style="background-color: #fff;">
+    <!--html-->
+    <header class="aui-bar aui-bar-nav">
+        <a class="aui-pull-left aui-btn button-active2" style="width: 45px;" onclick="closeWin();">
+            <span class="aui-iconfont aui-icon-close" style="margin: auto;"></span>
+        </a>
+        <div></div>
+    </header>
+    <div id="signIn" class="signIn">
+        <div class="logo">
+            <img src="../image/logo.png" style="border-radius: 17vw;">
+        </div>
+        <div class="aui-content aui-margin-b-15">
+            <ul class="aui-list aui-form-list z-no-bt">
+                <li class="aui-list-item">
+                    <div class='chooseCaracter'>选择角色</div>
+                    <select class="z-character " name="" id="character">
+              <option value="0">用户</option>
+              <option value="1">商户</option>
+              <option value="2">技师</option>
+            </select>
+                    <div class='aui-list-item-arrow'></div>
+                </li>
+                <li class="aui-list-item">
+                    <input type="tel" id='phone' placeholder="输入手机号">
+                </li>
+                <li class="aui-list-item">
+                    <input type="tel" id='captcha' placeholder="验证码">
+                    <div class="z-smsBtn" id='smsBtn'>获取</div>
+                </li>
+                <li class="aui-list-item">
+                    <input type='password' id="pwd" placeholder="输入密码(6~16位)">
+                </li>
+                <li class="aui-list-item">
+                    <input type='password' id="confirmPwd" placeholder="确认密码(6~16位)">
+                </li>
+            </ul>
+            <div class="c" id="app">
+
+              <img  :src="['../image/icon21.png','../image/icon20.png'][index]" class="a" @click="select">
+              <input type="hidden" :value="index" class="input" >
+              <p class="b">我同意<span style="color:#5990f4" class="agree">《车立享协议》</span></p>
+            </div>
+
+
+            <p class="aui-margin-t-15">
+                <div class="aui-btn aui-btn-block z-btn button-active" id='signUp'>确认注册</div>
+            </p>
+        </div>
+    </div>
+    <!--js-->
+    <script type="text/javascript" src="../script/api.js"></script>
+    <script type="text/javascript" src="../script/vue.js"></script>
+
+    <script type="text/javascript" src="../script/jquery.js"></script>
+    <script type="text/javascript" src="../script/fastclick.js"></script>
+    <script type="text/javascript" src="../config.js"></script>
+    <script type="text/javascript" src="../script/tool.js"></script>
+    <!--js-->
+    <script type="text/javascript">
+        apiready = function() {
+          var vm = new Vue({
+            el: '#app',
+            data: {
+              index:0
+            },
+          methods:{
+            select:function(){
+              vm.index+=1
+              console.log(vm.index);
+              vm.index = (vm.index)%2
+              console.log(vm.index);
+
+            },
+            // agreeDeal:function(){
+            //   Tool.openHeader({
+            //       frame: {
+            //           title: '车立享协议',
+            //           url: api.wgtRootDir + '/Html/news/agree_deal.html'
+            //       }
+            //   });
+            // }
+          }
+
+          });
+                var interval;
+                var Home = function() {
+                    this.getCaptchaIng = false;
+                    this.time = 60;
+                    this.phoneDom = $('#phone');
+                    this.passwordDom = $('#pwd');
+                    this.confirmPwdDom = $('#confirmPwd');
+                    this.captchaBtnText = '';
+                    this.init();
+                }
+                Home.prototype = {
+                    init: function() {
+                        this.bindClick();
+                        this.addEventListener();
+                        FastClick.attach(document.body);
+                    },
+
+                    addEventListener: function() {
+                        var self = this;
+                        api.addEventListener({
+                            name: 'signUp'
+                        }, function(ret, err) {
+                            clearInterval(interval); //清除计时器
+                            self.getCaptchaIng = false;
+                            $('#smsBtn').text('获取');
+                            self.time = 60;
+                        });
+                        api.addEventListener({
+                            name: 'closeSetLoginPwd'
+                        }, function(ret, err) {
+                            closeWin();
+                        });
+                    },
+                    bindClick: function() {
+
+                        var self = this;
+                        $('#smsBtn').off('click').on('click', function() {
+                            self.getCaptcha();
+                        });
+                        $('#signUp').off('click').on('click', function() {
+                            self.signUp();
+                        });
+                        $('.agree').on('click',function(){
+                          Tool.openWin({
+                            name: 'deal',
+                            url: '/html/news/agree.html'
+                          });
+                        })
+                    },
+                    // viewAgreement: function(){
+                    //     return;
+                    //     Tool.openHeader({
+                    //         frame: {
+                    //             title: '用户协议',
+                    //             url: Host + '/Html/agreement.html'
+                    //         }
+                    //     });
+                    // },
+                    // viewLegalNotices: function(){
+                    //     return;
+                    //     Tool.openHeader({
+                    //         frame: {
+                    //             title: '法律声明',
+                    //             url: Host + '/Html/legalNotices.html'
+                    //         }
+                    //     });
+                    // },
+                    blur: function(param) {
+                        if (param == 1) this.phoneFocus = false;
+                        if (param == 2) this.captchaFocus = false;
+                    },
+                    signUp: function() {
+                        var self = this;
+                        if (!isPhone(self.phoneDom.val())) {
+                            Tool.toastInfo('手机号格式不正确');
+                            return;
+                        }
+                        if (!isCaptcha($('#captcha').val())) {
+                            Tool.toastInfo('验证码格式有误');
+                            return;
+                        }
+                        if (!self.passwordDom.val()) {
+                            Tool.toastInfo('请设置您的密码');
+                            return;
+                        }
+                        if (!isPwd(self.passwordDom.val())) {
+                            Tool.toastInfo('输入密码格式不正确');
+                            return;
+                        }
+                        if (!isPwd(self.confirmPwdDom.val())) {
+                            Tool.toastInfo('两次密码输入不一致');
+                            return;
+                        }
+                        if (!(self.passwordDom.val() === self.confirmPwdDom.val())) {
+                            Tool.toastInfo('两次密码输入不一致');
+                            return;
+                        }
+                        // if(!self.code){
+                        //     Tool.toastInfo('请输入邀请码');
+                        //     return;
+                        // }
+                        if($('.input').val()==0){
+                            Tool.toastInfo('请先同意协议!');
+                            return;
+                        }
+                        if (self.signUpIng) {
+                            return;
+                        }
+                        api.showProgress();
+                        api.ajax({
+                            url: SERVER_PATH + 'User/signUp',
+                            method: 'post',
+                            data: {
+                                values: {
+                                    type: $('#character option:selected').val(),
+                                    phone: self.phoneDom.val(),
+                                    password: self.passwordDom.val(),
+                                    verifyCode: $('#captcha').val(),
+                                    deviceToken: api.deviceId,
+                                    OS: api.deviceModel + '(' + api.systemType + api.systemVersion + ')' + '[' + api.deviceId + ']',
+                                }
+                            }
+                        }, function(ret, err) {
+                            api.hideProgress();
+                            if (ret) {
+                                if (ret.code == 0) {
+                                    self.signUpIng = false;
+                                    Tool.toastInfo(ret.msg || okMsg);
+                                    setTimeout(function() {
+                                        api.closeToWin({
+                                            name: 'signIn'
+                                        });
+                                    }, 1500);
+                                } else {
+                                    self.signUpIng = false;
+                                    Tool.toastInfo(ret.msg || errMsg);
+                                }
+                            } else {
+                                self.signUpIng = false;
+                                Tool.toastInfo(errMsg);
+                            }
+                        });
+                    },
+                    checkForm: function() {
+                        var self = this;
+                        if (!isPhone(self.phone)) {
+                            return false;
+                        }
+                        if (!isPwd(self.password)) {
+                            return false;
+                        }
+                        if (!isCaptcha(self.code)) {
+                            return false;
+                        }
+                        // if(!self.code){
+                        //     return false;
+                        // }
+                        return true;
+                    },
+                    getCaptcha: function() {
+                        var self = this;
+                        if (self.getCaptchaIng) {
+                            return;
+                        }
+                        self.getCaptchaIng = true;
+                        if (!isPhone(self.phoneDom.val())) {
+                            self.getCaptchaIng = false;
+                            Tool.toastInfo('手机号格式不正确');
+                            return;
+                        } else {
+                            api.showProgress();
+                            api.ajax({
+                                url: SERVER_PATH + 'User/sendVerifyCode',
+                                method: 'post',
+                                data: {
+                                    values: {
+                                        phone: self.phoneDom.val(),
+                                        type: 1
+                                    }
+                                }
+                            }, function(ret, err) {
+                                api.hideProgress();
+                                if (ret) {
+                                    if (ret.code == 0) {
+                                        Tool.toastInfo(ret.msg || okMsg);
+                                        interval = setInterval(refreshGetCaptcha, 1000); //创建计时器
+                                        self.captchaFocus = true;
+                                    } else {
+                                        Tool.toastInfo(ret.msg || errMsg);
+                                        self.getCaptchaIng = false;
+                                    }
+                                } else {
+                                    Tool.toastInfo(err.msg || errMsg);
+                                    self.getCaptchaIng = false;
+                                }
+                            });
+                        }
+
+                        function refreshGetCaptcha() {
+                            $('#smsBtn').text(self.time + 's');
+                            self.time--;
+                            if (self.time < 0) {
+                                clearInterval(interval); //清除计时器
+                                self.getCaptchaIng = false;
+                                $('#smsBtn').text('获取');
+                                self.time = 60;
+                            }
+                        }
+                    },
+                }
+                new Home();
+            }
+            // apiready = function(){
+            //     $api.fixStatusBar($api.dom('header'));
+            //     var interval,time = 60;
+            //     var vm = new Vue({
+            //         el: "#signUp",
+            //         data: {
+            //             signUpApi : SERVER_PATH + 'User/createUser',
+            //             getSMSApi : SERVER_PATH + 'User/sendVerifyCode',
+            //             phone : "",
+            //             password : "",
+            //             username : "",
+            //             code : "",
+            //             verifyCode : "",
+            //             captchaBtnText: "获取",
+            //             getCaptchaIng : false,
+            //             signUpIng: true,
+            //             phoneFocus: false,
+            //             captchaFocus: false,
+            //             ischecked: true
+            //         },
+            //         directives:{
+            //             focus: {
+            //                 inserted: function (el, binding) {
+            //                     if(binding.value) el.focus();
+            //                 },
+            //                 update: function (el, binding) {
+            //                     if(binding.value) el.focus();
+            //                 }
+            //             }
+            //     　　},
+            //         methods: {
+            //             init: function(){
+            //                 setTimeout(function(){
+            //                     vm.phoneFocus = true;
+            //                 }, 500);
+            //             },
+            //             viewAgreement: function(){
+            //                 return;
+            //                 Tool.openHeader({
+            //                     frame: {
+            //                         title: '用户协议',
+            //                         url: Host + '/Html/agreement.html'
+            //                     }
+            //                 });
+            //             },
+            //             viewLegalNotices: function(){
+            //                 return;
+            //                 Tool.openHeader({
+            //                     frame: {
+            //                         title: '法律声明',
+            //                         url: Host + '/Html/legalNotices.html'
+            //                     }
+            //                 });
+            //             },
+            //             blur: function(param){
+            //                 if(param == 1) this.phoneFocus = false;
+            //                 if(param == 2) this.captchaFocus = false;
+            //             },
+            //             signUp: function(){
+            //                 var self = this;
+            //                 // if(!isPwd(self.username)){
+            //                 //     Tool.toastInfo('账户格式6~16位数字字母');
+            //                 //     return;
+            //                 // }
+            //                 if(!isPhone(self.phone)){
+            //                     Tool.toastInfo('手机号格式不正确');
+            //                     return;
+            //                 }
+            //                 if(!isCaptcha(self.code)){
+            //                     Tool.toastInfo('验证码格式有误');
+            //                     return;
+            //                 }
+            //                 if(!isPwd(self.password)){
+            //                     Tool.toastInfo('密码格式6~16位数字字母组合');
+            //                     return;
+            //                 }
+            //                 // if(!self.code){
+            //                 //     Tool.toastInfo('请输入邀请码');
+            //                 //     return;
+            //                 // }
+            //                 if(!this.ischecked){
+            //                     Tool.toastInfo('请先同意协议!');
+            //                     return;
+            //                 }
+            //                 if(self.signUpIng){
+            //                     return;
+            //                 }
+            //
+            //                 api.showProgress();
+            //                 api.ajax({
+            //                     url: self.signUpApi,
+            //                     method: 'post',
+            //                     data: {
+            //                         values: {
+            //                             phone: self.phone,
+            //                             password: self.password,
+            //                             code: self.code,
+            //                             verifyCode:self.verifyCode,
+            //                             deviceToken: api.deviceId,
+            //                             OS: api.deviceModel + '(' + api.systemType + api.systemVersion + ')' + '[' + api.deviceId + ']',
+            //                             inviteCode: self.code,
+            //                             username: self.username,
+            //                         }
+            //                     }
+            //                 }, function (ret, err) {
+            //                     api.hideProgress();
+            //                     if (ret) {
+            //                         if (ret.code == 0) {
+            //                             self.signUpIng = false;
+            //                             Tool.toastInfo(ret.msg || okMsg);
+            //                             setTimeout(function () {
+            //                                 api.closeToWin({
+            //                                     name: 'signIn'
+            //                                 });
+            //                             }, 1500);
+            //                         } else {
+            //                             self.signUpIng = false;
+            //                             Tool.toastInfo(ret.msg || errMsg);
+            //                         }
+            //                     } else {
+            //                         self.signUpIng = false;
+            //                         Tool.toastInfo(errMsg);
+            //                     }
+            //                 });
+            //             },
+            //             checkForm: function(){
+            //                 var self = this;
+            //                 if(!isPhone(self.phone)){
+            //                     return false;
+            //                 }
+            //                 if(!isPwd(self.password)){
+            //                     return false;
+            //                 }
+            //                 if(!isCaptcha(self.code)){
+            //                     return false;
+            //                 }
+            //                 // if(!self.code){
+            //                 //     return false;
+            //                 // }
+            //                 return true;
+            //             },
+            //             getCaptcha: function(){
+            //                 var self = this;
+            //                 if(self.getCaptchaIng){
+            //                     return;
+            //                 }
+            //                 // if(!isPwd(self.username)){
+            //                 //     Tool.toastInfo('账户格式6~16位数字字母组合');
+            //                 //     return;
+            //                 // }
+            //                 self.getCaptchaIng = true;
+            //                 if(!isPhone(self.phone)){
+            //                     self.getCaptchaIng = false;
+            //                     Tool.toastInfo('手机号格式不正确');
+            //                     return;
+            //                 }else{
+            //                     api.showProgress();
+            //                     api.ajax({
+            //                         url: self.getSMSApi,
+            //                         method: 'post',
+            //                         data: {
+            //                             values: {
+            //                                 username : self.username,
+            //                                 phone : self.phone,
+            //                                 type: 1
+            //                             }
+            //                         }
+            //                     }, function(ret, err) {
+            //                         api.hideProgress();
+            //                         if (ret) {
+            //                             if(ret.code == 0){
+            //                                 Tool.toastInfo(ret.msg || okMsg);
+            //                                 interval = setInterval(refreshGetCaptcha, 1000); //创建计时器
+            //                                 self.captchaFocus = true;
+            //                             }else{
+            //                                 Tool.toastInfo(ret.msg || errMsg);
+            //                                 self.getCaptchaIng = false;
+            //                             }
+            //                         } else {
+            //                             Tool.toastInfo(err.msg || errMsg);
+            //                             self.getCaptchaIng = false;
+            //                         }
+            //                     });
+            //                 }
+            //                 function refreshGetCaptcha() {
+            //                     self.captchaBtnText = time + 's';
+            //                     time--;
+            //                     if(time < 0) {
+            //                         clearInterval(interval); //清除计时器
+            //                         self.getCaptchaIng = false;
+            //                         self.captchaBtnText = "获取";
+            //                         time = 60;
+            //                     }
+            //                 }
+            //             }
+            //         },
+            //         watch: {
+            //             phone: function(){
+            //                 var bool = vm.checkForm();
+            //                 if(bool) this.signUpIng = false;
+            //                 if(!bool) this.signUpIng = true;
+            //             },
+            //             password: function(){
+            //                 var bool = vm.checkForm();
+            //                 if(bool) this.signUpIng = false;
+            //                 if(!bool) this.signUpIng = true;
+            //             },
+            //             code: function(){
+            //                 var bool = vm.checkForm();
+            //                 if(bool) this.signUpIng = false;
+            //                 if(!bool) this.signUpIng = true;
+            //             },
+            //             // code: function(){
+            //             //     var bool = vm.checkForm();
+            //             //     if(bool) this.signUpIng = false;
+            //             //     if(!bool) this.signUpIng = true;
+            //             // }
+            //         },
+            //         created :function (){
+            //             FastClick.attach(document.body);
+            //         },
+            //     });
+            //     vm.init();
+            // }
+    </script>
+</body>
+
+</html>

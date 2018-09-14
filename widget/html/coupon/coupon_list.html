@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../../css/aui/aui.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/main.css" />
+</head>
+<body >
+  <div   id="app">
+    <header class="aui-bar aui-bar-nav aui-bar-info" style="padding-top: 25px;" >
+        <a class="aui-pull-left aui-iconfont aui-icon-left" tapmode onclick="closeWin()"></a>
+        <div class="aui-title" id="title">优惠券列表</div>
+        <div style="width:30px;float:right;margin-top:8px;margin-right:8px">
+          <img src="../../image/sys.png" @click="Flicking">
+        </div>
+
+
+    </header>
+    <div class="aui-bar aui-bar-btn aui-bar-btn-full z-tab" >
+        <div class="aui-bar-btn-item" :class="{'aui-active': activeBtn[0]}" v-on:click="switchFrame(0)">未使用</div>
+        <div class="aui-bar-btn-item" :class="{'aui-active': activeBtn[1]}" v-on:click="switchFrame(1)">已使用</div>
+        <div class="aui-bar-btn-item" :class="{'aui-active': activeBtn[2]}" v-on:click="switchFrame(2)">已过期</div>
+    </div>
+
+
+</div>
+</body>
+<script type="text/javascript" src="../../script/api.js"></script>
+<script type="text/javascript" src="../../script/vue.js"></script>
+<script type="text/javascript" src="../../script/fastclick.js"></script>
+<script type="text/javascript" src="../../config.js"></script>
+<script type="text/javascript" src="../../script/tool.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+      var header = $api.dom('header'),
+       tab = $api.dom('.z-tab');
+      var headerHeight = $api.offset(header).h;//herder高度
+      var tabHeight = $api.offset(tab).h;//tab栏高度
+      var posY = headerHeight + tabHeight; //frameGroup的Y坐标
+      var posH = api.winHeight - posY; //frameGroup的高度
+      var FNScanner = api.require('FNScanner');
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                activeBtn: [1, 0, 0],
+                active: 0,
+                dataArr:[]
+
+            },
+
+            methods: {
+                init: function(){
+                  vm.openOrderGroup();
+                  vm.getData();
+                },
+
+                getData: function () {
+                    api.showProgress();
+                    api.ajax({
+                        url: SERVER_PATH + 'Agency/vouchersList',
+                        method: 'post',
+                        data: {
+                            values: {
+                                AccessToken: $api.getStorage('token'),
+                                start: vm.page,
+                                length: vm.length,
+                                status:  0,//可使用
+                                id:$api.getStorage('userId')
+                            },
+                            files: {}
+                        }
+                    }, function (ret, err) {
+                      console.log(ret.data);
+                        api.hideProgress();
+                        if (ret) {
+                            if (ret.code == 0 && ret.data && ret.data.length) {
+                                console.log(ret.code);
+                                vm.dataArr = vm.dataArr.concat(ret.data);
+
+                            } else {
+                                vm.nullData = true;
+                            }
+                        } else {
+                          console.log(errMsg);
+                          Tool.toastInfo(errMsg);
+                        }
+                    });
+                },
+
+
+                Flicking:function(){
+
+                  FNScanner.open({
+                    autorotation: true
+                  }, function(ret, err) {
+                    console.log(api.winName);
+                    if (ret) {
+                      if(ret.eventType=='success'){
+
+                         api.ajax({
+                             url: SERVER_PATH + 'Agency/vouchersList',
+                             method: 'post',
+                             data: {
+                                 values: {
+                                     AccessToken: $api.getStorage('token'),
+                                     start: vm.page,
+                                     length: vm.length,
+                                     code:ret.content,
+                                     status:  0,//可使用
+                                     id: $api.getStorage('userId')
+
+                                 },
+                                 files: {}
+                             }
+                         }, function (ret, err) {
+
+                             api.hideProgress();
+                             if (ret) {
+                                 if (ret.code == 0 && ret.data && ret.data.length) {
+                                     console.log(ret.code);
+
+
+                                     Tool.openHeader({
+                                         frame: {
+                                             title: '优惠券',
+                                             url: api.wgtRootDir + '/html/coupon/code_list.html',
+                                             param: {
+                                                 value: ret.data,
+                                                 id:ret.data[0].id,
+                                             }
+                                         }
+                                     });
+
+                                 } else {
+                                     Tool.toastInfo(ret.msg);
+                                 }
+                             } else {
+                               console.log(errMsg);
+                               Tool.toastInfo(errMsg);
+                             }
+                         });
+                      }else{
+                        console.log(ret.eventType);
+                      }
+
+
+                    } else {
+                      Tool.toastInfo(errMsg);
+                    }
+                  });
+
+                },
+                openOrderGroup: function(){
+                    api.openFrameGroup({
+                        name: 'orderGroup',
+                        rect: {
+                            x: 0,
+                            y: posY,
+                            w: api.winWidth,
+                            h: posH
+                        },
+                        preload: 1,
+                        frames: [
+                          {
+                            name: 'refund_z',
+                            url: './refund_z0.html',
+                            vScrollBarEnabled: false,
+                            bounces: false
+                          },
+                          {
+                            name: 'refund_s',
+                            url: './refund_s0.html',
+                            vScrollBarEnabled: false,
+                            bounces: false
+                        }, {
+                            name: 'refund_f',
+                            url: './refund_f0.html',
+                            vScrollBarEnabled: false,
+                            bounces: false
+                        }]
+                    }, function (ret, err) {
+                        Vue.set(vm.activeBtn, self.active, 0);
+                        self.active = ret.index;
+                        Vue.set(vm.activeBtn, self.active, 1);
+                    });
+                },
+                switchFrame: function (index) {
+                    api.setFrameGroupIndex({
+                        name: 'orderGroup',
+                        index: index,
+                        scroll: true
+                    });
+                },
+            },
+            created :function () {
+                FastClick.attach(document.body);
+            }
+        });
+        vm.init();
+    };
+</script>
+</html>
